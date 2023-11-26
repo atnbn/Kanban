@@ -1,0 +1,58 @@
+<section
+  [ngClass]="{ 'dark-mode': isDarkMode, 'border-right': isDarkMode ,'light-mode': !isDarkMode, 'hide-sidebar' : !sidebarState, }"
+>
+  <img
+    class="logo"
+    [src]="
+      isDarkMode
+        ? '/assets/images/logo-light.svg'
+        : '/assets/images/logo-dark.svg'
+    "
+    alt="logo"
+  />
+
+  <div class="board-container">
+    <h2>ALL BOARDS ( {{ collection.length }} )</h2>
+    <div class="board-collection" *ngFor="let board of collection">
+      <div class="board">
+        <img [src]="board.icon" />
+        <span>{{ board.boardName }}</span>
+      </div>
+    </div>
+    <div class="board" (click)="openModal()">
+      <img src="assets/images/icon-board-new.svg" />
+      <span style="color: #635fc7"> + Create New Board</span>
+    </div>
+  </div>
+
+  <div class="section-below">
+    <div
+      class="switch-container"
+      [ngClass]="{
+        'dark-mode-gray': isDarkMode,
+        'light-mode-gray': !isDarkMode
+      }"
+    >
+      <img src="assets/images/icon-light-theme.svg" />
+      <label class="switch">
+        <input type="checkbox" (change)="changeMode()" [checked]="isDarkMode" />
+        <span class="slider round"></span>
+      </label>
+      <img src="assets/images/icon-dark-theme.svg" />
+    </div>
+
+    <div class="hide" (click)="toggleSidebar()">
+      <img src="assets/images/icon-hide-sidebar.svg" />
+      <span>Hide Sidebar</span>
+    </div>
+  </div>
+</section>
+<div
+  class="toggle-container"
+  [ngClass]="{ 'hide-button': sidebarState }"
+  (click)="toggleSidebar()"
+>
+  <img src="assets/images/icon-show-sidebar.svg" />
+</div>
+
+<app-add-board *ngIf="modalOpen" (closePopUp)="closeModal()"></app-add-board>

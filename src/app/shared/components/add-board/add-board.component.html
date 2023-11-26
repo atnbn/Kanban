@@ -1,0 +1,60 @@
+<section>
+  <form>
+    <div
+      class="form"
+      [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"
+    >
+      <h3 [ngClass]="{ white: isDarkMode }">Add New Board</h3>
+      <label
+        [ngClass]="{
+          white: isDarkMode,
+          'dark-mode-label': !isDarkMode
+        }"
+        >Name</label
+      >
+      <input
+        [ngClass]="{
+          'dark-mode': isDarkMode,
+          white: isDarkMode,
+          'dark-mode-border': isDarkMode
+        }"
+        type="text"
+        placeholder="e.g. Web Design"
+      />
+
+      <label
+        style="padding-top: 10px"
+        [ngClass]="{
+          white: isDarkMode,
+          'dark-mode-label': !isDarkMode
+        }"
+        for=""
+        >Board Columns</label
+      >
+      <div class="columns" *ngFor="let column of columns">
+        <input
+          [ngClass]="{
+            'dark-mode': isDarkMode,
+            white: isDarkMode,
+            'dark-mode-border': isDarkMode
+          }"
+          type="text"
+          [value]="column.name"
+        />
+        <button class="delete-column--btn btn-nobackground">
+          <img src="assets/images/icon-cross.svg" />
+        </button>
+      </div>
+      <button
+        [ngClass]="{
+          'dark-mode-button': isDarkMode,
+          'add-hover': !isDarkMode
+        }"
+        class="add-column--btn"
+      >
+        + Add New Column
+      </button>
+      <button class="add-board--btn">Create New Board</button>
+    </div>
+  </form>
+</section>

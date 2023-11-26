@@ -1,0 +1,7 @@
+<section>
+  <div class="column-body" [ngClass]="{ 'dark-mode-body': isDarkMode }">
+    <div class="columns" *ngFor="let column of columns">
+      <h3>{{ column.name }}</h3>
+    </div>
+  </div>
+</section>

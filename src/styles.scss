@@ -1,1 +1,84 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
+:root {
+    --ultradark: #20212c;
+    --darkgray: #2b2c37;
+    --mediumgray: #828fa3;
+    --mainpurple: #635fc7;
+    --purplehover: #a8a4ff;
+    --light: #e4ebfa;
+    --white: #ffff;
+    --lightgray: #f4f7fd;
+    --linesdark: #3e3f4e;
+    --lineswhite: #828fa3;
+    --secondarybtn: hsl(244, 45%, 94%);
+}
+
+@font-face {
+    font-family: PlusBold;
+    font-weight: bold;
+    src: url(/assets/fonts/PlusJakartaSans-Bold.ttf);
+}
+@font-face {
+    font-family: PlusMedium;
+    font-weight: medium;
+    src: url(/assets/fonts/PlusJakartaSans-Medium.ttf);
+}
+
+.light-mode {
+    background-color: var(--white);
+}
+.white {
+    color: var(--white);
+}
+
+.light-mode-gray {
+    background-color: var(--lightgray);
+}
+
+.dark-mode {
+    background-color: var(--darkgray);
+}
+.dark-mode-label {
+    color: var(--mediumgray);
+}
+.dark-mode-gray {
+    background-color: var(--ultradark);
+}
+
+.dark-mode-border {
+    border: 1px solid var(--linesdark) !important;
+}
+.dark-mode-button {
+    background-color: var(--white) !important;
+}
+
+.dark-mode-body {
+    background-color: var(--ultradark) !important;
+}
+
+.border-bottom {
+    border-bottom: 2px solid var(--linesdark) !important;
+}
+
+.sec-darkmode-btn {
+    background-color: var(--mainpurple) !important;
+    border: none;
+    border: 0px transparent;
+    color: var(--white);
+    font-family: PlusBold;
+}
+button {
+    cursor: pointer;
+}
+
+.btn-nobackground {
+    background-color: none;
+    background: none;
+    border: none;
+}
