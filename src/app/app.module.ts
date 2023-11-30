@@ -8,6 +8,8 @@ import { BoardComponent } from './features/board/board.component';
 import { AddBoardComponent } from './shared/components/add-board/add-board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './shared/components/header/header.component';
+import AddTaskComponent from './shared/components/add-task/add-task.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,8 +18,14 @@ import { HeaderComponent } from './shared/components/header/header.component';
     BoardComponent,
     AddBoardComponent,
     HeaderComponent,
+    AddTaskComponent,
   ],
-  imports: [BrowserAnimationsModule, BrowserModule, AppRoutingModule],
+  imports: [
+    BrowserAnimationsModule,
+    BrowserModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

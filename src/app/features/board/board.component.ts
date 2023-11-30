@@ -8,28 +8,7 @@ import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 })
 export class BoardComponent {
   isDarkMode: boolean = false;
-  columns = [
-    {
-      name: 'todo',
-      tasks: [
-        {
-          title: 'aufräumen',
-          description: 'gründlich aufräumen',
-          status: 'todo',
-        },
-      ],
-    },
-    {
-      name: 'doing',
-      tasks: [
-        {
-          title: 'aufräumen',
-          description: 'gründlich aufräumen',
-          status: 'todo',
-        },
-      ],
-    },
-  ];
+  board!: any[];
   constructor(private themeService: ThemeService) {}
 
   ngOnInit(): void {

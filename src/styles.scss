@@ -37,6 +37,10 @@ body {
     color: var(--white);
 }
 
+.light-mode-button {
+    background-color: var(--mainpurple);
+}
+
 .light-mode-gray {
     background-color: var(--lightgray);
 }
@@ -73,6 +77,11 @@ body {
     color: var(--white);
     font-family: PlusBold;
 }
+
+.border-right {
+    border-right: 2px solid var(--linesdark) !important;
+}
+
 button {
     cursor: pointer;
 }
@@ -81,4 +90,8 @@ button {
     background-color: none;
     background: none;
     border: none;
+}
+
+.d-none {
+    display: none !important;
 }

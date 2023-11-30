@@ -1,17 +1,19 @@
-<div
-  class="header"
-  [ngClass]="{ 'dark-mode': isDarkMode, 'border-bottom': isDarkMode }"
->
-  <h1 c [ngClass]="{ white: isDarkMode }">Platform Launch</h1>
-  <div class="buttons">
-    <button
-      class="add-task--btn"
-      [ngClass]="{ 'sec-darkmode-btn': isDarkMode }"
-    >
-      + Add New Task
-    </button>
-    <button class="settings--btn btn-nobackground">
-      <img src="assets/images/icon-vertical-ellipsis.svg" />
-    </button>
+<header [ngClass]="{ 'dark-mode': isDarkMode, 'border-bottom': isDarkMode }">
+  <div class="inner-header">
+    <h1 [ngClass]="{ white: isDarkMode }">Platform Launch</h1>
+    <div class="buttons">
+      <button
+        class="add-task--btn"
+        (click)="openAddTask()"
+        [ngClass]="{ 'sec-darkmode-btn': isDarkMode }"
+      >
+        + Add New Task
+      </button>
+      <button class="settings--btn btn-nobackground" [ngClass]="{}">
+        <img src="assets/images/icon-vertical-ellipsis.svg" />
+      </button>
+    </div>
   </div>
-</div>
+</header>
+<app-add-task *ngIf="addTaskPopUp" (closePopUp)="closeAddTask()">
+</app-add-task>

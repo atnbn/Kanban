@@ -1,5 +1,5 @@
 section {
-    height: 100vh;
+    // height: calc(100vh - 91.7px);
     width: 300px;
     display: flex;
     flex-direction: column;
@@ -7,6 +7,21 @@ section {
     transition: transform 0.7s ease-out;
     position: relative;
     border-right: 2px solid var(--light);
+}
+
+.logo-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding-left: 15px;
+    padding-right: 25px;
+    border-right: 2px solid var(--light);
+    img {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+    }
 }
 span {
     color: var(--mediumgray);

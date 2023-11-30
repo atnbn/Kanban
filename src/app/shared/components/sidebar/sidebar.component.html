@@ -1,4 +1,6 @@
 <section
+  [@fadeInOut]
+  *ngIf="sidebarState"
   [ngClass]="{ 'dark-mode': isDarkMode, 'border-right': isDarkMode ,'light-mode': !isDarkMode, 'hide-sidebar' : !sidebarState, }"
 >
   <img
@@ -10,16 +12,15 @@
     "
     alt="logo"
   />
-
   <div class="board-container">
-    <h2>ALL BOARDS ( {{ collection.length }} )</h2>
-    <div class="board-collection" *ngFor="let board of collection">
-      <div class="board">
-        <img [src]="board.icon" />
-        <span>{{ board.boardName }}</span>
+    <h2>ALL BOARDS ( {{ boards.length }} )</h2>
+    <div class="board-collection" *ngFor="let board of storage">
+      <div class="board" (click)="openId(board.id)">
+        <img src="/assets/images/icon-board.svg" />
+        <span>{{ board.title }}</span>
       </div>
     </div>
-    <div class="board" (click)="openModal()">
+    <div class="board" (click)="openAddBoard()">
       <img src="assets/images/icon-board-new.svg" />
       <span style="color: #635fc7"> + Create New Board</span>
     </div>
@@ -55,4 +56,7 @@
   <img src="assets/images/icon-show-sidebar.svg" />
 </div>
 
-<app-add-board *ngIf="modalOpen" (closePopUp)="closeModal()"></app-add-board>
+<app-add-board
+  *ngIf="addBoardPopUp"
+  (closePopUp)="closeAddBoard()"
+></app-add-board>

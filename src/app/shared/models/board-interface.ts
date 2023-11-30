@@ -1,4 +1,9 @@
 export interface Board {
   title: String;
-  columns: [];
+  columns: Columns[];
+  id: string;
+}
+
+export interface Columns {
+  name: string;
 }

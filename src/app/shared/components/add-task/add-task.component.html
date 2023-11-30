@@ -1,19 +1,18 @@
 <section>
-  <form [formGroup]="boardForm" (ngSubmit)="submitForm()">
+  <form>
     <div
       class="form"
       [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"
     >
-      <h3 [ngClass]="{ white: isDarkMode }">Add New Board</h3>
+      <h3 [ngClass]="{ white: isDarkMode }">Add New Task</h3>
       <label
         [ngClass]="{
           white: isDarkMode,
           'dark-mode-label': !isDarkMode
         }"
-        >Name</label
+        >Title</label
       >
       <input
-        formControlName="title"
         [ngClass]="{
           'dark-mode': isDarkMode,
           white: isDarkMode,
@@ -29,13 +28,26 @@
           white: isDarkMode,
           'dark-mode-label': !isDarkMode
         }"
-        for=""
-        >Board Columns</label
+        >Description</label
       >
-      <div
-        class="columns"
-        *ngFor="let input of columns.controls; let i = index"
+      <textarea
+        [ngClass]="{
+          'dark-mode': isDarkMode,
+          white: isDarkMode,
+          'dark-mode-border': isDarkMode
+        }"
+        type="text"
+        placeholder="e.g It's always good to take a break. This 15 minute break will recharge the batteries a little"
+      ></textarea>
+      <label
+        [ngClass]="{
+          white: isDarkMode,
+          'dark-mode-label': !isDarkMode
+        }"
       >
+        Subtasks</label
+      >
+      <div class="columns" *ngFor="let column of subtasks">
         <input
           [ngClass]="{
             'dark-mode': isDarkMode,
@@ -43,12 +55,9 @@
             'dark-mode-border': isDarkMode
           }"
           type="text"
-          [value]="input.value"
+          [placeholder]="column.name"
         />
-        <button
-          (click)="removeInput(i)"
-          class="delete-column--btn btn-nobackground"
-        >
+        <button class="delete-column--btn btn-nobackground">
           <img src="assets/images/icon-cross.svg" />
         </button>
       </div>
@@ -58,18 +67,21 @@
           'add-hover': !isDarkMode
         }"
         class="add-column--btn"
-        (click)="createNewColumn()"
       >
-        + Add New Column
+        + Add New Subtask
       </button>
-      <button
-        type="submit"
-        class="add-board--btn"
-        [disabled]="!boardForm.valid"
-        [ngClass]="{ invalid: !boardForm.valid }"
+      <select
+        [ngClass]="{
+          'dark-mode': isDarkMode,
+          white: isDarkMode,
+          'dark-mode-border': isDarkMode
+        }"
+        name="todo"
+        id=""
       >
-        Create New Board
-      </button>
+        <option>Todo</option>
+      </select>
+      <button class="add-board--btn">Create Task</button>
     </div>
   </form>
 </section>

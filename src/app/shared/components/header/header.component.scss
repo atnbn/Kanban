@@ -1,0 +1,36 @@
+header {
+    height: 90px;
+
+    border-bottom: 2px solid var(--light);
+}
+.img-con {
+    border-right: 2px solid var();
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: inherit;
+}
+.inner-header {
+    display: flex;
+    height: inherit;
+    width: inherit;
+    margin-left: 15px;
+    margin-right: 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+.buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.add-task--btn {
+    width: 140px;
+    height: 40px;
+    border-radius: 30px;
+    background-color: var(--mainpurple);
+    color: #fff;
+    border: none;
+}
+.settings--btn {
+}

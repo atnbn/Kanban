@@ -9,18 +9,18 @@ import { trigger, transition, style, animate } from '@angular/animations';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   animations: [
-    trigger('fadeInOut', [
+    trigger('fadeInOutHeader', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'translateX(-100%)' }),
+        style({ opacity: 0, transform: 'translateY(-100%)' }),
         animate(
           '300ms ease-out',
-          style({ opacity: 1, transform: 'translateX(0%)' })
+          style({ opacity: 1, transform: 'translateY(0%)' })
         ),
       ]),
       transition(':leave', [
         animate(
           '300ms ease-in',
-          style({ opacity: 0, transform: 'translateX(-100%)' })
+          style({ opacity: 0, transform: 'translateY(-100%)' })
         ),
       ]),
     ]),
@@ -29,7 +29,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 export class AppComponent {
   title = 'Project';
   isDarkMode: boolean = false;
-  sidebarStatus: boolean = false;
+  sidebarState: boolean = false;
   constructor(
     private themeService: ThemeService,
     private sidebarService: SidebarService
@@ -40,13 +40,14 @@ export class AppComponent {
     });
 
     this.sidebarService.sidebar$.subscribe((status) => {
-      this.sidebarStatus = status;
+      this.sidebarState = status;
+      console.log(this.sidebarState);
     });
   }
 
   changeSidebar() {
     this.sidebarService.toggleSidebar();
-    this.sidebarStatus = !this.sidebarStatus;
-    console.log(this.sidebarStatus);
+    this.sidebarState = !this.sidebarState;
+    console.log(this.sidebarState);
   }
 }

@@ -113,7 +113,6 @@ The more specific you are with your questions the more likely it is that another
 We love receiving feedback! We're always looking to improve our challenges and our platform. So if you have anything you'd like to mention, please email hi[at]frontendmentor[dot]io.
 
 **Have fun building!** 🚀
-
 Light Mode Image ändert sich
 Hintergrund ändert sich
 
@@ -129,5 +128,7 @@ Label Names
 input value color
 
 add new column button background
-#   K a n b a n  
- 
+
+remove sidebar complete from display
+
+add Icon above where it should be
