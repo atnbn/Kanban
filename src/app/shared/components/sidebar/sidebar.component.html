@@ -13,7 +13,7 @@
     alt="logo"
   />
   <div class="board-container">
-    <h2>ALL BOARDS ( {{ boards.length }} )</h2>
+    <h2>ALL BOARDS ( {{ storage.length }} )</h2>
     <div class="board-collection" *ngFor="let board of storage">
       <div class="board" (click)="openId(board.id)">
         <img src="/assets/images/icon-board.svg" />

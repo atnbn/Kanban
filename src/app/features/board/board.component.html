@@ -1,7 +1,42 @@
-<section>
-  <div class="column-body" [ngClass]="{ 'dark-mode-body': isDarkMode }">
-    <div class="columns" *ngFor="let column of board">
-      <h3>{{ column.name }}</h3>
+<header [ngClass]="{ 'dark-mode': isDarkMode, 'border-bottom': isDarkMode }">
+  <div class="inner-header">
+    <h1 [ngClass]="{ white: isDarkMode }">
+      {{ board.title ? board.title : "Test" }}
+    </h1>
+    <div class="buttons">
+      <button
+        class="add-task--btn"
+        (click)="openAddTask()"
+        [ngClass]="{ 'sec-darkmode-btn': isDarkMode }"
+      >
+        + Add New Task
+      </button>
+      <button class="settings--btn btn-nobackground" [ngClass]="{}">
+        <img src="assets/images/icon-vertical-ellipsis.svg" />
+      </button>
+    </div>
+  </div>
+</header>
+<app-add-task *ngIf="addTaskPopUp" (closePopUp)="closeAddTask()">
+</app-add-task>
+
+<section [ngClass]="{ 'dark-mode-body': isDarkMode }">
+  <div class="column-body">
+    <div class="columns" *ngFor="let column of board.columns; let i = index">
+      <div class="column-title-con">
+        <p class="dot" [style.backgroundColor]="colors[i]"></p>
+        <h3 [ngClass]="{ 'dark-mode-label': isDarkMode }">
+          {{ column.boardName }} ({{ column.tasks?.length }})
+        </h3>
+      </div>
+
+      <div class="tasks" *ngFor="let task of column.tasks">
+        <h3 [ngClass]="{ white: isDarkMode }">{{ task.title }}</h3>
+
+        <p [ngClass]="{ 'dark-mode-label': isDarkMode }">
+          0 of {{ task.subtasks.length }} subtasks
+        </p>
+      </div>
     </div>
   </div>
 </section>

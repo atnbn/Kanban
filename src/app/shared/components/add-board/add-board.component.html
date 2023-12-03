@@ -1,5 +1,5 @@
 <section>
-  <form [formGroup]="boardForm" (ngSubmit)="submitForm()">
+  <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
     <div
       class="form"
       [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"
@@ -32,9 +32,11 @@
         for=""
         >Board Columns</label
       >
+
       <div
         class="columns"
-        *ngFor="let input of columns.controls; let i = index"
+        *ngFor="let input of inputs.controls; let i = index"
+        formArrayName="inputs"
       >
         <input
           [ngClass]="{
@@ -43,30 +45,34 @@
             'dark-mode-border': isDarkMode
           }"
           type="text"
-          [value]="input.value"
+          [formControlName]="i"
         />
         <button
-          (click)="removeInput(i)"
+          type="button"
           class="delete-column--btn btn-nobackground"
+          (click)="deleteInput(i)"
         >
           <img src="assets/images/icon-cross.svg" />
         </button>
       </div>
+
+      <!-- add new input button -->
       <button
         [ngClass]="{
           'dark-mode-button': isDarkMode,
           'add-hover': !isDarkMode
         }"
         class="add-column--btn"
-        (click)="createNewColumn()"
+        type="button"
+        (click)="addInput()"
       >
         + Add New Column
       </button>
       <button
         type="submit"
         class="add-board--btn"
-        [disabled]="!boardForm.valid"
-        [ngClass]="{ invalid: !boardForm.valid }"
+        [disabled]="!formGroup.valid"
+        [ngClass]="{ invalid: !formGroup.valid }"
       >
         Create New Board
       </button>

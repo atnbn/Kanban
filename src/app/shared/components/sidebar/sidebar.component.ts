@@ -32,21 +32,43 @@ export class SidebarComponent implements OnInit {
   isDarkMode: boolean = false;
   addBoardPopUp: boolean = false;
   sidebarState: boolean = true;
-  storage: any[] = [
+  storage: Board[] = [
     {
-      title: 'Todo',
-      id: '124914782',
+      title: 'Test',
+      columns: [
+        {
+          columnName: ' Todo',
+          tasks: [
+            {
+              title: 'Fix Life',
+              description: ' Fixing life in diffrent ways',
+              subtasks: [],
+              status: 'todo',
+            },
+          ],
+        },
+        {
+          columnName: 'Done',
+          tasks: [
+            {
+              title: 'Fix Life',
+              description: ' Fixing life in diffrent ways',
+              subtasks: [],
+              status: 'todo',
+            },
+          ],
+        },
+      ],
+      id: '212314414124',
+    },
+    {
+      title: 'Hall',
       columns: [],
+      id: '5454',
     },
   ];
   storedMode = localStorage.getItem('darkmode');
-  boards: Board[] = [
-    {
-      title: 'Board',
-      columns: [],
-      id: '214414124',
-    },
-  ];
+  boards: Board[] = [];
 
   constructor(
     private themeService: ThemeService,
@@ -58,9 +80,12 @@ export class SidebarComponent implements OnInit {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
       this.isDarkMode = darkmode;
     });
+
     this.boardService.getBoardObjects().subscribe((objects) => {
       console.log(objects);
-      if (objects.title) this.storage.push(objects);
+      if (Object.values(objects).length > 0) {
+        this.storage.push(...objects);
+      }
     });
 
     this.popupService.addBoard$.subscribe((value) => {
@@ -81,7 +106,14 @@ export class SidebarComponent implements OnInit {
     this.addBoardPopUp = true;
   }
 
-  openId(id: number) {}
+  openId(id: string) {
+    const foundObject = this.storage.find((obj) => obj.id === id);
+    if (foundObject) {
+      console.log(foundObject);
+      this.boardService.submitDataToBoard(foundObject);
+    }
+  }
+
   closeAddBoard() {
     this.addBoardPopUp = false;
     console.log('Modal closed:', this.addBoardPopUp);

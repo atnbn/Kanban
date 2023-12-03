@@ -6,13 +6,19 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class BoardObjectService {
-  private boardObjectsSubject = new BehaviorSubject<any>({});
+  private boardObjectsSubject = new BehaviorSubject<any[]>([]);
+  private sidebarDataSubject = new BehaviorSubject<any>({});
+  sidebarData$ = this.sidebarDataSubject.asObservable();
 
-  addBoardObject(obj: any) {
+  addBoardObject(obj: Board[]) {
     this.boardObjectsSubject.next(obj);
   }
 
   getBoardObjects() {
     return this.boardObjectsSubject.asObservable();
+  }
+
+  submitDataToBoard(data: any) {
+    this.sidebarDataSubject.next(data);
   }
 }

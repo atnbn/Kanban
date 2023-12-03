@@ -21,6 +21,7 @@
         type="text"
         placeholder="e.g. Web Design"
       />
+      <!-- formControlName="title" -->
 
       <label
         style="padding-top: 10px"
@@ -47,7 +48,7 @@
       >
         Subtasks</label
       >
-      <div class="columns" *ngFor="let column of subtasks">
+      <div class="columns">
         <input
           [ngClass]="{
             'dark-mode': isDarkMode,
@@ -55,9 +56,8 @@
             'dark-mode-border': isDarkMode
           }"
           type="text"
-          [placeholder]="column.name"
         />
-        <button class="delete-column--btn btn-nobackground">
+        <button class="delete-column--btn btn-nobackground" type="button">
           <img src="assets/images/icon-cross.svg" />
         </button>
       </div>
@@ -66,10 +66,18 @@
           'dark-mode-button': isDarkMode,
           'add-hover': !isDarkMode
         }"
+        type="button"
         class="add-column--btn"
       >
         + Add New Subtask
       </button>
+      <label
+        [ngClass]="{
+          white: isDarkMode,
+          'dark-mode-label': !isDarkMode
+        }"
+        >Current Status</label
+      >
       <select
         [ngClass]="{
           'dark-mode': isDarkMode,
@@ -77,9 +85,13 @@
           'dark-mode-border': isDarkMode
         }"
         name="todo"
-        id=""
       >
-        <option>Todo</option>
+        <option
+          *ngFor="let column of currentBoard.columns"
+          [value]="column.columnName"
+        >
+          {{ column.columnName }}
+        </option>
       </select>
       <button class="add-board--btn">Create Task</button>
     </div>

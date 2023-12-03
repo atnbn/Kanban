@@ -5,5 +5,13 @@ export interface Board {
 }
 
 export interface Columns {
-  name: string;
+  columnName: string;
+  tasks: Task[];
+}
+
+export interface Task {
+  title: string;
+  description: string;
+  subtasks?: string[];
+  status: string;
 }

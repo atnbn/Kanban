@@ -1,11 +1,52 @@
-.header {
-    display: flex;
+header {
     height: 90px;
-    align-items: center;
-    padding-left: 15px;
-    padding-right: 15px;
-    justify-content: space-between;
+
     border-bottom: 2px solid var(--light);
+}
+
+section {
+    background-color: var(--light);
+    height: calc(100vh - 92px);
+}
+
+p {
+    font-family: Plusbold;
+}
+
+h3 {
+    font-family: Plusbold;
+}
+
+.img-con {
+    border-right: 2px solid var();
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: inherit;
+}
+.inner-header {
+    display: flex;
+    height: inherit;
+    width: inherit;
+    margin-left: 15px;
+    margin-right: 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+.buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.add-task--btn {
+    width: 140px;
+    height: 40px;
+    border-radius: 30px;
+    background-color: var(--mainpurple);
+    color: #fff;
+    border: none;
+}
+.settings--btn {
 }
 
 .buttons {
@@ -24,8 +65,10 @@
 }
 
 .column-body {
-    background-color: var(--light);
-    height: calc(100vh - 92px);
+    display: flex;
+    gap: 30px;
+    padding-top: 10px;
+    padding-left: 13px;
 }
 
 h3 {
@@ -36,4 +79,40 @@ h3 {
 h1 {
     font-size: 24px;
     font-family: PlusBold;
+}
+
+.columns {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    h3 {
+        font-size: 12px;
+    }
+}
+
+.tasks {
+    background-color: var(--darkgray);
+    margin-top: 10px;
+    border-radius: 8px;
+    min-height: 60px;
+    min-width: 200px;
+    padding: 10px;
+    box-shadow: 0px 0px 5px var(--linesdark);
+    h3 {
+        font-family: PlusBold;
+        font-size: 15px;
+        letter-spacing: auto;
+    }
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+}
+
+.column-title-con {
+    display: flex;
+    align-items: center;
+    gap: 7px;
 }

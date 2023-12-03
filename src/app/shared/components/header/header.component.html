@@ -1,6 +1,8 @@
 <header [ngClass]="{ 'dark-mode': isDarkMode, 'border-bottom': isDarkMode }">
   <div class="inner-header">
-    <h1 [ngClass]="{ white: isDarkMode }">Platform Launch</h1>
+    <h1 [ngClass]="{ white: isDarkMode }">
+      {{ board.title ? board.title : "Test" }}
+    </h1>
     <div class="buttons">
       <button
         class="add-task--btn"
