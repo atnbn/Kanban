@@ -14,4 +14,5 @@ export interface Task {
   description: string;
   subtasks?: string[];
   status: string;
+  id: string;
 }

@@ -1,10 +1,12 @@
 <section>
-  <form>
+  <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
     <div
       class="form"
       [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"
     >
       <h3 [ngClass]="{ white: isDarkMode }">Add New Task</h3>
+
+      <!-- Title -->
       <label
         [ngClass]="{
           white: isDarkMode,
@@ -20,9 +22,10 @@
         }"
         type="text"
         placeholder="e.g. Web Design"
+        formControlName="title"
       />
-      <!-- formControlName="title" -->
 
+      <!-- Description -->
       <label
         style="padding-top: 10px"
         [ngClass]="{
@@ -38,8 +41,11 @@
           'dark-mode-border': isDarkMode
         }"
         type="text"
+        formControlName="description"
         placeholder="e.g It's always good to take a break. This 15 minute break will recharge the batteries a little"
       ></textarea>
+
+      <!-- Subtasks -->
       <label
         [ngClass]="{
           white: isDarkMode,
@@ -48,7 +54,11 @@
       >
         Subtasks</label
       >
-      <div class="columns">
+      <div
+        class="columns"
+        formArrayName="inputs"
+        *ngFor="let input of inputs.controls; let i = index"
+      >
         <input
           [ngClass]="{
             'dark-mode': isDarkMode,
@@ -56,21 +66,31 @@
             'dark-mode-border': isDarkMode
           }"
           type="text"
+          [formControlName]="i"
         />
-        <button class="delete-column--btn btn-nobackground" type="button">
+        <button
+          class="delete-column--btn btn-nobackground"
+          type="button"
+          (click)="deleteInput(i)"
+        >
           <img src="assets/images/icon-cross.svg" />
         </button>
       </div>
+
+      <!-- add subtask button -->
       <button
         [ngClass]="{
           'dark-mode-button': isDarkMode,
           'add-hover': !isDarkMode
         }"
+        (click)="addInput()"
         type="button"
         class="add-column--btn"
       >
         + Add New Subtask
       </button>
+
+      <!-- Select Status -->
       <label
         [ngClass]="{
           white: isDarkMode,
@@ -84,7 +104,7 @@
           white: isDarkMode,
           'dark-mode-border': isDarkMode
         }"
-        name="todo"
+        formControlName="currentStatus"
       >
         <option
           *ngFor="let column of currentBoard.columns"
@@ -93,6 +113,7 @@
           {{ column.columnName }}
         </option>
       </select>
+      <!-- Submit button -->
       <button class="add-board--btn">Create Task</button>
     </div>
   </form>

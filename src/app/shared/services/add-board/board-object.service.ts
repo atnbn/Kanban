@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Board } from '../../models/board-interface';
+import { Board } from '../models/board-interface';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class BoardObjectService {
   private boardObjectsSubject = new BehaviorSubject<any[]>([]);
   private sidebarDataSubject = new BehaviorSubject<any>({});
+
   sidebarData$ = this.sidebarDataSubject.asObservable();
 
   addBoardObject(obj: Board[]) {

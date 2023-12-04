@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ThemeService } from '../../services/theme/theme.service';
 import { SidebarService } from '../../services/sidebar/sidebar.service';
 import { BoardObjectService } from '../../services/add-board/board-object.service';
-import { Board } from '../../models/board-interface';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',

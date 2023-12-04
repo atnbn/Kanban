@@ -15,7 +15,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { BoardObjectService } from '../../services/add-board/board-object.service';
-import { Board, Columns } from '../../models/board-interface';
+import { Board, Columns } from '../../services/models/board-interface';
 import { OpenPopUpService } from '../../services/add-board/add-board-up.service';
 
 @Component({
@@ -82,12 +82,12 @@ export class AddBoardComponent implements OnInit {
   deleteInput(index: number) {
     this.inputs.removeAt(index);
   }
+
   submitForm() {
     const values = this.collectInputValues();
 
     this.createColumnObject(values);
-    const formArrayValue = this.formGroup.get('inputFields')?.value;
-    console.log(formArrayValue);
+
     const boardValues = this.formGroup.value;
     if (this.formGroup.valid) {
       this.boardObject = [
@@ -101,8 +101,6 @@ export class AddBoardComponent implements OnInit {
 
       this.popupService.closeAddBoard();
     }
-    console.log(boardValues);
-    // Handle form submission logic here
   }
 
   @HostListener('document:click', ['$event'])

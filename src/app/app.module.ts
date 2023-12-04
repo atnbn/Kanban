@@ -8,8 +8,10 @@ import { BoardComponent } from './features/board/board.component';
 import { AddBoardComponent } from './shared/components/add-board/add-board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './shared/components/header/header.component';
-import AddTaskComponent from './shared/components/add-task/add-task.component';
+import AddTaskComponent from './shared/components/task/add-task/add-task.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { EditTaskComponent } from './shared/components/task/edit-task/edit-task.component';
+import { TaskDetailComponent } from './shared/components/task/detail-task/detail-task.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     AddBoardComponent,
     HeaderComponent,
     AddTaskComponent,
+    EditTaskComponent,
+    TaskDetailComponent,
   ],
   imports: [
     BrowserAnimationsModule,

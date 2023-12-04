@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Board, Columns } from 'src/app/shared/models/board-interface';
+import { Board, Columns } from 'src/app/shared/services/models/board-interface';
+import { OpenPopUpService } from 'src/app/shared/services/add-board/add-board-up.service';
 import { BoardObjectService } from 'src/app/shared/services/add-board/board-object.service';
 import { SidebarService } from 'src/app/shared/services/sidebar/sidebar.service';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
@@ -27,7 +28,8 @@ export class BoardComponent {
   constructor(
     private themeService: ThemeService,
     private boardService: BoardObjectService,
-    private sidebarService: SidebarService
+    private sidebarService: SidebarService,
+    private popupService: OpenPopUpService
   ) {}
 
   ngOnInit(): void {
@@ -39,10 +41,14 @@ export class BoardComponent {
       this.sidebarStatus = status;
     });
 
+    this.popupService.addTask$.subscribe((value) => {
+      this.addTaskPopUp = value;
+    });
+
     this.boardService.sidebarData$.subscribe((data) => {
       if (Object.keys(data).length > 0) {
         this.board = data;
-        console.log(data);
+        // console.log(data);
       }
     });
   }

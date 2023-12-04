@@ -4,7 +4,7 @@ import { ThemeService } from '../../services/theme/theme.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { SidebarService } from '../../services/sidebar/sidebar.service';
 import { BoardObjectService } from '../../services/add-board/board-object.service';
-import { Board } from '../../models/board-interface';
+import { Board } from '../../services/models/board-interface';
 
 @Component({
   selector: 'app-sidebar',
@@ -44,6 +44,7 @@ export class SidebarComponent implements OnInit {
               description: ' Fixing life in diffrent ways',
               subtasks: [],
               status: 'todo',
+              id: 'w4e8zu624598ßow4859g245gh2g45',
             },
           ],
         },
@@ -55,6 +56,7 @@ export class SidebarComponent implements OnInit {
               description: ' Fixing life in diffrent ways',
               subtasks: [],
               status: 'todo',
+              id: '+opavcj+pioaweürf9juü+4+53io´nu',
             },
           ],
         },
@@ -109,7 +111,6 @@ export class SidebarComponent implements OnInit {
   openId(id: string) {
     const foundObject = this.storage.find((obj) => obj.id === id);
     if (foundObject) {
-      console.log(foundObject);
       this.boardService.submitDataToBoard(foundObject);
     }
   }

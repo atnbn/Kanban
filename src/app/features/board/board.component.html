@@ -17,8 +17,6 @@
     </div>
   </div>
 </header>
-<app-add-task *ngIf="addTaskPopUp" (closePopUp)="closeAddTask()">
-</app-add-task>
 
 <section [ngClass]="{ 'dark-mode-body': isDarkMode }">
   <div class="column-body">
@@ -40,3 +38,6 @@
     </div>
   </div>
 </section>
+
+<app-add-task *ngIf="addTaskPopUp" (closePopUp)="closeAddTask()">
+</app-add-task>
