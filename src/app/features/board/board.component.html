@@ -28,7 +28,11 @@
         </h3>
       </div>
 
-      <div class="tasks" *ngFor="let task of column.tasks">
+      <div
+        class="tasks"
+        *ngFor="let task of column.tasks; let i = index"
+        (click)="openTask(task)"
+      >
         <h3 [ngClass]="{ white: isDarkMode }">{{ task.title }}</h3>
 
         <p [ngClass]="{ 'dark-mode-label': isDarkMode }">
@@ -41,3 +45,8 @@
 
 <app-add-task *ngIf="addTaskPopUp" (closePopUp)="closeAddTask()">
 </app-add-task>
+
+<app-detail-task
+  *ngIf="OpenTaskWindow"
+  (closePopUp)="closeTask()"
+></app-detail-task>

@@ -37,13 +37,30 @@ export class SidebarComponent implements OnInit {
       title: 'Test',
       columns: [
         {
-          columnName: ' Todo',
+          columnName: 'Todo',
           tasks: [
             {
               title: 'Fix Life',
               description: ' Fixing life in diffrent ways',
-              subtasks: [],
-              status: 'todo',
+              subtasks: [
+                {
+                  name: 'Fixingbixing',
+                  done: true,
+                },
+              ],
+              status: 'Todo',
+              id: 'w4e8zu6233334598ßow4859g245gh2g45',
+            },
+            {
+              title: 'Test Life',
+              description: 'Fixing life in diffrent ways',
+              subtasks: [
+                {
+                  name: 'Fixingbixing',
+                  done: true,
+                },
+              ],
+              status: 'Todo',
               id: 'w4e8zu624598ßow4859g245gh2g45',
             },
           ],
@@ -55,7 +72,7 @@ export class SidebarComponent implements OnInit {
               title: 'Fix Life',
               description: ' Fixing life in diffrent ways',
               subtasks: [],
-              status: 'todo',
+              status: 'Done',
               id: '+opavcj+pioaweürf9juü+4+53io´nu',
             },
           ],

@@ -1,15 +1,103 @@
 <section>
-  <h3>Title</h3>
-
-  <p>description</p>
-
-  <div>
-    <input type="checkbox" />
-    <span>Subtasks folder inside anything dont why</span>
+  <div
+    class="delete-con"
+    *ngIf="deleteForm"
+    [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"
+  >
+    <h2 class="title-delete" [ngClass]="{ white: isDarkMode }">
+      Delete this Task?
+    </h2>
+    <p [ngClass]="{ 'dark-mode-label': isDarkMode }">
+      Are you sure you want to delete the ‘{{ currentTask.title }}’ task and its
+      subtasks? This action cannot be reversed.
+    </p>
+    <div class="delete-btn-con">
+      <button (click)="deleteTask(currentTask.id)" class="delete-btn btn">
+        Delete
+      </button>
+      <button (click)="toggelDeleteTaskWindow()" class="cancel-btn btn">
+        Cancel
+      </button>
+    </div>
   </div>
+  <div
+    *ngIf="!deleteForm"
+    class="form"
+    [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"
+  >
+    <div class="title-con">
+      <h3 [ngClass]="{ white: isDarkMode }">{{ currentTask.title }}</h3>
+      <button (click)="openDropDown()" class="settings--btn btn-nobackground">
+        <img src="assets/images/icon-vertical-ellipsis.svg" />
+      </button>
 
-  <label for="">Current Status</label>
-  <select>
-    <option>Test</option>
-  </select>
+      <div [ngClass]="{ 'd-none': !dropDown }" class="edit-con">
+        <span [ngClass]="{ 'dark-mode-label': isDarkMode }">Edit Task</span>
+        <span (click)="toggelDeleteTaskWindow()" style="color: var(--red)"
+          >Delete Task</span
+        >
+      </div>
+    </div>
+
+    <span
+      [ngClass]="{
+        'dark-mode': isDarkMode,
+        'dark-mode-label': isDarkMode,
+      }"
+    >
+      {{ currentTask.description }}
+    </span>
+    <!-- Subtask--container -->
+    <div class="subtask-con">
+      <label
+        [ngClass]="{
+          white: isDarkMode,
+          'dark-mode-label': !isDarkMode
+        }"
+        >Subtasks( of {{ currentTask.subtasks?.length }})</label
+      >
+      <!-- Subtask-->
+      <div class="subtask" *ngFor="let subtask of currentTask.subtasks">
+        <input
+          [checked]="subtask.done"
+          (change)="changeValue(subtask)"
+          type="checkbox"
+        />
+
+        <span
+          [ngClass]="{
+            white: isDarkMode,
+            'dark-mode-label': !isDarkMode,
+            'crossed-out': subtask.done
+          }"
+          >{{ subtask.name }}</span
+        >
+      </div>
+    </div>
+    <div class="currentStatus-con">
+      <label
+        [ngClass]="{
+          white: isDarkMode,
+          'dark-mode-label': !isDarkMode
+        }"
+        >Current Status</label
+      >
+      <select
+        [ngClass]="{
+          'dark-mode': isDarkMode,
+          white: isDarkMode,
+          'dark-mode-border': isDarkMode
+        }"
+        (change)="onSelectChange($event)"
+        [(ngModel)]="currentTask.status"
+      >
+        <option
+          *ngFor="let option of currentBoard.columns"
+          [value]="option.columnName"
+        >
+          {{ option.columnName }}
+        </option>
+      </select>
+    </div>
+  </div>
 </section>

@@ -8,3 +8,163 @@ section {
     font-family: PlusMedium;
     background-color: rgba(0, 0, 0, 0.5);
 }
+
+select {
+    border: 1px solid var(--lineswhite);
+    height: 40px;
+    border-radius: 3px;
+    padding-left: 15px;
+    font-family: PlusMedium;
+    &:focus {
+        text-decoration: none;
+        outline: none;
+    }
+}
+
+select {
+    padding-right: 5px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 20px;
+    background-image: url("/assets/images/icon-chevron-down.svg"); /* Replace with the path to your custom arrow image */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+select::after {
+    content: "\25BC"; /* Unicode character for down arrow ▼ */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+label {
+    font-size: 14px;
+}
+
+h3 {
+    font-family: PlusBold;
+    margin: 0px;
+}
+p {
+    font-size: 14px;
+}
+
+.form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    z-index: 2;
+    width: 480px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    min-height: 400px;
+    border-radius: 5px;
+}
+
+.subtask-con {
+    display: flex;
+}
+
+.subtask {
+    background-color: var(--ultradark);
+    min-height: 20px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    span {
+        font-size: 13px;
+    }
+}
+
+.currentStatus-con,
+.subtask-con {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.title-con {
+    display: flex;
+    position: relative;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.edit-con {
+    position: absolute;
+    top: 30px;
+    background-color: var(--ultradark);
+    padding: 10px;
+    height: 60px;
+    width: 150px;
+    gap: 10px;
+    justify-content: center;
+    padding-left: 15px;
+    border-radius: 10px;
+    right: -70px;
+    flex-direction: column;
+    display: flex;
+    span {
+        font-size: 14px;
+        font-family: Plusmedium;
+        cursor: pointer;
+    }
+}
+
+.crossed-out {
+    text-decoration: line-through;
+    color: var(--lineswhite);
+}
+
+.delete-con {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    gap: 10px;
+    display: flex;
+    width: 420px;
+    padding: 30px;
+    flex-direction: column;
+    border-radius: 15px;
+    p {
+        font-size: 14px;
+    }
+}
+
+.btn {
+    width: 190px;
+    height: 40px;
+    border-radius: 30px;
+    border: none;
+    font-size: 14px;
+}
+
+.delete-btn {
+    background-color: var(--red);
+    color: #ffff;
+}
+.title-delete {
+    color: var(--red);
+    margin: 0;
+    font-size: 18px;
+}
+.cancel-btn {
+    color: var(--mainpurple);
+    background-color: #ffff;
+}
+
+.delete-btn-con {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+}

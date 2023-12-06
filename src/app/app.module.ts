@@ -11,8 +11,9 @@ import { HeaderComponent } from './shared/components/header/header.component';
 import AddTaskComponent from './shared/components/task/add-task/add-task.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditTaskComponent } from './shared/components/task/edit-task/edit-task.component';
-import { TaskDetailComponent } from './shared/components/task/detail-task/detail-task.component';
-
+import { DetailTaskComponent } from './shared/components/task/detail-task/detail-task.component';
+import { FormsModule } from '@angular/forms';
+import { DeletePopupComponent } from './shared/components/delete-popup/delete-popup.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,13 +23,15 @@ import { TaskDetailComponent } from './shared/components/task/detail-task/detail
     HeaderComponent,
     AddTaskComponent,
     EditTaskComponent,
-    TaskDetailComponent,
+    DetailTaskComponent,
+    DeletePopupComponent,
   ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

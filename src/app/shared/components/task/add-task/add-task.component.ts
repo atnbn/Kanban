@@ -13,7 +13,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Board, Task } from '../../../services/models/board-interface';
+import { Board, Subtask, Task } from '../../../services/models/board-interface';
 import { BoardObjectService } from '../../../services/add-board/board-object.service';
 import { OpenPopUpService } from '../../../services/add-board/add-board-up.service';
 
@@ -77,8 +77,8 @@ export default class AddTaskComponent implements OnInit {
 
   createSubtaskObject(arr: any[]) {
     arr.forEach((value) => {
-      let column = {
-        subTaskName: value,
+      let column: Subtask = {
+        name: value,
         done: false,
       };
       this.subTaskObject.push(column);

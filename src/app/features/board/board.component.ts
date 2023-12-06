@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { Board, Columns } from 'src/app/shared/services/models/board-interface';
+import {
+  Board,
+  Columns,
+  Task,
+} from 'src/app/shared/services/models/board-interface';
 import { OpenPopUpService } from 'src/app/shared/services/add-board/add-board-up.service';
 import { BoardObjectService } from 'src/app/shared/services/add-board/board-object.service';
 import { SidebarService } from 'src/app/shared/services/sidebar/sidebar.service';
@@ -13,6 +17,8 @@ import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 export class BoardComponent {
   isDarkMode: boolean = false;
   addTaskPopUp: boolean = false;
+  OpenTaskWindow: boolean = false;
+  openDropDown: boolean = false;
   sidebarStatus: boolean = false;
   colors: string[] = [
     '#3498db',
@@ -57,8 +63,23 @@ export class BoardComponent {
     this.addTaskPopUp = true;
   }
 
+  openTask(task: Task) {
+    this.OpenTaskWindow = true;
+    this.boardService.submitTask(task);
+    this.boardService.submitDataToBoard(this.board);
+  }
+
+  closeTask() {
+    this.OpenTaskWindow = false;
+  }
+
   closeAddTask(): void {
     this.addTaskPopUp = false;
+    console.log('Modal closed:', this.addTaskPopUp);
+  }
+
+  closeDropDown(): void {
+    this.openDropDown = false;
     console.log('Modal closed:', this.addTaskPopUp);
   }
 }

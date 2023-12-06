@@ -12,7 +12,12 @@ export interface Columns {
 export interface Task {
   title: string;
   description: string;
-  subtasks?: string[];
+  subtasks?: Subtask[];
   status: string;
   id: string;
+}
+
+export interface Subtask {
+  name: string;
+  done: boolean;
 }
