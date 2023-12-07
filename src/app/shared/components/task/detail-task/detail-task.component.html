@@ -1,4 +1,4 @@
-<section>
+<section *ngIf="!edit">
   <div
     class="delete-con"
     *ngIf="deleteForm"
@@ -11,6 +11,7 @@
       Are you sure you want to delete the ‘{{ currentTask.title }}’ task and its
       subtasks? This action cannot be reversed.
     </p>
+
     <div class="delete-btn-con">
       <button (click)="deleteTask(currentTask.id)" class="delete-btn btn">
         Delete
@@ -32,7 +33,9 @@
       </button>
 
       <div [ngClass]="{ 'd-none': !dropDown }" class="edit-con">
-        <span [ngClass]="{ 'dark-mode-label': isDarkMode }">Edit Task</span>
+        <span (click)="editTask()" [ngClass]="{ 'dark-mode-label': isDarkMode }"
+          >Edit Task</span
+        >
         <span (click)="toggelDeleteTaskWindow()" style="color: var(--red)"
           >Delete Task</span
         >
@@ -100,4 +103,8 @@
       </select>
     </div>
   </div>
+</section>
+
+<section *ngIf="edit">
+  <app-add-task [currentTask]="currentTask"></app-add-task>
 </section>

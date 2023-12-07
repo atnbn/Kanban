@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   HostListener,
+  Input,
   OnInit,
   Output,
 } from '@angular/core';
@@ -24,11 +25,13 @@ import { OpenPopUpService } from '../../../services/add-board/add-board-up.servi
 })
 export default class AddTaskComponent implements OnInit {
   taskObject!: Task;
+  edit: boolean = false;
   modalOpen: boolean = true;
   formGroup!: FormGroup;
   isDarkMode: boolean = false;
   currentBoard!: Board;
   subTaskObject: any[] = [];
+  @Input() currentTask: Task | null = null;
   @Output() closePopUp = new EventEmitter<boolean>();
   constructor(
     private themeService: ThemeService,
@@ -47,8 +50,17 @@ export default class AddTaskComponent implements OnInit {
         console.log('addtask object', data);
       }
     });
-    this.initializeForm();
+
+    if (this.currentTask !== null) {
+      this.taskObject = this.currentTask;
+      console.log(this.taskObject);
+      this.fillForm();
+      this.edit = true;
+    } else {
+      this.initializeForm();
+    }
   }
+
   initializeForm() {
     this.formGroup = this.fb.group({
       title: ['', [Validators.minLength(1), Validators.required]],
@@ -57,6 +69,27 @@ export default class AddTaskComponent implements OnInit {
       currentStatus: [''],
     });
   }
+
+  fillForm() {
+    this.formGroup = this.fb.group({
+      title: [
+        this.taskObject?.title,
+        [Validators.minLength(1), Validators.required],
+      ],
+      description: [
+        this.taskObject?.description,
+        [Validators.minLength(1), Validators.required],
+      ],
+      inputs: this.fb.array([]),
+      currentStatus: this.taskObject?.status,
+    });
+    console.log(this.inputs);
+
+    this.taskObject.subtasks?.forEach((sub) => {
+      this.inputs.push(this.fb.control(sub.name));
+    });
+  }
+
   get inputs() {
     return this.formGroup.controls['inputs'] as FormArray;
   }
@@ -79,7 +112,7 @@ export default class AddTaskComponent implements OnInit {
     arr.forEach((value) => {
       let column: Subtask = {
         name: value,
-        done: false,
+        done: value.done ? value.done : false,
       };
       this.subTaskObject.push(column);
     });
