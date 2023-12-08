@@ -77,7 +77,6 @@ export class BoardComponent {
 
   closeAddTask(): void {
     this.addTaskPopUp = false;
-    console.log('Modal closed:', this.addTaskPopUp);
   }
 
   closeDropDown(): void {

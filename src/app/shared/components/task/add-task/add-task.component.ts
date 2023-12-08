@@ -14,7 +14,12 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Board, Subtask, Task } from '../../../services/models/board-interface';
+import {
+  Board,
+  Columns,
+  Subtask,
+  Task,
+} from '../../../services/models/board-interface';
 import { BoardObjectService } from '../../../services/add-board/board-object.service';
 import { OpenPopUpService } from '../../../services/add-board/add-board-up.service';
 
@@ -53,7 +58,6 @@ export default class AddTaskComponent implements OnInit {
 
     if (this.currentTask !== null) {
       this.taskObject = this.currentTask;
-      console.log(this.taskObject);
       this.fillForm();
       this.edit = true;
     } else {
@@ -99,46 +103,91 @@ export default class AddTaskComponent implements OnInit {
     this.inputs.push(inputForm);
   }
 
-  collectInputValues() {
-    const values = this.inputs.controls.map((control: any) => control.value);
-    return values;
-  }
-
   deleteInput(index: number) {
     this.inputs.removeAt(index);
   }
 
-  createSubtaskObject(arr: any[]) {
-    arr.forEach((value) => {
-      let column: Subtask = {
+  createSubtaskObject() {
+    const values = this.inputs.controls.map((control: any) => control.value);
+
+    values.forEach((value) => {
+      let subtask: Subtask = {
         name: value,
-        done: value.done ? value.done : false,
+        done: value.done || false,
+        id: value.id || Math.random().toString(16).slice(2, 10),
       };
-      this.subTaskObject.push(column);
+      this.subTaskObject.push(subtask);
     });
   }
 
-  submitForm() {
-    const values = this.collectInputValues();
-    this.createSubtaskObject(values);
+  createTaskObject() {
+    this.createSubtaskObject();
     const taskValues = this.formGroup.value;
-    if (this.formGroup.valid) {
-      this.taskObject = {
-        title: taskValues.title,
-        description: taskValues.description,
-        id: Math.random().toString(16).slice(2, 10),
-        subtasks: this.subTaskObject,
-        status: taskValues.currentStatus,
-      };
+    this.taskObject = {
+      title: taskValues.title,
+      description: taskValues.description,
+      id: this.currentTask?.id || Math.random().toString(16).slice(2, 10),
+      subtasks: this.subTaskObject,
+      status: taskValues.currentStatus,
+    };
+    console.log(this.taskObject);
+  }
 
-      this.currentBoard?.columns.find((column) => {
-        if (column.columnName === this.taskObject.status) {
-          column.tasks.push(this.taskObject);
-        }
-      });
+  createTask() {
+    if (this.formGroup.invalid) return;
 
-      this.popupService.closeAddTask();
+    this.createTaskObject();
+    this.currentBoard?.columns.find((column) => {
+      if (column.columnName === this.taskObject.status) {
+        column.tasks.push(this.taskObject);
+      }
+    });
+  }
+
+  updateTask() {
+    if (this.edit && this.formGroup.valid) {
+      this.createTaskObject();
+      this.moveTask(this.taskObject, this.taskObject.status);
     }
+  }
+
+  private moveTask(task: Task, newStatus: string) {
+    const currentColumn = this.findColumnContainingTask(task);
+
+    if (currentColumn && currentColumn.columnName !== newStatus) {
+      // Remove task from current column
+      currentColumn.tasks = currentColumn.tasks.filter((t) => t.id !== task.id);
+
+      // Find the new column
+      const newColumn = this.currentBoard.columns.find(
+        (column) => column.columnName === newStatus
+      );
+
+      if (newColumn) {
+        // Add task to the new column
+        newColumn.tasks.push(task);
+
+        // Update the task status
+        task.status = newStatus;
+      } else {
+        console.error(`Column '${newStatus}' not found.`);
+      }
+    }
+  }
+
+  private findColumnContainingTask(task: Task): Columns | undefined {
+    return this.currentBoard.columns.find((column) =>
+      column.tasks.some((t) => t.id === task.id)
+    );
+  }
+
+  submitForm() {
+    if (!this.edit) {
+      this.createTask();
+    } else {
+      this.updateTask();
+    }
+    this.popupService.closeAddTask();
   }
 
   changeMode() {

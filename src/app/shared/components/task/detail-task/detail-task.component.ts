@@ -66,6 +66,14 @@ export class DetailTaskComponent implements OnInit {
     this.edit = true;
     console.log(this.edit);
   }
+
+  closeWindow() {
+    this.edit = false;
+  }
+  closePopUps() {
+    this.edit = false;
+  }
+
   deleteTask(taskId: string) {
     const currentColumn = this.currentBoard.columns.find((column) =>
       column.tasks.some((task) => task.id === taskId)

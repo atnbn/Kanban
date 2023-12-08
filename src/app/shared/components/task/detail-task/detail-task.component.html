@@ -106,5 +106,8 @@
 </section>
 
 <section *ngIf="edit">
-  <app-add-task [currentTask]="currentTask"></app-add-task>
+  <app-add-task
+    [currentTask]="currentTask"
+    (closePopUp)="closePopUps()"
+  ></app-add-task>
 </section>

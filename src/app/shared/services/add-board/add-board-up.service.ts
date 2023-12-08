@@ -16,21 +16,17 @@ export class OpenPopUpService {
 
   openAddBoard() {
     this.addBoard.next(true);
-    console.log('true');
   }
 
   closeAddBoard() {
     this.addBoard.next(false);
-    console.log('false');
   }
 
   openAddTask() {
     this.addTask.next(true);
-    console.log('true');
   }
 
   closeAddTask() {
     this.addTask.next(false);
-    console.log('false');
   }
 }
