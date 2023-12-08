@@ -20,6 +20,7 @@ export class BoardComponent {
   OpenTaskWindow: boolean = false;
   openDropDown: boolean = false;
   sidebarStatus: boolean = false;
+  task!: Task;
   colors: string[] = [
     '#3498db',
     '#2ecc71',
@@ -67,6 +68,7 @@ export class BoardComponent {
     this.OpenTaskWindow = true;
     this.boardService.submitTask(task);
     this.boardService.submitDataToBoard(this.board);
+    this.task = task;
   }
 
   closeTask() {
@@ -75,7 +77,6 @@ export class BoardComponent {
 
   closeAddTask(): void {
     this.addTaskPopUp = false;
-    console.log('Modal closed:', this.addTaskPopUp);
   }
 
   closeDropDown(): void {

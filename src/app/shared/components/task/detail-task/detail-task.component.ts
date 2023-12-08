@@ -23,7 +23,8 @@ export class DetailTaskComponent implements OnInit {
   isDarkMode: boolean = false;
   dropDown: boolean = false;
   currentBoard!: Board;
-  deleteForm: boolean = true;
+  edit: boolean = false;
+  deleteForm: boolean = false;
   currentTask!: Task;
   constructor(
     private themeService: ThemeService,
@@ -59,6 +60,18 @@ export class DetailTaskComponent implements OnInit {
   public toggelDeleteTaskWindow() {
     this.deleteForm = !this.deleteForm;
     console.log('test');
+  }
+
+  editTask() {
+    this.edit = true;
+    console.log(this.edit);
+  }
+
+  closeWindow() {
+    this.edit = false;
+  }
+  closePopUps() {
+    this.edit = false;
   }
 
   deleteTask(taskId: string) {

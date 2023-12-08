@@ -4,7 +4,8 @@
       class="form"
       [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"
     >
-      <h3 [ngClass]="{ white: isDarkMode }">Add New Task</h3>
+      <h3 *ngIf="!edit" [ngClass]="{ white: isDarkMode }">Add New Task</h3>
+      <h3 *ngIf="edit" [ngClass]="{ white: isDarkMode }">Edit Task</h3>
 
       <!-- Title -->
       <label
@@ -114,7 +115,8 @@
         </option>
       </select>
       <!-- Submit button -->
-      <button class="add-board--btn">Create Task</button>
+      <button class="add-board--btn" *ngIf="!edit">Create Task</button>
+      <button class="add-board--btn" *ngIf="edit">Save Changes</button>
     </div>
   </form>
 </section>

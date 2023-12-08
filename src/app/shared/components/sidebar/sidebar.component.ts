@@ -46,6 +46,7 @@ export class SidebarComponent implements OnInit {
                 {
                   name: 'Fixingbixing',
                   done: true,
+                  id: '123123123123',
                 },
               ],
               status: 'Todo',
@@ -58,6 +59,7 @@ export class SidebarComponent implements OnInit {
                 {
                   name: 'Fixingbixing',
                   done: true,
+                  id: '1231212123216881',
                 },
               ],
               status: 'Todo',
