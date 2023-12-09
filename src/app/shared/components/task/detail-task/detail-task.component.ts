@@ -26,11 +26,11 @@ export class DetailTaskComponent implements OnInit {
   edit: boolean = false;
   deleteForm: boolean = false;
   currentTask!: Task;
+  @Output() closePopUp = new EventEmitter<boolean>(false);
   constructor(
     private themeService: ThemeService,
     private boardService: BoardObjectService
   ) {}
-  @Output() closePopUp = new EventEmitter<boolean>();
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
       this.isDarkMode = darkmode;
@@ -47,6 +47,9 @@ export class DetailTaskComponent implements OnInit {
 
   public openDropDown() {
     this.dropDown = true;
+  }
+  public onCloseEdit(isClose: boolean) {
+    this.edit = isClose;
   }
   public changeValue(subtask: Subtask) {
     subtask.done = !subtask.done;
@@ -67,11 +70,9 @@ export class DetailTaskComponent implements OnInit {
     console.log(this.edit);
   }
 
-  closeWindow() {
-    this.edit = false;
-  }
-  closePopUps() {
-    this.edit = false;
+  closeWindow(boolean: boolean) {
+    this.edit = boolean;
+    console.log('testS');
   }
 
   deleteTask(taskId: string) {
@@ -86,10 +87,10 @@ export class DetailTaskComponent implements OnInit {
 
       if (this.currentTask.id === taskId) {
         this.currentTask = null!;
-        this.closePopUp.emit(false);
       }
     }
   }
+
   private moveTask(task: Task, newStatus: string) {
     const currentColumn = this.findColumnContainingTask(task);
 
@@ -125,6 +126,10 @@ export class DetailTaskComponent implements OnInit {
     const clickedElement = event.target as HTMLElement;
     if (clickedElement.tagName.toLowerCase() === 'section') {
       this.closePopUp.emit(false);
+      this.dropDown = false;
+    }
+    if (clickedElement.tagName.toLowerCase() === 'div') {
+      this.dropDown = false;
     } else return;
   }
 

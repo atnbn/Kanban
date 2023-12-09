@@ -83,4 +83,8 @@ export class BoardComponent {
     this.openDropDown = false;
     console.log('Modal closed:', this.addTaskPopUp);
   }
+
+  closePopUp(): void {
+    this.addTaskPopUp = false;
+  }
 }

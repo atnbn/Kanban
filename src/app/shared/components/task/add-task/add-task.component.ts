@@ -87,7 +87,6 @@ export default class AddTaskComponent implements OnInit {
       inputs: this.fb.array([]),
       currentStatus: this.taskObject?.status,
     });
-    console.log(this.inputs);
 
     this.taskObject.subtasks?.forEach((sub) => {
       this.inputs.push(this.fb.control(sub.name));
@@ -148,7 +147,22 @@ export default class AddTaskComponent implements OnInit {
     if (this.edit && this.formGroup.valid) {
       this.createTaskObject();
       this.moveTask(this.taskObject, this.taskObject.status);
+
+      const currentColumn = this.findColumnContainingTask(this.taskObject);
+
+      if (currentColumn) {
+        const taskToUpdate = currentColumn.tasks.find(
+          (task) => task.id === this.taskObject.id
+        );
+
+        if (taskToUpdate) {
+          taskToUpdate.title = this.taskObject.title;
+          taskToUpdate.description = this.taskObject.description;
+          taskToUpdate.status = this.taskObject.status;
+        }
+      }
     }
+    this.closePopUp.emit(true);
   }
 
   private moveTask(task: Task, newStatus: string) {
@@ -187,7 +201,6 @@ export default class AddTaskComponent implements OnInit {
     } else {
       this.updateTask();
     }
-    this.popupService.closeAddTask();
   }
 
   changeMode() {
