@@ -105,7 +105,7 @@ export class SidebarComponent implements OnInit {
     this.boardService.getBoardObjects().subscribe((objects) => {
       console.log(objects);
       if (Object.values(objects).length > 0) {
-        this.storage.push(...objects);
+        this.storage.push(objects);
       }
     });
 

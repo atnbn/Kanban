@@ -38,7 +38,8 @@ h3 {
     gap: 15px;
 }
 
-.add-task--btn {
+.add-task--btn,
+.add-column--btn {
     width: 140px;
     height: 40px;
     border-radius: 30px;
@@ -58,7 +59,6 @@ h3 {
     width: 140px;
     height: 40px;
     border-radius: 30px;
-    background-color: var(--secondarybtn);
 }
 .settings--btn {
     background-color: n;
@@ -115,4 +115,21 @@ h1 {
     display: flex;
     align-items: center;
     gap: 7px;
+}
+
+.fixed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+    align-items: center;
+    span {
+        letter-spacing: 1px;
+        color: var(--mediumgray);
+        font-family: "PlusMedium";
+        font-size: 14px;
+    }
 }

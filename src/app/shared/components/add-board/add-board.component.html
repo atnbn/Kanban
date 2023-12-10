@@ -4,7 +4,8 @@
       class="form"
       [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"
     >
-      <h3 [ngClass]="{ white: isDarkMode }">Add New Board</h3>
+      <h3 *ngIf="!edit" [ngClass]="{ white: isDarkMode }">Add New Board</h3>
+      <h3 *ngIf="edit" [ngClass]="{ white: isDarkMode }">Edit Board</h3>
       <label
         [ngClass]="{
           white: isDarkMode,
