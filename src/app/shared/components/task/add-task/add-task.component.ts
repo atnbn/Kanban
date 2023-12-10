@@ -41,8 +41,7 @@ export default class AddTaskComponent implements OnInit {
   constructor(
     private themeService: ThemeService,
     private fb: FormBuilder,
-    private boardService: BoardObjectService,
-    private popupService: OpenPopUpService
+    private boardService: BoardObjectService
   ) {}
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((darkmode) => {

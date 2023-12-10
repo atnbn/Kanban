@@ -24,10 +24,10 @@ import { OpenPopUpService } from '../../services/add-board/add-board-up.service'
   styleUrls: ['./add-board.component.scss'],
 })
 export class AddBoardComponent implements OnInit {
-  boardObject!: Board[];
+  boardObject: Board | undefined;
   fields: string[] = [];
   columnObject: any[] = [];
-
+  edit: boolean = false;
   formGroup!: FormGroup;
   modalOpen: boolean = true;
   isDarkMode: boolean = false;
@@ -44,13 +44,27 @@ export class AddBoardComponent implements OnInit {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
       this.isDarkMode = darkmode;
     });
-    this.initializeForm();
+    if (this.boardObject !== undefined) {
+      this.edit = true;
+      this.boardService.sidebarData$.subscribe((board: Board) => {
+        this.boardObject = board;
+      });
+    } else {
+      this.initializeForm();
+    }
   }
 
   initializeForm() {
     this.formGroup = this.fb.group({
       title: ['', [Validators.minLength(1), Validators.required]],
       inputs: this.fb.array([]),
+    });
+  }
+  initializeEditForm() {
+    this.formGroup = this.fb.group({
+      title: ['', [Validators.minLength(1), Validators.required]],
+      inputs: this.fb.array([]),
+      columns: this.boardObject?.columns,
     });
   }
 
@@ -84,23 +98,18 @@ export class AddBoardComponent implements OnInit {
   }
 
   submitForm() {
+    if (this.formGroup.invalid) return;
     const values = this.collectInputValues();
-
     this.createColumnObject(values);
-
     const boardValues = this.formGroup.value;
-    if (this.formGroup.valid) {
-      this.boardObject = [
-        {
-          title: boardValues.title,
-          columns: this.columnObject,
-          id: Math.random().toString(16).slice(2, 10),
-        },
-      ];
+    debugger;
+    (this.boardObject = {
+      title: boardValues.title,
+      columns: this.columnObject,
+      id: Math.random().toString(16).slice(2, 10),
+    }),
       this.boardService.addBoardObject(this.boardObject);
-
-      this.popupService.closeAddBoard();
-    }
+    this.popupService.closeAddBoard();
   }
 
   @HostListener('document:click', ['$event'])

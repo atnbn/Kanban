@@ -20,6 +20,7 @@ export class BoardComponent {
   OpenTaskWindow: boolean = false;
   openDropDown: boolean = false;
   sidebarStatus: boolean = false;
+  openBoardMenu: boolean = false;
   task!: Task;
   colors: string[] = [
     '#3498db',
@@ -56,6 +57,11 @@ export class BoardComponent {
       if (Object.keys(data).length > 0) {
         this.board = data;
         // console.log(data);
+      } else {
+        this.board = {
+          title: 'Select a board',
+          columns: [],
+        };
       }
     });
   }
@@ -86,5 +92,10 @@ export class BoardComponent {
 
   closePopUp(): void {
     this.addTaskPopUp = false;
+  }
+
+  openBoardWindow() {
+    this.openBoardMenu = true;
+    this.boardService.submitDataToBoard(this.board);
   }
 }
