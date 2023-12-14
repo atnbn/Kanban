@@ -107,7 +107,7 @@ export default class AddTaskComponent implements OnInit {
 
   createSubtaskObject() {
     const values = this.inputs.controls.map((control: any) => control.value);
-
+    console.log(values);
     values.forEach((value) => {
       let subtask: Subtask = {
         name: value,

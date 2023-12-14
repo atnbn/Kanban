@@ -133,3 +133,25 @@ h1 {
         font-size: 14px;
     }
 }
+
+.edit-con {
+    position: absolute;
+    top: 75px;
+    right: 4px;
+    background-color: var(--ultradark);
+    padding: 10px;
+    height: 60px;
+    width: 150px;
+    box-shadow: 0px 6px 1px var(--lt-color-gray-800);
+    gap: 10px;
+    justify-content: center;
+    padding-left: 15px;
+    border-radius: 10px;
+    flex-direction: column;
+    display: flex;
+    span {
+        font-size: 14px;
+        font-family: Plusmedium;
+        cursor: pointer;
+    }
+}

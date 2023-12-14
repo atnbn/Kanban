@@ -18,9 +18,10 @@ export class BoardComponent {
   isDarkMode: boolean = false;
   addTaskPopUp: boolean = false;
   OpenTaskWindow: boolean = false;
-  openDropDown: boolean = false;
+  dropDown: boolean = false;
   sidebarStatus: boolean = false;
   openBoardMenu: boolean = false;
+
   task!: Task;
   colors: string[] = [
     '#3498db',
@@ -58,10 +59,7 @@ export class BoardComponent {
         this.board = data;
         // console.log(data);
       } else {
-        this.board = {
-          title: 'Select a board',
-          columns: [],
-        };
+        this.board = data;
       }
     });
   }
@@ -85,17 +83,16 @@ export class BoardComponent {
     this.addTaskPopUp = false;
   }
 
-  closeDropDown(): void {
-    this.openDropDown = false;
-    console.log('Modal closed:', this.addTaskPopUp);
+  editBoard(): void {
+    this.openBoardMenu = true;
+    this.boardService.submitBoard(this.board);
+  }
+
+  openSettings(): void {
+    this.dropDown = true;
   }
 
   closePopUp(): void {
     this.addTaskPopUp = false;
-  }
-
-  openBoardWindow() {
-    this.openBoardMenu = true;
-    this.boardService.submitDataToBoard(this.board);
   }
 }

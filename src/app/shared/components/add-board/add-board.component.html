@@ -33,30 +33,31 @@
         for=""
         >Board Columns</label
       >
-
-      <div
-        class="columns"
-        *ngFor="let input of inputs.controls; let i = index"
-        formArrayName="inputs"
-      >
-        <input
-          [ngClass]="{
-            'dark-mode': isDarkMode,
-            white: isDarkMode,
-            'dark-mode-border': isDarkMode
-          }"
-          type="text"
-          [formControlName]="i"
-        />
-        <button
-          type="button"
-          class="delete-column--btn btn-nobackground"
-          (click)="deleteInput(i)"
+      <div formArrayName="inputs">
+        <div
+          class="columns"
+          *ngFor="let input of inputs.controls; let i = index"
+          [formGroupName]="i"
         >
-          <img src="assets/images/icon-cross.svg" />
-        </button>
+          <input
+            *ngIf="this.edit"
+            [ngClass]="{
+              'dark-mode': isDarkMode,
+              white: isDarkMode,
+              'dark-mode-border': isDarkMode
+            }"
+            type="text"
+            formControlName="columnName"
+          />
+          <button
+            type="button"
+            class="delete-column--btn btn-nobackground"
+            (click)="deleteInput(i)"
+          >
+            <img src="assets/images/icon-cross.svg" />
+          </button>
+        </div>
       </div>
-
       <!-- add new input button -->
       <button
         [ngClass]="{
@@ -75,7 +76,7 @@
         [disabled]="!formGroup.valid"
         [ngClass]="{ invalid: !formGroup.valid }"
       >
-        Create New Board
+        {{ this.edit ? "Save Changes" : "Create New Board" }}
       </button>
     </div>
   </form>

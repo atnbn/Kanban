@@ -3,6 +3,7 @@
     <h1 [ngClass]="{ white: isDarkMode }">
       {{ board.title ? board.title : "Test" }}
     </h1>
+
     <div class="buttons">
       <button
         class="add-task--btn"
@@ -11,9 +12,18 @@
       >
         + Add New Task
       </button>
-      <button class="settings--btn btn-nobackground" [ngClass]="{}">
+      <button class="settings--btn btn-nobackground" (click)="openSettings()">
         <img src="assets/images/icon-vertical-ellipsis.svg" />
       </button>
+      <!-- Popup window -->
+      <div [ngClass]="{ 'd-none': !dropDown }" class="edit-con">
+        <span
+          (click)="editBoard()"
+          [ngClass]="{ 'dark-mode-label': isDarkMode }"
+          >Edit Board</span
+        >
+        <span style="color: var(--red)">Delete Task</span>
+      </div>
     </div>
   </div>
 </header>
@@ -56,4 +66,7 @@
   (closePopUp)="closeTask()"
 ></app-detail-task>
 
-<app-add-board *ngIf="openBoardMenu"></app-add-board>
+<app-add-board
+  [currentBoard]="this.board"
+  *ngIf="openBoardMenu"
+></app-add-board>

@@ -67,7 +67,6 @@ export class DetailTaskComponent implements OnInit {
 
   editTask() {
     this.edit = true;
-    console.log(this.edit);
   }
 
   closeWindow(boolean: boolean) {
