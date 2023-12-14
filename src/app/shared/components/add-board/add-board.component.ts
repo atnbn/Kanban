@@ -33,6 +33,7 @@ export class AddBoardComponent implements OnInit {
   modalOpen: boolean = true;
   allBoards!: Board[];
   isDarkMode: boolean = false;
+  deleteForm: boolean = false;
   @Input() currentBoard: Board | null = null;
 
   @Output() closePopUp = new EventEmitter<boolean>();
@@ -75,7 +76,7 @@ export class AddBoardComponent implements OnInit {
         [Validators.minLength(1), Validators.required],
       ],
       inputs: this.fb.array([]),
-      existingColumn: [],
+      columnName: [],
     });
 
     this.boardObject?.columns.forEach((column) => {
@@ -149,14 +150,27 @@ export class AddBoardComponent implements OnInit {
     if (this.edit) {
       this.updateBoard();
     } else {
+      this.createBoard();
     }
     this.popupService.closeAddBoard();
   }
   createBoard() {
     this.createBoardObject();
-    this.boardService.submitDataToBoard(this.boardObject);
+    this.boardService.addBoardObject(this.boardObject!);
+    this.boardService.submitDataToBoard(this.boardObject!);
   }
+  deleteBoard(currBoard: any) {
+    this.deleteForm = true;
+    const currentBoard = this.allBoards.some(
+      (board) => (board.id = currBoard.id)
+    );
 
+    if (currentBoard) {
+    }
+  }
+  toggelDeleteWindow() {
+    this.deleteForm = false;
+  }
   updateBoard() {
     this.createBoardObject();
 

@@ -22,7 +22,9 @@
           [ngClass]="{ 'dark-mode-label': isDarkMode }"
           >Edit Board</span
         >
-        <span style="color: var(--red)">Delete Task</span>
+        <span style="color: var(--red)" (click)="openDeleteWindow()"
+          >Delete Board</span
+        >
       </div>
     </div>
   </div>
@@ -70,3 +72,8 @@
   [currentBoard]="this.board"
   *ngIf="openBoardMenu"
 ></app-add-board>
+
+<app-delete-object
+  [board]="this.board"
+  *ngIf="deleteWindow"
+></app-delete-object>

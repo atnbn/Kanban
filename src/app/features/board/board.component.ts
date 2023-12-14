@@ -21,7 +21,7 @@ export class BoardComponent {
   dropDown: boolean = false;
   sidebarStatus: boolean = false;
   openBoardMenu: boolean = false;
-
+  deleteWindow: boolean = false;
   task!: Task;
   colors: string[] = [
     '#3498db',
@@ -86,6 +86,10 @@ export class BoardComponent {
   editBoard(): void {
     this.openBoardMenu = true;
     this.boardService.submitBoard(this.board);
+  }
+
+  openDeleteWindow(): void {
+    this.deleteWindow = true;
   }
 
   openSettings(): void {
