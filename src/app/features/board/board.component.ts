@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import {
   Board,
   Columns,
@@ -8,6 +8,7 @@ import { OpenPopUpService } from 'src/app/shared/services/add-board/add-board-up
 import { BoardObjectService } from 'src/app/shared/services/add-board/board-object.service';
 import { SidebarService } from 'src/app/shared/services/sidebar/sidebar.service';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-board',
@@ -74,6 +75,7 @@ export class BoardComponent {
     this.boardService.submitDataToBoard(this.board);
     this.task = task;
   }
+  currentItem: any = {};
 
   closeTask() {
     this.OpenTaskWindow = false;
@@ -82,14 +84,50 @@ export class BoardComponent {
   closeAddTask(): void {
     this.addTaskPopUp = false;
   }
+  onDragStart(task: any) {
+    this.currentItem = task;
+
+    console.log(this.currentItem);
+  }
+
+  onDrop(event: any, status: string) {
+    const column = this.findColumnContainingTask(this.currentItem);
+    if (column) {
+      const currentColumn = this.findColumnContainingTask(this.currentItem);
+      const task = currentColumn?.tasks.find(
+        (t: any) => t.id === this.currentItem.id
+      );
+      currentColumn?.tasks.splice(currentColumn?.tasks.indexOf(task!), 1);
+      this.board.columns
+        .find((column: any) => column.columnName === status)
+        ?.tasks.push(task);
+      this.boardService.submitBoard(this.board);
+    }
+  }
+
+  onDragOver(event: any) {
+    event.preventDefault();
+  }
+
+  private findColumnContainingTask(task: Task): Columns | undefined {
+    return this.board.columns.find((column: any) =>
+      column.tasks.some((t: any) => t.id === task.id)
+    );
+  }
 
   editBoard(): void {
     this.openBoardMenu = true;
     this.boardService.submitBoard(this.board);
+    this.dropDown = false;
   }
 
-  openDeleteWindow(): void {
-    this.deleteWindow = true;
+  closeBoardMenu(): void {
+    this.openBoardMenu = false;
+  }
+
+  toggleDeleteWindow(): void {
+    this.deleteWindow = !this.deleteWindow;
+    this.dropDown = false;
   }
 
   openSettings(): void {
@@ -98,5 +136,13 @@ export class BoardComponent {
 
   closePopUp(): void {
     this.addTaskPopUp = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleOutsideClick(event: MouseEvent) {
+    const clickedElement = event.target as HTMLElement;
+    if (clickedElement.tagName.toLowerCase() === 'div') {
+      this.dropDown = false;
+    } else return;
   }
 }

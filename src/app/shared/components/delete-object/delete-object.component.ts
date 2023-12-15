@@ -1,6 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { ThemeService } from '../../services/theme/theme.service';
 import { Board, Task } from '../../services/models/board-interface';
+import { BoardObjectService } from '../../services/add-board/board-object.service';
 
 @Component({
   selector: 'app-delete-object',
@@ -10,12 +18,17 @@ import { Board, Task } from '../../services/models/board-interface';
 export class DeleteObjectComponent implements OnInit {
   isTask: boolean = false;
   isDarkMode: boolean = false;
+  allBoards: Board[] = [];
   currentObject?: Task | Board;
   @Input() board?: Board;
   @Input() task?: Task;
 
   @Output() recivingObject = new EventEmitter<Task | Board>();
-  constructor(private themeService: ThemeService) {}
+  @Output() closePopUp = new EventEmitter<boolean>();
+  constructor(
+    private themeService: ThemeService,
+    private boardService: BoardObjectService
+  ) {}
 
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
@@ -24,6 +37,9 @@ export class DeleteObjectComponent implements OnInit {
 
     if (this.board !== undefined) {
       this.isTask = false;
+      this.boardService.storage$.subscribe((storage) => {
+        this.allBoards = storage;
+      });
       this.currentObject = this.board;
     }
     if (this.task !== undefined) {
@@ -32,8 +48,42 @@ export class DeleteObjectComponent implements OnInit {
     }
   }
   deleteObject(id: any) {
-    console.log(id);
+    if (this.isTask) {
+      // this.onDeleteTask(id);
+    } else {
+      this.onDeleteBoard(id);
+    }
+    this.closeDeleteWindow();
+    this.recivingObject.emit();
   }
 
-  closeDeleteWindow() {}
+  onDeleteBoard(boardId: string) {
+    // Find and handle board deletion logic here
+    const index = this.allBoards.findIndex((board) => board.id === boardId);
+    if (index !== -1) {
+      this.allBoards.splice(index, 1); // Remove the board from the array
+    }
+    this.boardService.submitDataToBoard(this.allBoards[0]);
+  }
+
+  onDeleteTask(taskId: string) {
+    // Find and handle task deletion logic here
+  }
+
+  closeDeleteWindow() {
+    this.closePopUp.emit(false);
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleOutsideClick(event: MouseEvent) {
+    const clickedElement = event.target as HTMLElement;
+    if (clickedElement.tagName.toLowerCase() === 'section') {
+      this.closePopUp.emit(false);
+    } else return;
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscapeKey() {
+    this.closePopUp.emit(false);
+  }
 }

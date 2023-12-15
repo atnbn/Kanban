@@ -71,7 +71,6 @@ export class DetailTaskComponent implements OnInit {
 
   closeWindow(boolean: boolean) {
     this.edit = boolean;
-    console.log('testS');
   }
 
   deleteTask(taskId: string) {

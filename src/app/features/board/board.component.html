@@ -22,7 +22,7 @@
           [ngClass]="{ 'dark-mode-label': isDarkMode }"
           >Edit Board</span
         >
-        <span style="color: var(--red)" (click)="openDeleteWindow()"
+        <span style="color: var(--red)" (click)="toggleDeleteWindow()"
           >Delete Board</span
         >
       </div>
@@ -32,25 +32,39 @@
 
 <section [ngClass]="{ 'dark-mode-body': isDarkMode }">
   <div *ngIf="board.columns.length > 0" class="column-body">
-    <div class="columns" *ngFor="let column of board.columns; let i = index">
-      <div class="column-title-con">
-        <p class="dot" [style.backgroundColor]="colors[i]"></p>
-        <h3 [ngClass]="{ 'dark-mode-label': isDarkMode }">
-          {{ column.columnName }} ({{ column.tasks?.length }})
-        </h3>
-      </div>
+    <!-- columns -->
+    <div
+      class="columns"
+      (dragover)="onDragOver($event)"
+      *ngFor="let column of board.columns; let i = index"
+      (drop)="onDrop($event, column.columnName)"
+    >
+      <div>
+        <div class="column-title-con">
+          <p class="dot" [style.backgroundColor]="colors[i]"></p>
+          <h3 [ngClass]="{ 'dark-mode-label': isDarkMode }">
+            {{ column.columnName }} ({{ column.tasks?.length }})
+          </h3>
+        </div>
 
-      <div
-        class="tasks"
-        *ngFor="let task of column.tasks; let i = index"
-        (click)="openTask(task)"
-      >
-        <h3 [ngClass]="{ white: isDarkMode }">{{ task.title }}</h3>
+        <div
+          class="tasks"
+          *ngFor="let task of column.tasks; let j = index"
+          (click)="openTask(task)"
+          (dragstart)="onDragStart(task)"
+          draggable="true"
+          [ngClass]="{ 'dark-mode-body': isDarkMode }"
+        >
+          <h3 [ngClass]="{ white: isDarkMode }">{{ task.title }}</h3>
 
-        <p [ngClass]="{ 'dark-mode-label': isDarkMode }">
-          0 of {{ task.subtasks.length }} subtasks
-        </p>
+          <p [ngClass]="{ 'dark-mode-label': isDarkMode }">
+            0 of {{ task.subtasks.length }} subtasks
+          </p>
+        </div>
       </div>
+    </div>
+    <div class="columns add-column" (click)="editBoard()">
+      <p>+ New Column</p>
     </div>
   </div>
   <div *ngIf="board.columns.length === 0" class="fixed">
@@ -71,9 +85,11 @@
 <app-add-board
   [currentBoard]="this.board"
   *ngIf="openBoardMenu"
+  (closePopUp)="closeBoardMenu()"
 ></app-add-board>
 
 <app-delete-object
   [board]="this.board"
   *ngIf="deleteWindow"
+  (closePopUp)="toggleDeleteWindow()"
 ></app-delete-object>
