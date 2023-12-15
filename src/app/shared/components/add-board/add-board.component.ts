@@ -3,6 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   HostListener,
+  Input,
   OnInit,
   Output,
 } from '@angular/core';
@@ -15,7 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { BoardObjectService } from '../../services/add-board/board-object.service';
-import { Board, Columns } from '../../services/models/board-interface';
+import { Board, Columns, Task } from '../../services/models/board-interface';
 import { OpenPopUpService } from '../../services/add-board/add-board-up.service';
 
 @Component({
@@ -30,7 +31,11 @@ export class AddBoardComponent implements OnInit {
   edit: boolean = false;
   formGroup!: FormGroup;
   modalOpen: boolean = true;
+  allBoards!: Board[];
   isDarkMode: boolean = false;
+  deleteForm: boolean = false;
+  @Input() currentBoard: Board | null = null;
+
   @Output() closePopUp = new EventEmitter<boolean>();
 
   constructor(
@@ -41,14 +46,16 @@ export class AddBoardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.themeService.isDarkMode$.subscribe((darkmode) => {
-      this.isDarkMode = darkmode;
+    this.themeService.isDarkMode$.subscribe((value) => {
+      this.isDarkMode = value;
     });
-    if (this.boardObject !== undefined) {
-      this.edit = true;
-      this.boardService.sidebarData$.subscribe((board: Board) => {
-        this.boardObject = board;
+    if (this.currentBoard !== null) {
+      this.boardService.getStorage().subscribe((storage) => {
+        this.allBoards = storage;
       });
+      this.edit = true;
+      this.boardObject = this.currentBoard;
+      this.initializeEditForm();
     } else {
       this.initializeForm();
     }
@@ -58,13 +65,27 @@ export class AddBoardComponent implements OnInit {
     this.formGroup = this.fb.group({
       title: ['', [Validators.minLength(1), Validators.required]],
       inputs: this.fb.array([]),
+      columnName: [],
     });
   }
+
   initializeEditForm() {
     this.formGroup = this.fb.group({
-      title: ['', [Validators.minLength(1), Validators.required]],
+      title: [
+        this.boardObject?.title,
+        [Validators.minLength(1), Validators.required],
+      ],
       inputs: this.fb.array([]),
-      columns: this.boardObject?.columns,
+      columnName: [],
+    });
+
+    this.boardObject?.columns.forEach((column) => {
+      this.inputs.push(
+        this.fb.group({
+          columnName: column.columnName,
+          tasks: this.fb.array(column.tasks),
+        })
+      );
     });
   }
 
@@ -73,8 +94,12 @@ export class AddBoardComponent implements OnInit {
   }
 
   addInput() {
-    const inputForm = this.fb.control('New Column');
-    this.inputs.push(inputForm);
+    const newInputForm = this.fb.group({
+      columnName: ['New Column'],
+      tasks: this.fb.array([]), // You might need to adjust this depending on your requirements
+    });
+
+    this.inputs.push(newInputForm);
     console.log(this.inputs);
   }
 
@@ -83,35 +108,88 @@ export class AddBoardComponent implements OnInit {
     return values;
   }
 
-  createColumnObject(arr: any[]) {
-    arr.forEach((value) => {
-      let column = {
-        boardName: value,
-        tasks: [],
-      };
-      this.columnObject.push(column);
-    });
-  }
+  // createColumnObject(arr: any[]) {
+  //   console.log(arr);
+
+  //   arr.forEach((value) => {
+  //     let column = {
+  //       boardName: value,
+  //       tasks: [value.tasks],
+  //     };
+  //     console.log(column);
+  //     this.columnObject.push(column);
+  //   });
+  // }
 
   deleteInput(index: number) {
     this.inputs.removeAt(index);
   }
 
-  submitForm() {
-    if (this.formGroup.invalid) return;
-    const values = this.collectInputValues();
-    this.createColumnObject(values);
-    const boardValues = this.formGroup.value;
-    debugger;
-    (this.boardObject = {
-      title: boardValues.title,
-      columns: this.columnObject,
-      id: Math.random().toString(16).slice(2, 10),
-    }),
-      this.boardService.addBoardObject(this.boardObject);
-    this.popupService.closeAddBoard();
+  changeTaskStatus() {
+    this.inputs.value.forEach((column: Columns) => {
+      column.tasks.forEach((task: Task) => {
+        console.log('task', task);
+        task.status = column.columnName;
+      });
+    });
+  }
+  checkIfBoardExists() {
+    this.allBoards?.find((board) => board.id === this.boardObject?.id);
   }
 
+  createBoardObject() {
+    if (this.formGroup.invalid) return;
+    this.boardObject = {
+      title: this.formGroup.value.title,
+      columns: this.inputs.value,
+      id: this.boardObject?.id || Math.random().toString(16).slice(2, 10),
+    };
+  }
+
+  submitForm() {
+    if (this.edit) {
+      this.updateBoard();
+    } else {
+      this.createBoard();
+    }
+    this.popupService.closeAddBoard();
+  }
+  createBoard() {
+    this.createBoardObject();
+    this.boardService.addBoardObject(this.boardObject!);
+    this.boardService.submitDataToBoard(this.boardObject!);
+  }
+  deleteBoard(currBoard: any) {
+    this.deleteForm = true;
+    const currentBoard = this.allBoards.some(
+      (board) => (board.id = currBoard.id)
+    );
+
+    if (currentBoard) {
+    }
+  }
+  toggelDeleteWindow() {
+    this.deleteForm = false;
+  }
+  updateBoard() {
+    this.createBoardObject();
+
+    const indexToUpdate = this.allBoards.findIndex(
+      (board: Board) => board.id === this.boardObject?.id
+    );
+
+    if (indexToUpdate !== -1) {
+      // If the board with the specified id is found, update it
+      this.allBoards[indexToUpdate] = {
+        title: this.boardObject!.title,
+        columns: this.boardObject!.columns,
+        id: this.boardObject!.id,
+      };
+    }
+    this.boardService.submitDataToBoard(this.boardObject);
+
+    this.changeTaskStatus();
+  }
   @HostListener('document:click', ['$event'])
   handleOutsideClick(event: MouseEvent) {
     const clickedElement = event.target as HTMLElement;

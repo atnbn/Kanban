@@ -13,6 +13,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EditTaskComponent } from './shared/components/task/edit-task/edit-task.component';
 import { DetailTaskComponent } from './shared/components/task/detail-task/detail-task.component';
 import { FormsModule } from '@angular/forms';
+import { DeleteObjectComponent } from './shared/components/delete-object/delete-object.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { FormsModule } from '@angular/forms';
     AddTaskComponent,
     EditTaskComponent,
     DetailTaskComponent,
+    DeleteObjectComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -30,6 +33,7 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    DragDropModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

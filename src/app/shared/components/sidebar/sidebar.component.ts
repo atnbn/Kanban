@@ -108,7 +108,8 @@ export class SidebarComponent implements OnInit {
         this.storage.push(objects);
       }
     });
-
+    this.boardService.submitDataToBoard(this.storage[0]);
+    this.boardService.submitStorage(this.storage);
     this.popupService.addBoard$.subscribe((value) => {
       this.addBoardPopUp = value;
     });

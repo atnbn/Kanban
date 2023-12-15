@@ -107,7 +107,7 @@ export default class AddTaskComponent implements OnInit {
 
   createSubtaskObject() {
     const values = this.inputs.controls.map((control: any) => control.value);
-
+    console.log(values);
     values.forEach((value) => {
       let subtask: Subtask = {
         name: value,
@@ -128,6 +128,8 @@ export default class AddTaskComponent implements OnInit {
       subtasks: this.subTaskObject,
       status: taskValues.currentStatus,
     };
+    console.log(this.getCompletedSubtaskCount());
+
     console.log(this.taskObject);
   }
 
@@ -192,6 +194,10 @@ export default class AddTaskComponent implements OnInit {
     return this.currentBoard.columns.find((column) =>
       column.tasks.some((t) => t.id === task.id)
     );
+  }
+
+  getCompletedSubtaskCount() {
+    return this.currentTask?.subtasks?.filter((subtask) => subtask.done).length;
   }
 
   submitForm() {

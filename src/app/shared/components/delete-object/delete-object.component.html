@@ -1,0 +1,29 @@
+<section>
+  <div
+    class="delete-con"
+    [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"
+  >
+    <h2 class="title-delete" [ngClass]="{ white: isDarkMode }">
+      {{ isTask ? "Delete this Task" : " Delete this Board?" }}
+    </h2>
+
+    <p *ngIf="isTask" [ngClass]="{ 'dark-mode-label': isDarkMode }">
+      Are you sure you want to delete the ‘{{ task?.title }}’ task and its
+      subtasks? This action cannot be reversed.
+    </p>
+
+    <p *ngIf="!isTask" [ngClass]="{ 'dark-mode-label': isDarkMode }">
+      Are you sure you want to delete the {{ this.board?.title }} board? This
+      action will remove all columns and tasks and cannot be reversed.
+    </p>
+
+    <div class="delete-btn-con">
+      <button (click)="deleteObject(currentObject?.id)" class="delete-btn btn">
+        Delete
+      </button>
+      <button (click)="closeDeleteWindow()" class="cancel-btn btn">
+        Cancel
+      </button>
+    </div>
+  </div>
+</section>

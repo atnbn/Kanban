@@ -110,3 +110,5 @@
   [currentTask]="currentTask"
   (closePopUp)="closeWindow(false)"
 ></app-add-task>
+
+<app-delete-object *ngIf="deleteForm" [task]="currentTask"></app-delete-object>
