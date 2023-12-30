@@ -19,6 +19,11 @@ export class DeleteObjectComponent implements OnInit {
   isTask: boolean = false;
   isDarkMode: boolean = false;
   allBoards: Board[] = [];
+  emptyBoard: Board = {
+    id: '0',
+    title: '',
+    columns: [],
+  };
   currentObject?: Task | Board;
   @Input() board?: Board;
   @Input() task?: Task;
@@ -63,7 +68,12 @@ export class DeleteObjectComponent implements OnInit {
     if (index !== -1) {
       this.allBoards.splice(index, 1); // Remove the board from the array
     }
-    this.boardService.submitDataToBoard(this.allBoards[0]);
+    if (this.allBoards.length === 0) {
+      this.boardService.submitDataToBoard(this.emptyBoard);
+      console.log('test');
+    } else {
+      this.boardService.submitDataToBoard(this.allBoards[0]);
+    }
   }
 
   onDeleteTask(taskId: string) {

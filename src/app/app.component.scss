@@ -18,6 +18,7 @@ app-header {
 }
 .right-side {
     width: 100%;
+    position: relative;
 }
 
 .logo-header {
@@ -66,4 +67,11 @@ app-header {
 
 .con {
     display: flex;
+}
+
+.add-board-con {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

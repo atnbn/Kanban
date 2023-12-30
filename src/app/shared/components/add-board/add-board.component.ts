@@ -108,19 +108,6 @@ export class AddBoardComponent implements OnInit {
     return values;
   }
 
-  // createColumnObject(arr: any[]) {
-  //   console.log(arr);
-
-  //   arr.forEach((value) => {
-  //     let column = {
-  //       boardName: value,
-  //       tasks: [value.tasks],
-  //     };
-  //     console.log(column);
-  //     this.columnObject.push(column);
-  //   });
-  // }
-
   deleteInput(index: number) {
     this.inputs.removeAt(index);
   }
@@ -189,6 +176,7 @@ export class AddBoardComponent implements OnInit {
     this.boardService.submitDataToBoard(this.boardObject);
 
     this.changeTaskStatus();
+    this.closePopUp.emit(false);
   }
   @HostListener('document:click', ['$event'])
   handleOutsideClick(event: MouseEvent) {

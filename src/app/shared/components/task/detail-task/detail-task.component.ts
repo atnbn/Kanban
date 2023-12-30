@@ -26,6 +26,7 @@ export class DetailTaskComponent implements OnInit {
   edit: boolean = false;
   deleteForm: boolean = false;
   currentTask!: Task;
+  checkedCount: number = 0;
   @Output() closePopUp = new EventEmitter<boolean>(false);
   constructor(
     private themeService: ThemeService,
@@ -43,6 +44,7 @@ export class DetailTaskComponent implements OnInit {
     this.boardService.sidebarData$.subscribe((board: Board) => {
       this.currentBoard = board;
     });
+    this.calculateDoneSubtasks();
   }
 
   public openDropDown() {
@@ -53,6 +55,7 @@ export class DetailTaskComponent implements OnInit {
   }
   public changeValue(subtask: Subtask) {
     subtask.done = !subtask.done;
+    this.calculateDoneSubtasks();
   }
 
   public onSelectChange(event: any) {
@@ -71,6 +74,56 @@ export class DetailTaskComponent implements OnInit {
 
   closeWindow(boolean: boolean) {
     this.edit = boolean;
+  }
+
+  calculateDoneSubtasks() {
+    this.checkedCount = 0;
+    this.currentTask.subtasks?.forEach((subtask) => {
+      if (subtask.done) {
+        this.checkedCount++;
+      }
+      if (subtask.done === false) {
+      }
+    });
+  }
+
+  // saveTask(task: Task) {
+  //   const currentColumn = this.findColumnContainingTask(task);
+  //   if (currentColumn ) {
+  //     currentColumn.tasks = currentColumn.tasks.filter((t) => t.id !== task.id);
+
+  //     currentColumn.tasks.push(task);
+  //   }
+  // }
+  saveTask(task: Task) {
+    const currentColumn = this.findColumnContainingTask(task);
+    if (currentColumn) {
+      const existingTask = currentColumn.tasks.find((t) => t.id === task.id);
+
+      if (existingTask) {
+        // Check if any property is different before updating
+        if (!this.checkIfTasksEqual(existingTask, task)) {
+          // Remove the existing task
+          currentColumn.tasks = currentColumn.tasks.filter(
+            (t) => t.id !== task.id
+          );
+
+          // Add the updated task
+          currentColumn.tasks.push(task);
+          console.log('task is safed');
+        }
+      }
+    }
+  }
+
+  checkIfTasksEqual(task1: Task, task2: Task): boolean {
+    return (
+      task1.id === task2.id &&
+      task1.title === task2.title &&
+      task1.description === task2.description &&
+      task1.status === task2.status &&
+      JSON.stringify(task1.subtasks) === JSON.stringify(task2.subtasks)
+    );
   }
 
   deleteTask(taskId: string) {
@@ -124,6 +177,7 @@ export class DetailTaskComponent implements OnInit {
     const clickedElement = event.target as HTMLElement;
     if (clickedElement.tagName.toLowerCase() === 'section') {
       this.closePopUp.emit(false);
+      this.saveTask(this.currentTask);
       this.dropDown = false;
     }
     if (clickedElement.tagName.toLowerCase() === 'div') {
