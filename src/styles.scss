@@ -86,6 +86,10 @@ body {
 button {
     cursor: pointer;
 }
+input:focus {
+    text-decoration: none;
+    outline: none;
+}
 
 .btn-nobackground {
     background-color: none;
@@ -96,3 +100,9 @@ button {
 .d-none {
     display: none !important;
 }
+.hidden {
+    display: none !important;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -1,0 +1,23 @@
+<section>
+  <h1 [ngClass]="{ white: darkmode }">Kanban</h1>
+  <div class="login-form">
+    <form [formGroup]="userForm" (ngSubmit)="login()">
+      <h2 [ngClass]="{ white: darkmode }">Login</h2>
+      <label [ngClass]="{ white: darkmode }">Email</label>
+      <input formControlName="email" type="email" />
+
+      <label [ngClass]="{ white: darkmode }">Password</label>
+      <input formControlName="password" type="password" />
+
+      <button type="submit" [ngClass]="{ white: darkmode }">Login</button>
+    </form>
+
+    <div class="remember-con">
+      <input type="checkbox" />
+      <p [ngClass]="{ white: darkmode }">Remember me</p>
+    </div>
+    <p routerLink="/sign-up" [ngClass]="{ whit: darkmode }" class="create-acc">
+      Create an account
+    </p>
+  </div>
+</section>

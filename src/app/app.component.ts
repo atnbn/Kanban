@@ -5,6 +5,7 @@ import { SidebarService } from './shared/services/sidebar/sidebar.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Board } from './shared/services/models/board-interface';
 import { BoardObjectService } from './shared/services/add-board/board-object.service';
+import { CreateUserService } from './shared/services/create-user/create-user.service';
 
 @Component({
   selector: 'app-root',
@@ -36,7 +37,8 @@ export class AppComponent {
   constructor(
     private themeService: ThemeService,
     private sidebarService: SidebarService,
-    private boardService: BoardObjectService
+    private boardService: BoardObjectService,
+    private createUserService: CreateUserService
   ) {}
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
@@ -53,6 +55,7 @@ export class AppComponent {
         this.boards.push(boards);
       }
     });
+    // this.addUser();
   }
 
   changeSidebar() {

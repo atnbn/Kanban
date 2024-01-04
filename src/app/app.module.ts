@@ -15,6 +15,10 @@ import { DetailTaskComponent } from './shared/components/task/detail-task/detail
 import { FormsModule } from '@angular/forms';
 import { DeleteObjectComponent } from './shared/components/delete-object/delete-object.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './features/login/login.component';
+import { SignupComponent } from './features/signup/signup.component';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -26,14 +30,18 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     EditTaskComponent,
     DetailTaskComponent,
     DeleteObjectComponent,
+    LoginComponent,
+    SignupComponent,
   ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    HttpClientModule,
     FormsModule,
     DragDropModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
