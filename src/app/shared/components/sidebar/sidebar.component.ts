@@ -32,62 +32,63 @@ export class SidebarComponent implements OnInit {
   isDarkMode: boolean = false;
   addBoardPopUp: boolean = false;
   sidebarState: boolean = true;
-  storage: Board[] = [
-    {
-      title: 'Test',
-      columns: [
-        {
-          columnName: 'Todo',
-          tasks: [
-            {
-              title: 'Fix Life',
-              description: ' Fixing life in diffrent ways',
-              subtasks: [
-                {
-                  name: 'Fixingbixing',
-                  done: true,
-                  id: '123123123123',
-                },
-              ],
-              status: 'Todo',
-              id: 'w4e8zu6233334598ßow4859g245gh2g45',
-            },
-            {
-              title: 'Test Life',
-              description: 'Fixing life in diffrent ways',
-              subtasks: [
-                {
-                  name: 'Fixingbixing',
-                  done: true,
-                  id: '1231212123216881',
-                },
-              ],
-              status: 'Todo',
-              id: 'w4e8zu624598ßow4859g245gh2g45',
-            },
-          ],
-        },
-        {
-          columnName: 'Done',
-          tasks: [
-            {
-              title: 'Fix Life',
-              description: ' Fixing life in diffrent ways',
-              subtasks: [],
-              status: 'Done',
-              id: '+opavcj+pioaweürf9juü+4+53io´nu',
-            },
-          ],
-        },
-      ],
-      id: '212314414124',
-    },
-    {
-      title: 'Hall',
-      columns: [],
-      id: '5454',
-    },
-  ];
+  storage: Board[] = [];
+  //  [
+  //   {
+  //     title: 'Test',
+  //     columns: [
+  //       {
+  //         columnName: 'Todo',
+  //         tasks: [
+  //           {
+  //             title: 'Fix Life',
+  //             description: ' Fixing life in diffrent ways',
+  //             subtasks: [
+  //               {
+  //                 name: 'Fixingbixing',
+  //                 done: true,
+  //                 id: '123123123123',
+  //               },
+  //             ],
+  //             status: 'Todo',
+  //             id: 'w4e8zu6233334598ßow4859g245gh2g45',
+  //           },
+  //           {
+  //             title: 'Test Life',
+  //             description: 'Fixing life in diffrent ways',
+  //             subtasks: [
+  //               {
+  //                 name: 'Fixingbixing',
+  //                 done: true,
+  //                 id: '1231212123216881',
+  //               },
+  //             ],
+  //             status: 'Todo',
+  //             id: 'w4e8zu624598ßow4859g245gh2g45',
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         columnName: 'Done',
+  //         tasks: [
+  //           {
+  //             title: 'Fix Life',
+  //             description: ' Fixing life in diffrent ways',
+  //             subtasks: [],
+  //             status: 'Done',
+  //             id: '+opavcj+pioaweürf9juü+4+53io´nu',
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //     id: '212314414124',
+  //   },
+  //   {
+  //     title: 'Hall',
+  //     columns: [],
+  //     id: '5454',
+  //   },
+  // ];
   storedMode = localStorage.getItem('darkmode');
   boards: Board[] = [];
 
@@ -97,18 +98,24 @@ export class SidebarComponent implements OnInit {
     private boardService: BoardObjectService,
     private popupService: OpenPopUpService
   ) {}
+
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
       this.isDarkMode = darkmode;
     });
 
     this.boardService.getBoardObjects().subscribe((objects) => {
-      console.log(objects);
       if (Object.values(objects).length > 0) {
         this.storage.push(objects);
       }
     });
-    this.boardService.submitDataToBoard(this.storage[0]);
+    if (this.storage.length === 0) {
+      setTimeout(() => {
+        this.addBoardPopUp = true;
+      }, 1000);
+    } else {
+      this.boardService.submitDataToBoard(this.storage[0]);
+    }
     this.boardService.submitStorage(this.storage);
     this.popupService.addBoard$.subscribe((value) => {
       this.addBoardPopUp = value;

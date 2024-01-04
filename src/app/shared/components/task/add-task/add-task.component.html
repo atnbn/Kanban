@@ -55,29 +55,30 @@
       >
         Subtasks</label
       >
-      <div
-        class="columns"
-        formArrayName="inputs"
-        *ngFor="let input of inputs.controls; let i = index"
-      >
-        <input
-          [ngClass]="{
-            'dark-mode': isDarkMode,
-            white: isDarkMode,
-            'dark-mode-border': isDarkMode
-          }"
-          type="text"
-          [formControlName]="i"
-        />
-        <button
-          class="delete-column--btn btn-nobackground"
-          type="button"
-          (click)="deleteInput(i)"
+      <div formArrayName="inputs">
+        <div
+          class="columns"
+          *ngFor="let input of inputs.controls; let i = index"
+          [formGroupName]="i"
         >
-          <img src="assets/images/icon-cross.svg" />
-        </button>
+          <input
+            [ngClass]="{
+              'dark-mode': isDarkMode,
+              white: isDarkMode,
+              'dark-mode-border': isDarkMode
+            }"
+            type="text"
+            formControlName="name"
+          />
+          <button
+            class="delete-column--btn btn-nobackground"
+            type="button"
+            (click)="deleteInput(i)"
+          >
+            <img src="assets/images/icon-cross.svg" />
+          </button>
+        </div>
       </div>
-
       <!-- add subtask button -->
       <button
         [ngClass]="{

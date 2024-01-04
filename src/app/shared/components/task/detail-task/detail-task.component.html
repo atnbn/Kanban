@@ -57,13 +57,14 @@
           white: isDarkMode,
           'dark-mode-label': !isDarkMode
         }"
-        >Subtasks( of {{ currentTask.subtasks?.length }})</label
+        >Subtasks ({{ checkedCount }} of
+        {{ currentTask.subtasks?.length }})</label
       >
       <!-- Subtask-->
       <div class="subtask" *ngFor="let subtask of currentTask.subtasks">
         <input
           [checked]="subtask.done"
-          (change)="changeValue(subtask)"
+          (click)="changeValue(subtask)"
           type="checkbox"
         />
 

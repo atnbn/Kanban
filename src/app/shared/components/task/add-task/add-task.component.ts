@@ -88,7 +88,13 @@ export default class AddTaskComponent implements OnInit {
     });
 
     this.taskObject.subtasks?.forEach((sub) => {
-      this.inputs.push(this.fb.control(sub.name));
+      this.inputs.push(
+        this.fb.group({
+          name: [sub.name, [Validators.minLength(1), Validators.required]],
+          done: [sub.done],
+          id: [sub.id],
+        })
+      );
     });
   }
 
@@ -96,8 +102,17 @@ export default class AddTaskComponent implements OnInit {
     return this.formGroup.controls['inputs'] as FormArray;
   }
 
+  // addInput() {
+  //   const inputForm = this.fb.control('new Subtask');
+  //   this.inputs.push(inputForm);
+  // }
+
   addInput() {
-    const inputForm = this.fb.control('new Subtask');
+    const inputForm = this.fb.group({
+      name: ['New Column1'],
+      done: [false],
+      id: [Math.random().toString(16).slice(2, 10)],
+    });
     this.inputs.push(inputForm);
   }
 
@@ -105,27 +120,13 @@ export default class AddTaskComponent implements OnInit {
     this.inputs.removeAt(index);
   }
 
-  createSubtaskObject() {
-    const values = this.inputs.controls.map((control: any) => control.value);
-    console.log(values);
-    values.forEach((value) => {
-      let subtask: Subtask = {
-        name: value,
-        done: value.done || false,
-        id: value.id || Math.random().toString(16).slice(2, 10),
-      };
-      this.subTaskObject.push(subtask);
-    });
-  }
-
   createTaskObject() {
-    this.createSubtaskObject();
     const taskValues = this.formGroup.value;
     this.taskObject = {
       title: taskValues.title,
       description: taskValues.description,
       id: this.currentTask?.id || Math.random().toString(16).slice(2, 10),
-      subtasks: this.subTaskObject,
+      subtasks: this.inputs.value,
       status: taskValues.currentStatus,
     };
     console.log(this.getCompletedSubtaskCount());
@@ -164,6 +165,7 @@ export default class AddTaskComponent implements OnInit {
       }
     }
     this.closePopUp.emit(true);
+    this.boardService.submitTask(this.taskObject);
   }
 
   private moveTask(task: Task, newStatus: string) {

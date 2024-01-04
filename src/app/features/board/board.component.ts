@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import {
   Board,
   Columns,
+  Subtask,
   Task,
 } from 'src/app/shared/services/models/board-interface';
 import { OpenPopUpService } from 'src/app/shared/services/add-board/add-board-up.service';
@@ -22,8 +23,10 @@ export class BoardComponent {
   dropDown: boolean = false;
   sidebarStatus: boolean = false;
   openBoardMenu: boolean = false;
+  createBoardMenu: boolean = false;
   deleteWindow: boolean = false;
   task!: Task;
+  emptyBoard: boolean = false;
   colors: string[] = [
     '#3498db',
     '#2ecc71',
@@ -34,7 +37,9 @@ export class BoardComponent {
     '#e67e22',
     '#34495e',
   ];
-  board: any = {};
+  board: any = {
+    columns: [],
+  };
   constructor(
     private themeService: ThemeService,
     private boardService: BoardObjectService,
@@ -56,10 +61,14 @@ export class BoardComponent {
     });
 
     this.boardService.sidebarData$.subscribe((data) => {
-      if (Object.keys(data).length > 0) {
-        this.board = data;
-        // console.log(data);
+      if (data.id === '0' && !null) {
+        console.log('test');
+        this.createBoardMenu = true;
+        this.emptyBoard = true;
       } else {
+        this.emptyBoard = false;
+      }
+      if (Object.keys(data).length > 0) {
         this.board = data;
       }
     });
@@ -104,6 +113,22 @@ export class BoardComponent {
       this.boardService.submitBoard(this.board);
     }
   }
+  returnSomething(subtask: any) {
+    let checkedCount = 0;
+    subtask.forEach((subtask: any) => {
+      if (subtask.done) {
+        checkedCount++;
+      }
+    });
+    return checkedCount;
+  }
+  onDropColumn(event: CdkDragDrop<string[]>) {
+    moveItemInArray(
+      this.board.columns,
+      event.previousIndex,
+      event.currentIndex
+    );
+  }
 
   onDragOver(event: any) {
     event.preventDefault();
@@ -123,6 +148,7 @@ export class BoardComponent {
 
   closeBoardMenu(): void {
     this.openBoardMenu = false;
+    this.createBoardMenu = false;
   }
 
   toggleDeleteWindow(): void {
