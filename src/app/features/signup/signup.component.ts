@@ -23,19 +23,23 @@ export class SignupComponent {
     this.themeService.isDarkMode$.subscribe((theme) => {
       this.darkmode = theme;
     });
-    this.initliazeForm();
+    this.initializeForm();
     // this.getData();
   }
 
-  initliazeForm() {
+  initializeForm() {
     this.userForm = this.fb.group({
-      email: ['', [Validators.email]],
-      username: ['', [Validators.minLength(3)]],
-      password: ['', Validators.minLength(7)],
+      email: ['', [Validators.email, Validators.required]],
+      username: ['', [Validators.minLength(3), Validators.required]],
+      password: ['', [Validators.minLength(7), Validators.required]],
     });
   }
 
   createUser() {
+    if (this.userForm.invalid) {
+      console.log('error');
+    }
+
     const user = this.userForm.value;
 
     const newUser = {
@@ -50,12 +54,4 @@ export class SignupComponent {
       (error) => (this.errorMessage = error.error)
     );
   }
-
-  // getData() {
-  //   this.createUserService.getData().subscribe((datas: User[]) => {
-  //     datas.forEach((data: any) => {
-  //       this.allUserEmails.push(data.email);
-  //     });
-  //   });
-  // }
 }

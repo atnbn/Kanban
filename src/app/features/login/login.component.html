@@ -4,20 +4,47 @@
     <form [formGroup]="userForm" (ngSubmit)="login()">
       <h2 [ngClass]="{ white: darkmode }">Login</h2>
       <label [ngClass]="{ white: darkmode }">Email</label>
-      <input formControlName="email" type="email" />
-
+      <input matInput formControlName="email" type="email" />
+      <mat-error style="font-size: 10px" *ngIf="error"
+        >Email or Password is wrong !</mat-error
+      >
+      <mat-error
+        style="font-size: 10px"
+        *ngIf="
+          userForm.get('email')?.hasError('required') &&
+          userForm.get('email')?.touched
+        "
+        >Please enter a correct Email</mat-error
+      >
       <label [ngClass]="{ white: darkmode }">Password</label>
       <input formControlName="password" type="password" />
-
-      <button type="submit" [ngClass]="{ white: darkmode }">Login</button>
+      <mat-error
+        style="font-size: 10px"
+        *ngIf="
+          userForm.get('password')?.hasError('required') &&
+          userForm.get('password')?.touched
+        "
+        >Please enter a Password</mat-error
+      >
+      <button
+        [disabled]="userForm.invalid"
+        type="submit"
+        [ngClass]="{ white: darkmode, 'invalid-button': userForm.invalid }"
+      >
+        Login
+      </button>
     </form>
 
     <div class="remember-con">
       <input type="checkbox" />
       <p [ngClass]="{ white: darkmode }">Remember me</p>
     </div>
-    <p routerLink="/sign-up" [ngClass]="{ whit: darkmode }" class="create-acc">
+    <span
+      routerLink="/sign-up"
+      [ngClass]="{ white: darkmode }"
+      class="create-acc"
+    >
       Create an account
-    </p>
+    </span>
   </div>
 </section>

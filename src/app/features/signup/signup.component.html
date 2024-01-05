@@ -7,8 +7,27 @@
       <label [ngClass]="{ white: darkmode }">Username</label>
       <input formControlName="username" type="text" />
 
+      <mat-error
+        style="font-size: 10px"
+        *ngIf="
+          userForm.get('username')?.hasError('required') &&
+          userForm.get('username')?.touched
+        "
+        class="error"
+      >
+        Please add a Username with atleast 3 characters
+      </mat-error>
+
       <label [ngClass]="{ white: darkmode }">Email</label>
       <input formControlName="email" type="email" />
+      <mat-error
+        style="font-size: 10px"
+        *ngIf="
+          userForm.get('email')?.hasError('required') &&
+          userForm.get('email')?.touched
+        "
+        >Please add a valid email</mat-error
+      >
       <div [ngClass]="{ hidden: this.errorMessage === '' }">
         <span class="error">
           {{ this.errorMessage }}
@@ -18,6 +37,14 @@
 
       <label [ngClass]="{ white: darkmode }">Password</label>
       <input formControlName="password" type="password" />
+      <mat-error
+        style="font-size: 10px"
+        *ngIf="
+          userForm.get('password')?.hasError('required') &&
+          userForm.get('password')?.touched
+        "
+        >Please enter a valid Password with atleast 7 characters</mat-error
+      >
 
       <button type="submit" [ngClass]="{ white: darkmode }">Register</button>
     </form>
@@ -26,7 +53,7 @@
       <input type="checkbox" />
       <p [ngClass]="{ white: darkmode }">Remember me</p>
     </div>
-    <p routerLink="/signin" [ngClass]="{ whit: darkmode }" class="create-acc">
+    <p routerLink="/" [ngClass]="{ whit: darkmode }" class="create-acc">
       Already have an account ? Login
     </p>
   </div>

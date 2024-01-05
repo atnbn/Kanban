@@ -7,13 +7,13 @@ import { User } from '../models/user-interface';
   providedIn: 'root',
 })
 export class CreateUserService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'http://localhost:3000/api//sign-user';
 
   constructor(private http: HttpClient) {}
 
   signUser(user: User): Observable<any> {
     return this.http
-      .post(`${this.apiUrl}/sign-user`, user, {
+      .post(this.apiUrl, user, {
         headers: { 'Content-Type': 'application/json' },
       })
       .pipe(
@@ -22,9 +22,5 @@ export class CreateUserService {
           return throwError(() => err.error);
         })
       );
-  }
-
-  getData(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/users`);
   }
 }
