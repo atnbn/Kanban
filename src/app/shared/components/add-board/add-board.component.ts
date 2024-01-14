@@ -196,7 +196,7 @@ export class AddBoardComponent implements OnInit {
         },
       });
     this.boardService.submitDataToBoard(this.boardObject);
-
+    this.boardService.submitStorage(this.boardObject);
     this.changeTaskStatus();
     this.closePopUp.emit(false);
   }
