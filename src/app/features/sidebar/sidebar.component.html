@@ -12,6 +12,8 @@
     "
     alt="logo"
   />
+  <span>Welcome {{ currentUser.username }}</span>
+
   <div class="board-container">
     <h2>ALL BOARDS ( {{ storage.length }} )</h2>
     <div class="board-collection" *ngFor="let board of storage">

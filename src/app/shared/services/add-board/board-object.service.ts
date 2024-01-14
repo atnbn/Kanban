@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Board, Task } from '../models/board-interface';
+import { Board, Task } from '../../models/board-interface';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({

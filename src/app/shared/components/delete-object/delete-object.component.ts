@@ -7,8 +7,9 @@ import {
   Output,
 } from '@angular/core';
 import { ThemeService } from '../../services/theme/theme.service';
-import { Board, Task } from '../../services/models/board-interface';
+import { Board, Task } from '../../models/board-interface';
 import { BoardObjectService } from '../../services/add-board/board-object.service';
+import { SaveBoardService } from '../../services/save-board/save-board.service';
 
 @Component({
   selector: 'app-delete-object',
@@ -19,11 +20,6 @@ export class DeleteObjectComponent implements OnInit {
   isTask: boolean = false;
   isDarkMode: boolean = false;
   allBoards: Board[] = [];
-  emptyBoard: Board = {
-    id: '0',
-    title: '',
-    columns: [],
-  };
   currentObject?: Task | Board;
   @Input() board?: Board;
   @Input() task?: Task;
@@ -32,7 +28,8 @@ export class DeleteObjectComponent implements OnInit {
   @Output() closePopUp = new EventEmitter<boolean>();
   constructor(
     private themeService: ThemeService,
-    private boardService: BoardObjectService
+    private boardService: BoardObjectService,
+    private boardApiService: SaveBoardService
   ) {}
 
   ngOnInit(): void {
@@ -61,21 +58,25 @@ export class DeleteObjectComponent implements OnInit {
     this.closeDeleteWindow();
     this.recivingObject.emit();
   }
-
   onDeleteBoard(boardId: string) {
-    // Find and handle board deletion logic here
     const index = this.allBoards.findIndex((board) => board.id === boardId);
     if (index !== -1) {
-      this.allBoards.splice(index, 1); // Remove the board from the array
-    }
-    if (this.allBoards.length === 0) {
-      this.boardService.submitDataToBoard(this.emptyBoard);
-      console.log('test');
-    } else {
-      this.boardService.submitDataToBoard(this.allBoards[0]);
+      this.boardApiService.deleteBoardObject(boardId).subscribe({
+        next: (response) => {
+          this.allBoards.splice(index, 1);
+
+          if (this.allBoards.length === 0) {
+            this.boardService.submitDataToBoard(this.allBoards);
+          } else {
+            this.boardService.submitDataToBoard(this.allBoards[0]);
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
     }
   }
-
   onDeleteTask(taskId: string) {
     // Find and handle task deletion logic here
   }

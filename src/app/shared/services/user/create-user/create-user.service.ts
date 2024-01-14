@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
-import { User } from '../models/user-interface';
+import { User } from '../../../models/user-interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CreateUserService {
-  private apiUrl = 'http://localhost:3000/api//sign-user';
+  private apiUrl = 'http://localhost:3000/api/sign-user';
 
   constructor(private http: HttpClient) {}
 
@@ -18,7 +18,6 @@ export class CreateUserService {
       })
       .pipe(
         catchError((err) => {
-          console.log(err);
           return throwError(() => err.error);
         })
       );

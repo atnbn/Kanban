@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { SidebarComponent } from './features/sidebar/sidebar.component';
 import { BoardComponent } from './features/board/board.component';
 import { AddBoardComponent } from './shared/components/add-board/add-board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,10 +15,11 @@ import { DetailTaskComponent } from './shared/components/task/detail-task/detail
 import { FormsModule } from '@angular/forms';
 import { DeleteObjectComponent } from './shared/components/delete-object/delete-object.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { HttpClientModule } from '@angular/common/http';
-import { LoginComponent } from './features/login/login.component';
-import { SignupComponent } from './features/signup/signup.component';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './features/auth/login/login.component';
+import { SignupComponent } from './features/auth/signup/signup.component';
 import { MatInputModule } from '@angular/material/input';
+import { HomeComponent } from './features/home/home.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { MatInputModule } from '@angular/material/input';
     DeleteObjectComponent,
     LoginComponent,
     SignupComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserAnimationsModule,

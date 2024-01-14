@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LoginUserService } from 'src/app/shared/services/login-user/login-user.service';
-import { User } from 'src/app/shared/services/models/user-interface';
+import { Router, RouterLink } from '@angular/router';
+import { LoginUserService } from 'src/app/shared/services/user/login-user/login-user.service';
+import { User } from 'src/app/shared/models/user-interface';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 
 @Component({
@@ -17,7 +18,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private themeService: ThemeService,
     private fb: FormBuilder,
-    private loginUserService: LoginUserService
+    private loginUserService: LoginUserService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((theme) => {
@@ -28,27 +30,27 @@ export class LoginComponent implements OnInit {
 
   initliazeForm() {
     this.userForm = this.fb.group({
-      email: ['', [Validators.email, Validators.required]],
-      password: ['', [Validators.minLength(7), Validators.required]],
+      email: ['guest@gmail.com', [Validators.email, Validators.required]],
+      password: ['vegeta54', [Validators.minLength(7), Validators.required]],
     });
   }
-  // checkLoginData() {
-  //   return this.users.find(
-  //     (user) =>
-  //       user.email === this.userForm.value.email &&
-  //       user.password === this.userForm.value.password
-  //   );
-  // }
+
   login() {
     const value = this.userForm.value;
-    console.log(value);
-    if (this.userForm.invalid) return;
-    this.loginUserService.login(value.email, value.password).subscribe(
-      (response) => {
-        console.log(response);
+
+    if (this.userForm.invalid) {
+      return;
+    }
+    this.loginUserService.login(value.email, value.password).subscribe({
+      next: (response) => {
+        console.log(response.email);
+
+        this.router.navigate(['/home']); // Navigate on successful login
       },
-      (error) => console.log(error)
-    );
-    console.log('works');
+      error: (error) => {
+        console.log(error);
+        // Handle login error (e.g., show an error message)
+      },
+    });
   }
 }

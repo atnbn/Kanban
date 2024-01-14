@@ -2,16 +2,17 @@
   <h1 [ngClass]="{ white: darkmode }">Kanban</h1>
   <div class="login-form">
     <form [formGroup]="userForm" (ngSubmit)="createUser()">
-      <h2 [ngClass]="{ white: darkmode }">Login</h2>
+      <h2 [ngClass]="{ white: darkmode }">Signup</h2>
 
       <label [ngClass]="{ white: darkmode }">Username</label>
       <input formControlName="username" type="text" />
 
       <mat-error
         style="font-size: 10px"
+        minlength="4"
         *ngIf="
-          userForm.get('username')?.hasError('required') &&
-          userForm.get('username')?.touched
+          checkValidator('username', 'minlength') ||
+          checkValidator('username', 'required')
         "
         class="error"
       >
@@ -22,10 +23,7 @@
       <input formControlName="email" type="email" />
       <mat-error
         style="font-size: 10px"
-        *ngIf="
-          userForm.get('email')?.hasError('required') &&
-          userForm.get('email')?.touched
-        "
+        *ngIf="checkValidator('email', 'required')"
         >Please add a valid email</mat-error
       >
       <div [ngClass]="{ hidden: this.errorMessage === '' }">
@@ -40,13 +38,19 @@
       <mat-error
         style="font-size: 10px"
         *ngIf="
-          userForm.get('password')?.hasError('required') &&
-          userForm.get('password')?.touched
+          checkValidator('password', 'minlength') ||
+          checkValidator('password', 'required')
         "
         >Please enter a valid Password with atleast 7 characters</mat-error
       >
 
-      <button type="submit" [ngClass]="{ white: darkmode }">Register</button>
+      <button
+        type="submit"
+        [disabled]="userForm.invalid"
+        [ngClass]="{ white: darkmode, 'invalid-button': userForm.invalid }"
+      >
+        Register
+      </button>
     </form>
 
     <div class="remember-con">

@@ -4,7 +4,7 @@ import {
   Columns,
   Subtask,
   Task,
-} from 'src/app/shared/services/models/board-interface';
+} from 'src/app/shared/models/board-interface';
 import { OpenPopUpService } from 'src/app/shared/services/add-board/add-board-up.service';
 import { BoardObjectService } from 'src/app/shared/services/add-board/board-object.service';
 import { SidebarService } from 'src/app/shared/services/sidebar/sidebar.service';
@@ -61,16 +61,7 @@ export class BoardComponent {
     });
 
     this.boardService.sidebarData$.subscribe((data) => {
-      if (data.id === '0' && !null) {
-        console.log('test');
-        this.createBoardMenu = true;
-        this.emptyBoard = true;
-      } else {
-        this.emptyBoard = false;
-      }
-      if (Object.keys(data).length > 0) {
-        this.board = data;
-      }
+      this.board = data;
     });
   }
 

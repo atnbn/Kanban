@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { CreateUserService } from 'src/app/shared/services/create-user/create-user.service';
-import { User } from 'src/app/shared/services/models/user-interface';
+import { Router, RouterLink } from '@angular/router';
+import { switchMap } from 'rxjs';
+import { CreateUserService } from 'src/app/shared/services/user/create-user/create-user.service';
+import { LoginUserService } from 'src/app/shared/services/user/login-user/login-user.service';
+import { User } from 'src/app/shared/models/user-interface';
+import { SidebarService } from 'src/app/shared/services/sidebar/sidebar.service';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 
 @Component({
@@ -17,7 +21,10 @@ export class SignupComponent {
   constructor(
     private themeService: ThemeService,
     private fb: FormBuilder,
-    private createUserService: CreateUserService
+    private createUserService: CreateUserService,
+    private loginService: LoginUserService,
+    private sidebarService: SidebarService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((theme) => {
@@ -37,7 +44,7 @@ export class SignupComponent {
 
   createUser() {
     if (this.userForm.invalid) {
-      console.log('error');
+      return;
     }
 
     const user = this.userForm.value;
@@ -47,11 +54,20 @@ export class SignupComponent {
       password: user.password,
       email: user.email,
     };
-    this.createUserService.signUser(newUser).subscribe(
-      (response) => {
-        // console.log('item was succesfully added', response);
+    this.createUserService.signUser(newUser).subscribe({
+      next: (response) => {
+        this.router.navigate(['/login']);
+        console.log(response);
       },
-      (error) => (this.errorMessage = error.error)
-    );
+      error: (error) => {
+        console.log(error);
+        this.errorMessage = error.error;
+      },
+    });
+  }
+
+  checkValidator(formControlName: string, errorType: string) {
+    const control = this.userForm.get(formControlName);
+    return control?.hasError(errorType) && control.touched;
   }
 }

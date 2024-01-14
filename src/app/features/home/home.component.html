@@ -1,0 +1,29 @@
+<section [ngClass]="{ 'dark-mode': isDarkMode }" class="grid-container">
+  <div class="logo-con">
+    <div
+      class="logo-header"
+      [ngClass]="{
+        'border-right': isDarkMode,
+        'd-none': sidebarState,
+        'border-bottom': isDarkMode
+      }"
+    >
+      <img
+        class="logo"
+        [src]="
+          isDarkMode
+            ? '/assets/images/logo-light.svg'
+            : '/assets/images/logo-dark.svg'
+        "
+        alt="logo-alt"
+      />
+    </div>
+  </div>
+  <app-sidebar></app-sidebar>
+  <div class="right-side">
+    <app-board *ngIf="!emptyBoard"></app-board>
+    <div class="add-board-con" *ngIf="emptyBoard">
+      <h2 [ngClass]="{ white: isDarkMode }">Please add a Board</h2>
+    </div>
+  </div>
+</section>
