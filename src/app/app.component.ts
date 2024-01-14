@@ -3,9 +3,9 @@ import { OpenPopUpService } from './shared/services/add-board/add-board-up.servi
 import { ThemeService } from './shared/services/theme/theme.service';
 import { SidebarService } from './shared/services/sidebar/sidebar.service';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { Board } from './shared/services/models/board-interface';
+import { Board } from './shared/models/board-interface';
 import { BoardObjectService } from './shared/services/add-board/board-object.service';
-import { CreateUserService } from './shared/services/create-user/create-user.service';
+import { CreateUserService } from './shared/services/user/create-user/create-user.service';
 
 @Component({
   selector: 'app-root',

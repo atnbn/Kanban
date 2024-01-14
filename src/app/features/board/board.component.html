@@ -73,18 +73,10 @@
 
     <button class="add-column--btn">+ Add New Column</button>
   </div>
-  <div *ngIf="emptyBoard" class="fixed">
-    <span>There are no Boards please create a Board.</span>
-
-    <button (click)="(openBoardMenu)" class="add-column--btn">
-      + Add Board
-    </button>
-  </div>
 </section>
 
 <app-add-task *ngIf="addTaskPopUp" (closePopUp)="closeAddTask()">
 </app-add-task>
-<!-- Tarkan abi fragen was best practice wäre -->
 <app-detail-task
   *ngIf="OpenTaskWindow"
   (closePopUp)="closeTask()"

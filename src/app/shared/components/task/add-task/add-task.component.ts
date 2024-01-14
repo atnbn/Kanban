@@ -14,12 +14,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import {
-  Board,
-  Columns,
-  Subtask,
-  Task,
-} from '../../../services/models/board-interface';
+import { Board, Columns, Subtask, Task } from '../../../models/board-interface';
 import { BoardObjectService } from '../../../services/add-board/board-object.service';
 import { OpenPopUpService } from '../../../services/add-board/add-board-up.service';
 

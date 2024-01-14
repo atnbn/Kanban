@@ -1,0 +1,64 @@
+<section>
+  <h1 [ngClass]="{ white: darkmode }">Kanban</h1>
+  <div class="login-form">
+    <form [formGroup]="userForm" (ngSubmit)="createUser()">
+      <h2 [ngClass]="{ white: darkmode }">Signup</h2>
+
+      <label [ngClass]="{ white: darkmode }">Username</label>
+      <input formControlName="username" type="text" />
+
+      <mat-error
+        style="font-size: 10px"
+        minlength="4"
+        *ngIf="
+          checkValidator('username', 'minlength') ||
+          checkValidator('username', 'required')
+        "
+        class="error"
+      >
+        Please add a Username with atleast 3 characters
+      </mat-error>
+
+      <label [ngClass]="{ white: darkmode }">Email</label>
+      <input formControlName="email" type="email" />
+      <mat-error
+        style="font-size: 10px"
+        *ngIf="checkValidator('email', 'required')"
+        >Please add a valid email</mat-error
+      >
+      <div [ngClass]="{ hidden: this.errorMessage === '' }">
+        <span class="error">
+          {{ this.errorMessage }}
+        </span>
+        <img class="alert-svg" src="/assets/images/alert-svgrepo-com.svg" />
+      </div>
+
+      <label [ngClass]="{ white: darkmode }">Password</label>
+      <input formControlName="password" type="password" />
+      <mat-error
+        style="font-size: 10px"
+        *ngIf="
+          checkValidator('password', 'minlength') ||
+          checkValidator('password', 'required')
+        "
+        >Please enter a valid Password with atleast 7 characters</mat-error
+      >
+
+      <button
+        type="submit"
+        [disabled]="userForm.invalid"
+        [ngClass]="{ white: darkmode, 'invalid-button': userForm.invalid }"
+      >
+        Register
+      </button>
+    </form>
+
+    <div class="remember-con">
+      <input type="checkbox" />
+      <p [ngClass]="{ white: darkmode }">Remember me</p>
+    </div>
+    <p routerLink="/" [ngClass]="{ whit: darkmode }" class="create-acc">
+      Already have an account ? Login
+    </p>
+  </div>
+</section>

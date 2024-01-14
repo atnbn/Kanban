@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { Board } from '../models/board-interface';
+import { Board } from '../../models/board-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +11,6 @@ export class OpenPopUpService {
   addBoard$ = this.addBoard.asObservable();
   private addTask = new BehaviorSubject<boolean>(false);
   addTask$ = this.addTask.asObservable();
-
-  private boardObject: any;
 
   openAddBoard() {
     this.addBoard.next(true);

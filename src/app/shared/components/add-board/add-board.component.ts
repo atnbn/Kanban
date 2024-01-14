@@ -16,8 +16,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { BoardObjectService } from '../../services/add-board/board-object.service';
-import { Board, Columns, Task } from '../../services/models/board-interface';
+import { Board, Columns, Task } from '../../models/board-interface';
 import { OpenPopUpService } from '../../services/add-board/add-board-up.service';
+import { SaveBoardService } from '../../services/save-board/save-board.service';
+import { UserService } from '../../services/user/user/user.service';
 
 @Component({
   selector: 'app-add-board',
@@ -34,6 +36,7 @@ export class AddBoardComponent implements OnInit {
   allBoards!: Board[];
   isDarkMode: boolean = false;
   deleteForm: boolean = false;
+  currentUser: any;
   @Input() currentBoard: Board | null = null;
 
   @Output() closePopUp = new EventEmitter<boolean>();
@@ -42,7 +45,9 @@ export class AddBoardComponent implements OnInit {
     private themeService: ThemeService,
     private fb: FormBuilder,
     private popupService: OpenPopUpService,
-    private boardService: BoardObjectService
+    private boardService: BoardObjectService,
+    private saveBoardService: SaveBoardService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -145,6 +150,14 @@ export class AddBoardComponent implements OnInit {
     this.createBoardObject();
     this.boardService.addBoardObject(this.boardObject!);
     this.boardService.submitDataToBoard(this.boardObject!);
+    this.saveBoardService.saveBoardObject(this.boardObject!).subscribe({
+      next: (Response) => {
+        console.log(Response);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
   deleteBoard(currBoard: any) {
     this.deleteForm = true;
@@ -166,15 +179,24 @@ export class AddBoardComponent implements OnInit {
     );
 
     if (indexToUpdate !== -1) {
-      // If the board with the specified id is found, update it
       this.allBoards[indexToUpdate] = {
         title: this.boardObject!.title,
         columns: this.boardObject!.columns,
         id: this.boardObject!.id,
       };
     }
+    this.saveBoardService
+      .editBoardObject(this.boardObject, this.boardObject?.id!)
+      .subscribe({
+        next: (Response) => {
+          console.log(Response);
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
     this.boardService.submitDataToBoard(this.boardObject);
-
+    this.boardService.submitStorage(this.boardObject);
     this.changeTaskStatus();
     this.closePopUp.emit(false);
   }

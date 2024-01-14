@@ -12,7 +12,7 @@ import {
   Columns,
   Subtask,
   Task,
-} from 'src/app/shared/services/models/board-interface';
+} from 'src/app/shared/models/board-interface';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 @Component({
   selector: 'app-detail-task',

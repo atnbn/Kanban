@@ -31,6 +31,5 @@ export class ThemeService {
 
     // Save the current mode to local storage
     localStorage.setItem('darkmode', isDarkMode.toString());
-    console.log('Dark Mode Stored:', isDarkMode);
   }
 }
