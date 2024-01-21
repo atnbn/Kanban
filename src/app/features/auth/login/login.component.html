@@ -4,33 +4,37 @@
 ></app-notification>
 
 <section>
-  <h1 [ngClass]="{ white: darkmode }">Kanban</h1>
   <div class="login-form">
     <form [formGroup]="userForm" (ngSubmit)="login()">
       <h2 [ngClass]="{ white: darkmode }">Login</h2>
-      <label [ngClass]="{ white: darkmode }">Email</label>
+
+      <div class="label-error-con">
+        <label [ngClass]="{ white: darkmode }">Email</label>
+        <mat-error
+          class="error"
+          *ngIf="
+            userForm.get('email')?.hasError('required') &&
+            userForm.get('email')?.touched
+          "
+          >Please enter a correct Email</mat-error
+        >
+        <mat-error class="error" style="font-size: 10px" *ngIf="error"
+          >Email or Password is wrong !</mat-error
+        >
+      </div>
       <input matInput formControlName="email" type="email" />
-      <mat-error style="font-size: 10px" *ngIf="error"
-        >Email or Password is wrong !</mat-error
-      >
-      <mat-error
-        style="font-size: 10px"
-        *ngIf="
-          userForm.get('email')?.hasError('required') &&
-          userForm.get('email')?.touched
-        "
-        >Please enter a correct Email</mat-error
-      >
-      <label [ngClass]="{ white: darkmode }">Password</label>
+      <div class="label-error-con">
+        <label [ngClass]="{ white: darkmode }">Password</label>
+        <mat-error
+          class="error"
+          *ngIf="
+            userForm.get('password')?.hasError('required') &&
+            userForm.get('password')?.touched
+          "
+          >Please enter a Password</mat-error
+        >
+      </div>
       <input formControlName="password" type="password" />
-      <mat-error
-        style="font-size: 10px"
-        *ngIf="
-          userForm.get('password')?.hasError('required') &&
-          userForm.get('password')?.touched
-        "
-        >Please enter a Password</mat-error
-      >
       <button
         [disabled]="userForm.invalid"
         type="submit"
@@ -41,7 +45,7 @@
     </form>
 
     <div class="remember-con">
-      <input type="checkbox" />
+      <input type="checkbox" class="remember-checkbox" />
       <p [ngClass]="{ white: darkmode }">Remember me</p>
     </div>
     <span

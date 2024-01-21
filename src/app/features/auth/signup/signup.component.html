@@ -4,55 +4,60 @@
     <form [formGroup]="userForm" (ngSubmit)="createUser()">
       <h2 [ngClass]="{ white: darkmode }">Signup</h2>
 
-      <label [ngClass]="{ white: darkmode }">Username</label>
+      <div class="label-error-con">
+        <label [ngClass]="{ white: darkmode }">Username</label>
+        <mat-error
+          minlength="4"
+          *ngIf="
+            checkValidator('username', 'minlength') ||
+            checkValidator('username', 'required')
+          "
+          class="error"
+        >
+          Please add a Username with atleast 3 characters
+        </mat-error>
+      </div>
       <input formControlName="username" type="text" />
-
-      <mat-error
-        style="font-size: 10px"
-        minlength="4"
-        *ngIf="
-          checkValidator('username', 'minlength') ||
-          checkValidator('username', 'required')
-        "
-        class="error"
-      >
-        Please add a Username with atleast 3 characters
-      </mat-error>
-
-      <label [ngClass]="{ white: darkmode }">Email</label>
+      <div class="label-error-con">
+        <label [ngClass]="{ white: darkmode }">Email</label>
+        <mat-error
+          *ngIf="
+            this.errorMessage ||
+            checkValidator('email', 'email') ||
+            checkValidator('email', 'required')
+          "
+          class="error"
+        >
+          {{ this.errorMessage || "Please enter a valid email" }}
+          <img class="alert-svg" src="/assets/images/alert-svgrepo-com.svg" />
+        </mat-error>
+      </div>
       <input formControlName="email" type="email" />
-      <mat-error
-        style="font-size: 10px"
-        *ngIf="checkValidator('email', 'required')"
-        >Please add a valid email</mat-error
-      >
-      <div [ngClass]="{ hidden: this.errorMessage === '' }">
-        <span class="error">
-          {{ this.errorMessage }}
-        </span>
-        <img class="alert-svg" src="/assets/images/alert-svgrepo-com.svg" />
+      <div class="label-error-con">
+        <label [ngClass]="{ white: darkmode }">Password</label>
+        <mat-error
+          class="error"
+          *ngIf="
+            checkValidator('password', 'minlength') ||
+            checkValidator('password', 'required')
+          "
+          >Please enter a Password with atleast 7 characters</mat-error
+        >
+      </div>
+      <input formControlName="password" type="password" />
+      <div class="label-error-con">
+        <label [ngClass]="{ white: darkmode }">confirm password</label>
+        <mat-error
+          class="error"
+          *ngIf="
+            this.userForm.controls['password'].value !==
+            this.userForm.controls['confirmedPassword'].value
+          "
+          >Password does not match
+        </mat-error>
       </div>
 
-      <label [ngClass]="{ white: darkmode }">Password</label>
-      <input formControlName="password" type="password" />
-      <mat-error
-        style="font-size: 10px"
-        *ngIf="
-          checkValidator('password', 'minlength') ||
-          checkValidator('password', 'required')
-        "
-        >Please enter a valid Password with atleast 7 characters</mat-error
-      >
-      <label [ngClass]="{ white: darkmode }">confirm password</label>
       <input formControlName="confirmedPassword" type="password" />
-      <mat-error
-        style="font-size: 10px"
-        *ngIf="
-          this.userForm.controls['password'].value !==
-          this.userForm.controls['confirmedPassword'].value
-        "
-        >Password does not match</mat-error
-      >
 
       <button
         type="submit"
@@ -64,10 +69,15 @@
     </form>
 
     <div class="remember-con">
-      <input type="checkbox" />
+      <input type="checkbox" class="remember-checkbox" />
       <p [ngClass]="{ white: darkmode }">Remember me</p>
     </div>
-    <p routerLink="/" [ngClass]="{ whit: darkmode }" class="create-acc">
+    <p
+      style="cursor: pointer"
+      routerLink="/"
+      [ngClass]="{ whit: darkmode }"
+      class="create-acc"
+    >
       Already have an account ? Login
     </p>
   </div>
