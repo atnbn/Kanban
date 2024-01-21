@@ -21,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { HomeComponent } from './features/home/home.component';
 import { NotificationComponent } from './shared/components/notification/notification/notification.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     DragDropModule,
     MatInputModule,
     MatSidenavModule,
+    MatCheckboxModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
