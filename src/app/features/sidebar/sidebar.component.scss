@@ -1,5 +1,5 @@
 section {
-    width: 300px;
+    width: 280px;
     display: flex;
     flex-direction: column;
     padding-left: 25px;
@@ -43,6 +43,14 @@ h2 {
     display: flex;
     gap: 10px;
     flex-direction: column;
+}
+
+.all-boards {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow-x: auto;
+    max-height: 500px;
 }
 
 .board-collection {
@@ -92,26 +100,26 @@ h2 {
     transform: translateX(-100%);
 }
 
-.toggle-container {
-    background-color: var(--purplehover);
-    position: absolute;
-    bottom: 50px;
-    width: 56px;
-    height: 48px;
-    border-top-right-radius: 30px;
-    border-bottom-right-radius: 30px;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    animation: fadeIn 1s forwards;
-    img {
-        width: 16px;
-        height: 10px;
-        padding-right: 5px;
-    }
-}
+// .toggle-container {
+//     background-color: var(--purplehover);
+//     position: absolute;
+//     bottom: 50px;
+//     width: 56px;
+//     height: 48px;
+//     border-top-right-radius: 30px;
+//     border-bottom-right-radius: 30px;
+//     left: 0;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     opacity: 0;
+//     animation: fadeIn 1s forwards;
+//     img {
+//         width: 16px;
+//         height: 10px;
+//         padding-right: 5px;
+//     }
+// }
 
 .hide-button {
     display: none;
@@ -190,4 +198,36 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+.all-boards-sidebar-dark::-webkit-scrollbar {
+    width: 10px; /* Adjust the width of the scrollbar */
+    background-color: var(--darkgray); /* Background color */
+}
+
+/* Style the scrollbar thumb (the part that's draggable) */
+.all-boards-sidebar-dark::-webkit-scrollbar-thumb {
+    background-color: var(--ultradark); /* Thumb color */
+    border-radius: 5px; /* Round corners of the thumb */
+}
+
+/* Style the scrollbar thumb when hovering over it */
+.all-boards-sidebar-dark::-webkit-scrollbar-thumb:hover {
+    background-color: var(--ultradark); /* Darker color on hover */
+}
+
+.all-boards-sidebar-light::-webkit-scrollbar {
+    width: 10px; /* Adjust the width of the scrollbar */
+    background-color: #ffff; /* Background color */
+}
+
+/* Style the scrollbar thumb (the part that's draggable) */
+.all-boards-sidebar-light::-webkit-scrollbar-thumb {
+    background-color: var(--light); /* Thumb color */
+    border-radius: 5px; /* Round corners of the thumb */
+}
+
+/* Style the scrollbar thumb when hovering over it */
+.all-boards-sidebar-light::-webkit-scrollbar-thumb:hover {
+    background-color: var(--linesdark); /* Darker color on hover */
 }

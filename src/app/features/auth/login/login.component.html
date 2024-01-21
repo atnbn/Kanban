@@ -1,3 +1,8 @@
+<app-notification
+  [messageObject]="messageObject"
+  *ngIf="showMessage"
+></app-notification>
+
 <section>
   <h1 [ngClass]="{ white: darkmode }">Kanban</h1>
   <div class="login-form">

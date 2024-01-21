@@ -10,6 +10,9 @@ import { BoardObjectService } from 'src/app/shared/services/add-board/board-obje
 import { SidebarService } from 'src/app/shared/services/sidebar/sidebar.service';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { TaskApiService } from 'src/app/shared/services/add-task/add-task-api.service';
+import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
+import { Message } from 'src/app/shared/models/notification-interface';
 
 @Component({
   selector: 'app-board',
@@ -17,6 +20,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   styleUrls: ['./board.component.scss'],
 })
 export class BoardComponent {
+  message: string = '';
   isDarkMode: boolean = false;
   addTaskPopUp: boolean = false;
   OpenTaskWindow: boolean = false;
@@ -26,6 +30,8 @@ export class BoardComponent {
   createBoardMenu: boolean = false;
   deleteWindow: boolean = false;
   task!: Task;
+
+  show: boolean = true;
   emptyBoard: boolean = false;
   colors: string[] = [
     '#3498db',
@@ -44,7 +50,9 @@ export class BoardComponent {
     private themeService: ThemeService,
     private boardService: BoardObjectService,
     private sidebarService: SidebarService,
-    private popupService: OpenPopUpService
+    private popupService: OpenPopUpService,
+    private taskService: TaskApiService,
+    private messageService: ReturnMessageService
   ) {}
 
   ngOnInit(): void {
@@ -86,24 +94,68 @@ export class BoardComponent {
   }
   onDragStart(task: any) {
     this.currentItem = task;
-
-    console.log(this.currentItem);
   }
 
-  onDrop(event: any, status: string) {
-    const column = this.findColumnContainingTask(this.currentItem);
-    if (column) {
-      const currentColumn = this.findColumnContainingTask(this.currentItem);
-      const task = currentColumn?.tasks.find(
-        (t: any) => t.id === this.currentItem.id
+  onDrop(event: any, newStatus: string) {
+    const currentColumn = this.findColumnContainingTask(this.currentItem);
+    if (currentColumn) {
+      const taskIndex = currentColumn?.tasks.findIndex(
+        (t) => t.id === this.currentItem.id
       );
-      currentColumn?.tasks.splice(currentColumn?.tasks.indexOf(task!), 1);
-      this.board.columns
-        .find((column: any) => column.columnName === status)
-        ?.tasks.push(task);
-      this.boardService.submitBoard(this.board);
+      if (taskIndex !== -1) {
+        const task = currentColumn.tasks[taskIndex];
+
+        // Remove the task from the current column
+        currentColumn.tasks.splice(taskIndex, 1);
+
+        // Find the new column and add the task to it
+        const newColumn = this.board.columns.find(
+          (col: Columns) => col.id === newStatus
+        );
+        if (newColumn) {
+          task.status[0] = {
+            columnName: newColumn.columnName,
+            id: newColumn.id,
+          };
+          console.log(task.status);
+          newColumn.tasks.push(task);
+          // task.status = newStatus; // Update task status
+
+          // Prepare the updated task data
+          const updatedTaskData = { ...task, columnName: newStatus };
+          console.log('updatedTaskData', updatedTaskData);
+          // Call the API to update the task on the backend
+          this.taskService
+            .updateTask(
+              this.board.id,
+              currentColumn.id,
+              task.id,
+              updatedTaskData
+            )
+            .subscribe({
+              next: (response: any) => {
+                this.messageService.setMessage({
+                  message: response.message,
+                  type: 'success',
+                });
+              },
+              error: (error) => {
+                this.messageService.setMessage({
+                  message: error.message,
+                  type: 'error',
+                });
+              },
+            });
+
+          // Update the rest of your local board state if necessary
+          this.boardService.submitBoard(this.board);
+        } else {
+          console.error(`Column '${newStatus}' not found.`);
+        }
+      }
     }
   }
+
   returnSomething(subtask: any) {
     let checkedCount = 0;
     subtask.forEach((subtask: any) => {
@@ -113,6 +165,7 @@ export class BoardComponent {
     });
     return checkedCount;
   }
+
   onDropColumn(event: CdkDragDrop<string[]>) {
     moveItemInArray(
       this.board.columns,

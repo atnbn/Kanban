@@ -5,7 +5,7 @@ import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class LoginUserService {
+export class AuthUserService {
   private apiUrl = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) {}
@@ -25,5 +25,9 @@ export class LoginUserService {
 
   addUser(userId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/getUser/${userId}`);
+  }
+
+  logOutUser(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/logout`, {});
   }
 }

@@ -7,14 +7,14 @@
       {{ isTask ? "Delete this Task" : " Delete this Board?" }}
     </h2>
 
-    <p *ngIf="isTask" [ngClass]="{ 'dark-mode-label': isDarkMode }">
-      Are you sure you want to delete the ‘{{ task?.title }}’ task and its
-      subtasks? This action cannot be reversed.
+    <p *ngIf="edit === 'Task'" [ngClass]="{ 'dark-mode-label': isDarkMode }">
+      Are you sure you want to delete the ‘{{ currentTask?.title }}’ task and
+      its subtasks? This action cannot be reversed.
     </p>
 
-    <p *ngIf="!isTask" [ngClass]="{ 'dark-mode-label': isDarkMode }">
-      Are you sure you want to delete the {{ this.board?.title }} board? This
-      action will remove all columns and tasks and cannot be reversed.
+    <p *ngIf="edit === 'Board'" [ngClass]="{ 'dark-mode-label': isDarkMode }">
+      Are you sure you want to delete the {{ this.currentBoard?.title }} board?
+      This action will remove all columns and tasks and cannot be reversed.
     </p>
 
     <div class="delete-btn-con">

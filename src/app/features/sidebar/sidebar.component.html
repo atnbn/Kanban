@@ -1,5 +1,4 @@
 <section
-  [@fadeInOut]
   *ngIf="sidebarState"
   [ngClass]="{ 'dark-mode': isDarkMode, 'border-right': isDarkMode ,'light-mode': !isDarkMode, 'hide-sidebar' : !sidebarState, }"
 >
@@ -16,16 +15,23 @@
 
   <div class="board-container">
     <h2>ALL BOARDS ( {{ storage.length }} )</h2>
-    <div class="board-collection" *ngFor="let board of storage">
-      <div class="board" (click)="openId(board.id)">
-        <img src="/assets/images/icon-board.svg" />
-        <span>{{ board.title }}</span>
+    <div
+      class="all-boards"
+      [ngClass]="{
+        'all-boards-sidebar-dark': isDarkMode,
+      }"
+    >
+      <div class="board-collection" *ngFor="let board of storage">
+        <div class="board" (click)="openId(board.id)">
+          <img src="/assets/images/icon-board.svg" />
+          <span>{{ board.title }}</span>
+        </div>
       </div>
     </div>
-    <div class="board" (click)="openAddBoard()">
-      <img src="assets/images/icon-board-new.svg" />
-      <span style="color: #635fc7"> + Create New Board</span>
-    </div>
+  </div>
+  <div class="board" (click)="openAddBoard()">
+    <img src="assets/images/icon-board-new.svg" />
+    <span style="color: #635fc7"> + Create New Board</span>
   </div>
 
   <div class="section-below">
@@ -47,16 +53,10 @@
     <div class="hide" (click)="toggleSidebar()">
       <img src="assets/images/icon-hide-sidebar.svg" />
       <span>Hide Sidebar</span>
+      <button (click)="logout()">logout</button>
     </div>
   </div>
 </section>
-<div
-  class="toggle-container"
-  [ngClass]="{ 'hide-button': sidebarState }"
-  (click)="toggleSidebar()"
->
-  <img src="assets/images/icon-show-sidebar.svg" />
-</div>
 
 <app-add-board
   *ngIf="addBoardPopUp"

@@ -45,22 +45,11 @@ export class AppComponent {
       this.isDarkMode = darkmode;
     });
 
-    this.sidebarService.sidebar$.subscribe((status) => {
-      this.sidebarState = status;
-      console.log(this.sidebarState);
-    });
-
     this.boardService.sidebarData$.subscribe((boards) => {
       if (Object.keys(boards).length !== 0) {
         this.boards.push(boards);
       }
     });
     // this.addUser();
-  }
-
-  changeSidebar() {
-    this.sidebarService.toggleSidebar();
-    this.sidebarState = !this.sidebarState;
-    console.log(this.sidebarState);
   }
 }

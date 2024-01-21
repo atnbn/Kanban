@@ -17,6 +17,8 @@ import {
 import { Board, Columns, Subtask, Task } from '../../../models/board-interface';
 import { BoardObjectService } from '../../../services/add-board/board-object.service';
 import { OpenPopUpService } from '../../../services/add-board/add-board-up.service';
+import { TaskApiService } from 'src/app/shared/services/add-task/add-task-api.service';
+import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
 
 @Component({
   selector: 'app-add-task',
@@ -32,11 +34,14 @@ export default class AddTaskComponent implements OnInit {
   currentBoard!: Board;
   subTaskObject: any[] = [];
   @Input() currentTask: Task | null = null;
+  @Input() type: string = '';
   @Output() closePopUp = new EventEmitter<boolean>();
   constructor(
     private themeService: ThemeService,
     private fb: FormBuilder,
-    private boardService: BoardObjectService
+    private boardService: BoardObjectService,
+    private taskApiService: TaskApiService,
+    private messageService: ReturnMessageService
   ) {}
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
@@ -46,26 +51,32 @@ export default class AddTaskComponent implements OnInit {
     this.boardService.sidebarData$.subscribe((data) => {
       if (Object.keys(data).length > 0) {
         this.currentBoard = data;
-        console.log('addtask object', data);
       }
     });
-
-    if (this.currentTask !== null) {
+    if (this.type === 'create') {
+      this.initializeForm();
+    } else if (this.type === 'edit' && this.currentTask) {
       this.taskObject = this.currentTask;
       this.fillForm();
       this.edit = true;
-    } else {
-      this.initializeForm();
     }
   }
 
   initializeForm() {
+    const firstColumn = this.currentBoard.columns[0];
     this.formGroup = this.fb.group({
       title: ['', [Validators.minLength(1), Validators.required]],
       description: ['', [Validators.minLength(1), Validators.required]],
       inputs: this.fb.array([]),
-      currentStatus: [''],
+      status: this.fb.group([
+        {
+          id: firstColumn.id,
+          columnName: firstColumn.columnName,
+        },
+      ]),
     });
+
+    console.log('taskgroup', this.formGroup.value);
   }
 
   fillForm() {
@@ -79,7 +90,7 @@ export default class AddTaskComponent implements OnInit {
         [Validators.minLength(1), Validators.required],
       ],
       inputs: this.fb.array([]),
-      currentStatus: this.taskObject?.status,
+      status: [this.taskObject?.status],
     });
 
     this.taskObject.subtasks?.forEach((sub) => {
@@ -93,22 +104,36 @@ export default class AddTaskComponent implements OnInit {
     });
   }
 
+  get status() {
+    return this.formGroup.controls['status'] as FormArray;
+  }
+
+  addColumns() {
+    this.currentBoard.columns.forEach((column) => {
+      const newColumn = this.fb.group({
+        name: [column.columnName],
+        id: [column.id],
+      });
+      this.status.push(newColumn);
+    });
+  }
+
   get inputs() {
     return this.formGroup.controls['inputs'] as FormArray;
   }
 
-  // addInput() {
-  //   const inputForm = this.fb.control('new Subtask');
-  //   this.inputs.push(inputForm);
-  // }
-
   addInput() {
     const inputForm = this.fb.group({
-      name: ['New Column1'],
+      name: ['New Subtask', [Validators.minLength(1), Validators.required]],
       done: [false],
       id: [Math.random().toString(16).slice(2, 10)],
     });
     this.inputs.push(inputForm);
+  }
+
+  checkValidator(formControlName: string, errorType: string) {
+    const control = this.formGroup.get(formControlName);
+    return control?.hasError(errorType) && control.touched;
   }
 
   deleteInput(index: number) {
@@ -122,28 +147,55 @@ export default class AddTaskComponent implements OnInit {
       description: taskValues.description,
       id: this.currentTask?.id || Math.random().toString(16).slice(2, 10),
       subtasks: this.inputs.value,
-      status: taskValues.currentStatus,
+      status: [
+        {
+          id: taskValues?.status?.[0]?.id,
+          columnName: taskValues?.status?.[0]?.columnName,
+        },
+      ],
     };
-    console.log(this.getCompletedSubtaskCount());
-
-    console.log(this.taskObject);
   }
 
   createTask() {
-    if (this.formGroup.invalid) return;
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+    } else {
+      this.createTaskObject();
+      this.currentBoard?.columns.find((column) => {
+        if (column.id === this.taskObject.status[0].id) {
+          column.tasks.push(this.taskObject);
+          this.taskApiService
+            .createTask(this.taskObject, this.currentBoard.id, column.id)
+            .subscribe({
+              next: (response: any) => {
+                this.messageService.setMessage({
+                  message: response.message,
+                  type: 'success',
+                });
+                this.closePopUp.emit(false);
+              },
+              error: (error) => {
+                this.messageService.setMessage({
+                  message: error.error,
+                  type: 'error',
+                });
+              },
+            });
+        }
+      });
+    }
+  }
 
-    this.createTaskObject();
-    this.currentBoard?.columns.find((column) => {
-      if (column.columnName === this.taskObject.status) {
-        column.tasks.push(this.taskObject);
-      }
-    });
+  findBoard(currentColumn: Columns) {
+    const boarId = this.currentBoard.id;
+
+    console.log(boarId, currentColumn.columnName);
   }
 
   updateTask() {
     if (this.edit && this.formGroup.valid) {
       this.createTaskObject();
-      this.moveTask(this.taskObject, this.taskObject.status);
+      this.moveTask(this.taskObject, this.taskObject.status[0].id);
 
       const currentColumn = this.findColumnContainingTask(this.taskObject);
 
@@ -156,12 +208,56 @@ export default class AddTaskComponent implements OnInit {
           taskToUpdate.title = this.taskObject.title;
           taskToUpdate.description = this.taskObject.description;
           taskToUpdate.status = this.taskObject.status;
+
+          this.taskApiService
+            .updateTask(
+              this.currentBoard.id,
+              currentColumn.id,
+              this.taskObject.id,
+              taskToUpdate
+            )
+            .subscribe({
+              next: (response: any) => {
+                this.messageService.setMessage({
+                  message: response.message,
+                  type: 'success',
+                });
+              },
+              error: (error) => {
+                this.messageService.setMessage({
+                  message: error.error,
+                  type: 'error',
+                });
+              },
+            });
         }
       }
     }
     this.closePopUp.emit(true);
     this.boardService.submitTask(this.taskObject);
   }
+  onColumnSelect(event: Event) {
+    // Assert the event target as HTMLSelectElement
+    const selectElement = event.target as HTMLSelectElement | null;
+
+    if (selectElement && selectElement.value) {
+      const selectedColumnId = selectElement.value;
+
+      const column = this.currentBoard.columns.find(
+        (c) => c.id === selectedColumnId
+      );
+      if (column) {
+        this.formGroup.patchValue({
+          selectedColumn: {
+            id: column.id,
+            columnName: column.columnName,
+          },
+        });
+      }
+    }
+  }
+
+  // Move a task from one column to another
 
   private moveTask(task: Task, newStatus: string) {
     const currentColumn = this.findColumnContainingTask(task);
@@ -180,7 +276,7 @@ export default class AddTaskComponent implements OnInit {
         newColumn.tasks.push(task);
 
         // Update the task status
-        task.status = newStatus;
+        // task.status = newStatus;
       } else {
         console.error(`Column '${newStatus}' not found.`);
       }
@@ -201,7 +297,7 @@ export default class AddTaskComponent implements OnInit {
     if (!this.edit) {
       this.createTask();
     } else {
-      this.updateTask();
+      // this.updateTask();
     }
   }
 
