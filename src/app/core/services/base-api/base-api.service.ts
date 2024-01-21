@@ -30,6 +30,10 @@ export class BaseApiService {
       .pipe(catchError(this.handleError));
   }
 
+  protected put<T>(url: string, body: any, options = {}): Observable<T> {
+    return this.http.put<T>(`${this.apiUrl}${url}`, body, options);
+  }
+
   private handleError(error: HttpErrorResponse) {
     return throwError(() => error);
   }

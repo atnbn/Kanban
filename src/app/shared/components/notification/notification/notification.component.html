@@ -1,0 +1,13 @@
+<div
+  [ngClass]="{
+    'dark-mode-body': darkMode,
+    'white': darkMode,
+    'light-mode': !darkMode,
+    'error': messageType === 'error',
+  }"
+  *ngIf="showMessage"
+  [@slideDown]
+  class="message-banner success-message"
+>
+  {{ messageObject.message }}
+</div>

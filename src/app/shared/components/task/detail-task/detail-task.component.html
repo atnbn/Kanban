@@ -92,13 +92,10 @@
           white: isDarkMode,
           'dark-mode-border': isDarkMode
         }"
-        (change)="onSelectChange($event)"
-        [(ngModel)]="currentTask.status"
+        (change)="onColumnSelect($event)"
+        [(ngModel)]="currentTask.status[0].id"
       >
-        <option
-          *ngFor="let option of currentBoard.columns"
-          [value]="option.columnName"
-        >
+        <option *ngFor="let option of currentBoard.columns" [value]="option.id">
           {{ option.columnName }}
         </option>
       </select>
@@ -108,8 +105,15 @@
 
 <app-add-task
   *ngIf="edit"
+  [type]="'edit'"
   [currentTask]="currentTask"
   (closePopUp)="closeWindow(false)"
 ></app-add-task>
 
-<app-delete-object *ngIf="deleteForm" [task]="currentTask"></app-delete-object>
+<app-delete-object
+  *ngIf="deleteForm"
+  [currentTask]="currentTask"
+  [edit]="'Task'"
+  [currentBoard]="currentBoard"
+  (closePopUp)="closeDeleteWindow(false)"
+></app-delete-object>

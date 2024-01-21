@@ -193,3 +193,48 @@ h1 {
 .cdk-drop-list-dragging .column-body {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+
+// Responsiv
+
+@media screen and (max-width: 600px) {
+    header {
+        height: 60px; /* Smaller header for mobile */
+    }
+
+    section {
+        height: calc(100vh - 62px); /* Adjust height accordingly */
+    }
+}
+@media screen and (max-width: 600px) {
+    h1,
+    h3,
+    p {
+        font-size: smaller; /* Adjust font size for smaller screens */
+    }
+}
+@media screen and (max-width: 600px) {
+    .add-task--btn,
+    .add-column--btn {
+        width: 100px; /* Smaller buttons for mobile */
+        height: 35px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .column-body {
+        flex-direction: column; /* Stack columns vertically on small screens */
+        gap: 15px;
+    }
+
+    .columns,
+    .tasks {
+        min-width: 100%; /* Full width for smaller screens */
+        padding: 5px;
+    }
+}
+@media screen and (max-width: 600px) {
+    .edit-con {
+        width: 100px;
+        top: 50px;
+    }
+}

@@ -5,7 +5,6 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { OpenPopUpService } from 'src/app/shared/services/add-board/add-board-up.service';
 import { BoardObjectService } from 'src/app/shared/services/add-board/board-object.service';
 import {
   Board,
@@ -14,6 +13,8 @@ import {
   Task,
 } from 'src/app/shared/models/board-interface';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
+import { TaskApiService } from 'src/app/shared/services/add-task/add-task-api.service';
+import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
 @Component({
   selector: 'app-detail-task',
   templateUrl: './detail-task.component.html',
@@ -28,10 +29,14 @@ export class DetailTaskComponent implements OnInit {
   currentTask!: Task;
   checkedCount: number = 0;
   @Output() closePopUp = new EventEmitter<boolean>(false);
+  @Output() closeDeletePopUp = new EventEmitter<boolean>(false);
   constructor(
     private themeService: ThemeService,
-    private boardService: BoardObjectService
+    private boardService: BoardObjectService,
+    private taskApiService: TaskApiService,
+    private messageService: ReturnMessageService
   ) {}
+
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
       this.isDarkMode = darkmode;
@@ -39,6 +44,7 @@ export class DetailTaskComponent implements OnInit {
 
     this.boardService.getTask().subscribe((object: Task) => {
       this.currentTask = object;
+      console.log('currentTask', this.currentTask.status);
     });
 
     this.boardService.sidebarData$.subscribe((board: Board) => {
@@ -58,9 +64,26 @@ export class DetailTaskComponent implements OnInit {
     this.calculateDoneSubtasks();
   }
 
-  public onSelectChange(event: any) {
-    const newStatus = (this.currentTask.status = event.target.value);
-    this.moveTask(this.currentTask, newStatus);
+  onColumnSelect(event: Event) {
+    // Assert the event target as HTMLSelectElement
+    const selectElement = event.target as HTMLSelectElement | null;
+
+    if (selectElement && selectElement.value) {
+      const selectedColumnId = selectElement.value;
+      console.log('id', selectedColumnId);
+      const column = this.currentBoard.columns.find(
+        (c) => c.id === selectedColumnId
+      );
+      console.log('column', column);
+      if (column) {
+        this.currentTask.status[0] = {
+          id: column.id,
+          columnName: column.columnName,
+        };
+      }
+      // this.moveTask(this.currentTask, this.currentTask.status[0].id);
+      this.moveTask(this.currentTask.status[0].id);
+    }
   }
 
   public toggelDeleteTaskWindow() {
@@ -76,6 +99,10 @@ export class DetailTaskComponent implements OnInit {
     this.edit = boolean;
   }
 
+  closeDeleteWindow(boolean: boolean) {
+    this.deleteForm = boolean;
+  }
+
   calculateDoneSubtasks() {
     this.checkedCount = 0;
     this.currentTask.subtasks?.forEach((subtask) => {
@@ -87,18 +114,13 @@ export class DetailTaskComponent implements OnInit {
     });
   }
 
-  // saveTask(task: Task) {
-  //   const currentColumn = this.findColumnContainingTask(task);
-  //   if (currentColumn ) {
-  //     currentColumn.tasks = currentColumn.tasks.filter((t) => t.id !== task.id);
-
-  //     currentColumn.tasks.push(task);
-  //   }
-  // }
   saveTask(task: Task) {
     const currentColumn = this.findColumnContainingTask(task);
+
     if (currentColumn) {
       const existingTask = currentColumn.tasks.find((t) => t.id === task.id);
+      console.log('cuirrent ', currentColumn);
+      console.log(currentColumn.columnName);
 
       if (existingTask) {
         // Check if any property is different before updating
@@ -109,9 +131,17 @@ export class DetailTaskComponent implements OnInit {
           );
 
           // Add the updated task
+
           currentColumn.tasks.push(task);
+
           console.log('task is safed');
         }
+        this.taskApiService
+          .updateTask(this.currentBoard.id, currentColumn.id, task.id, task)
+          .subscribe({
+            next: (result: any) => console.log(result),
+            error: (error) => console.error(error),
+          });
       }
     }
   }
@@ -142,42 +172,13 @@ export class DetailTaskComponent implements OnInit {
     }
   }
 
-  private moveTask(task: Task, newStatus: string) {
-    const currentColumn = this.findColumnContainingTask(task);
-
-    if (currentColumn && currentColumn.columnName !== newStatus) {
-      // Remove task from current column
-      currentColumn.tasks = currentColumn.tasks.filter((t) => t.id !== task.id);
-
-      // Find the new column
-      const newColumn = this.currentBoard.columns.find(
-        (column) => column.columnName === newStatus
-      );
-
-      if (newColumn) {
-        // Add task to the new column
-        newColumn.tasks.push(task);
-
-        // Update the task status
-        task.status = newStatus;
-      } else {
-        console.error(`Column '${newStatus}' not found.`);
-      }
-    }
-  }
-
-  private findColumnContainingTask(task: Task): Columns | undefined {
-    return this.currentBoard.columns.find((column) =>
-      column.tasks.some((t) => t.id === task.id)
-    );
-  }
-
   @HostListener('document:click', ['$event'])
   handleOutsideClick(event: MouseEvent) {
     const clickedElement = event.target as HTMLElement;
     if (clickedElement.tagName.toLowerCase() === 'section') {
       this.closePopUp.emit(false);
-      this.saveTask(this.currentTask);
+      console.log('save task');
+      // this.saveTask(this.currentTask);
       this.dropDown = false;
     }
     if (clickedElement.tagName.toLowerCase() === 'div') {
@@ -188,5 +189,90 @@ export class DetailTaskComponent implements OnInit {
   @HostListener('document:keydown.escape', ['$event'])
   handleEscapeKey() {
     this.closePopUp.emit(false);
+  }
+
+  moveTask(newStatus: string) {
+    const currentColumn = this.findColumnContainingTask(this.currentTask);
+    if (currentColumn) {
+      const taskIndex = currentColumn?.tasks.findIndex(
+        (t) => t.id === this.currentTask.id
+      );
+      if (taskIndex !== -1) {
+        const task = currentColumn.tasks[taskIndex];
+
+        // Remove the task from the current column
+        currentColumn.tasks.splice(taskIndex, 1);
+
+        // Find the new column and add the task to it
+        const newColumn = this.currentBoard.columns.find(
+          (col: Columns) => col.id === newStatus
+        );
+        if (newColumn) {
+          newColumn.tasks.push(task);
+          // task.status = newStatus; // Update task status
+
+          // Prepare the updated task data
+          const updatedTaskData = { ...task };
+          console.log('updatedTaskData', updatedTaskData);
+          // Call the API to update the task on the backend
+          this.taskApiService
+            .updateTask(
+              this.currentBoard.id,
+              currentColumn.id,
+              task.id,
+              updatedTaskData
+            )
+            .subscribe({
+              next: (response: any) => {
+                this.messageService.setMessage({
+                  message: response.message,
+                  type: 'success',
+                });
+              },
+              error: (error) => {
+                this.messageService.setMessage({
+                  message: error.error,
+                  type: 'error',
+                });
+              },
+            });
+
+          // Update the rest of your local board state if necessary
+          this.boardService.submitBoard(this.currentBoard);
+        } else {
+          console.error(`Column '${newStatus}' not found.`);
+        }
+      }
+    }
+  }
+
+  // private moveTask(task: Task, newStatus: string) {
+  //   const currentColumn = this.findColumnContainingTask(task);
+
+  //   if (currentColumn && currentColumn.columnName !== newStatus) {
+  //     // Remove task from current column
+  //     currentColumn.tasks = currentColumn.tasks.filter((t) => t.id !== task.id);
+
+  //     // Find the new column
+  //     const newColumn = this.currentBoard.columns.find(
+  //       (column) => column.id === newStatus
+  //     );
+
+  //     if (newColumn) {
+  //       // Add task to the new column
+  //       newColumn.tasks.push(task);
+
+  //       // Update the task status
+  //       // task.status = newStatus;
+  //     } else {
+  //       console.error(`Column '${newStatus}' not found.`);
+  //     }
+  //   }
+  // }
+
+  private findColumnContainingTask(task: Task): Columns | undefined {
+    return this.currentBoard.columns.find((column: Columns) =>
+      column.tasks.some((t: any) => t.id === task.id)
+    );
   }
 }

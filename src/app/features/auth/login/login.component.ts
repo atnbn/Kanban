@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { LoginUserService } from 'src/app/shared/services/user/login-user/login-user.service';
+import { AuthUserService } from 'src/app/shared/services/user/login-user/login-user.service';
 import { User } from 'src/app/shared/models/user-interface';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
+import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
+import { Message } from 'src/app/shared/models/notification-interface';
 
 @Component({
   selector: 'app-login',
@@ -15,17 +17,39 @@ export class LoginComponent implements OnInit {
   userForm!: FormGroup;
   users: User[] = [];
   error: boolean = false;
+  messageObject: Message = {} as Message;
+  message: string = '';
+  showMessage: boolean = false;
   constructor(
     private themeService: ThemeService,
     private fb: FormBuilder,
-    private loginUserService: LoginUserService,
-    private router: Router
+    private authUserService: AuthUserService,
+    private router: Router,
+    private messageService: ReturnMessageService
   ) {}
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((theme) => {
       this.darkmode = theme;
     });
     this.initliazeForm();
+    this.messageService.message$.subscribe((object: any) => {
+      console.log(object);
+      if (object.message !== '') {
+        this.messageObject = object;
+        this.showMessage = true;
+        this.setTimer();
+      }
+    });
+  }
+
+  setTimer() {
+    setTimeout(() => {
+      this.showMessage = false;
+      this.messageObject = {
+        message: '',
+        type: '',
+      };
+    }, 3500);
   }
 
   initliazeForm() {
@@ -41,16 +65,26 @@ export class LoginComponent implements OnInit {
     if (this.userForm.invalid) {
       return;
     }
-    this.loginUserService.login(value.email, value.password).subscribe({
+    
+    this.authUserService.login(value.email, value.password).subscribe({
       next: (response) => {
-        console.log(response.email);
-
         this.router.navigate(['/home']); // Navigate on successful login
+        this.messageService.setMessage({
+          message: response.message,
+          type: 'success',
+        });
       },
       error: (error) => {
-        console.log(error);
-        // Handle login error (e.g., show an error message)
+        this.messageService.setMessage({
+          message: error.error,
+          type: 'success',
+        });
       },
     });
+  }
+
+  checkValidator(formControlName: string, errorType: string) {
+    const control = this.userForm.get(formControlName);
+    return control?.hasError(errorType) && control.touched;
   }
 }

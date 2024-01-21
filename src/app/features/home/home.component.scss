@@ -1,5 +1,6 @@
 section {
     display: flex;
+    position: relative;
 }
 app-board {
     width: 100%;
@@ -7,7 +8,6 @@ app-board {
 }
 app-sidebar {
     display: flex;
-    width: 315px;
     grid-area: sidebar;
     height: 100vh;
 }
@@ -75,4 +75,35 @@ app-header {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.sidenav-container {
+    width: 100%;
+    background-color: var(--ultradark);
+}
+
+.toggle-container {
+    z-index: 100;
+    background-color: var(--purplehover);
+    position: absolute;
+    bottom: 50px;
+    width: 56px;
+    height: 48px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    img {
+        width: 16px;
+        height: 10px;
+        padding-right: 5px;
+    }
+}
+
+.mat-drawer {
+    background-color: var(--ultradark);
 }

@@ -1,0 +1,22 @@
+.success-message {
+    padding: 15px; /* Some padding */
+    position: fixed; /* Fixed position */
+    top: 0; /* At the top of the screen */
+    left: 40%; /* Move to the middle of the screen */
+    width: auto; /* Auto width for content-based sizing */
+
+    text-align: center; /* Centered text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow */
+    z-index: 1000; /* Sit on top */
+    transition: all 0.5s ease; /* Transition for smooth effect */
+    border-radius: 5px; /* Optional: rounded corners */
+}
+
+.success-message.show {
+    top: 0; /* Slide down to show */
+}
+
+.error {
+    background-color: #f2dede;
+    color: #a94442;
+}

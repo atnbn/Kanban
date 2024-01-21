@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoginUserService } from '../user/login-user/login-user.service';
+import { AuthUserService } from '../user/login-user/login-user.service';
 import {
   ActivatedRouteSnapshot,
   Router,
@@ -10,17 +10,30 @@ import { Observable, map } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
-  constructor(private loginService: LoginUserService, private router: Router) {}
+export class AuthGuardService {
+  constructor(private authService: AuthUserService, private router: Router) {}
 
-  canActivate(): Observable<boolean> {
-    return this.loginService.checkSession().pipe(
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean> {
+    return this.authService.checkSession().pipe(
       map((authStatus) => {
-        if (!authStatus.isLoggedIn) {
-          this.router.navigate(['/login']);
-          return false;
+        const currentUrl = state.url;
+
+        if (authStatus.isLoggedIn) {
+          if (currentUrl === '/login' || currentUrl === '/sign-up') {
+            this.router.navigate(['/home']);
+            return false;
+          }
+          return true;
+        } else {
+          if (currentUrl !== '/login' && currentUrl !== '/sign-up') {
+            this.router.navigate(['/login']);
+            return false;
+          }
+          return true;
         }
-        return true;
       })
     );
   }

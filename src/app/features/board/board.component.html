@@ -37,7 +37,7 @@
       class="columns"
       (dragover)="onDragOver($event)"
       *ngFor="let column of board.columns; let i = index"
-      (drop)="onDrop($event, column.columnName)"
+      (drop)="onDrop($event, column.id)"
     >
       <div>
         <div class="column-title-con">
@@ -71,11 +71,17 @@
   <div *ngIf="board.columns.length === 0" class="fixed">
     <span>This board is empty. Create a new column to get started</span>
 
-    <button class="add-column--btn">+ Add New Column</button>
+    <button class="add-column--btn" (click)="editBoard()">
+      + Add New Column
+    </button>
   </div>
 </section>
 
-<app-add-task *ngIf="addTaskPopUp" (closePopUp)="closeAddTask()">
+<app-add-task
+  *ngIf="addTaskPopUp"
+  (closePopUp)="closeAddTask()"
+  [type]="'create'"
+>
 </app-add-task>
 <app-detail-task
   *ngIf="OpenTaskWindow"
@@ -89,7 +95,8 @@
 ></app-add-board>
 
 <app-delete-object
-  [board]="this.board"
+  [currentBoard]="this.board"
   *ngIf="deleteWindow"
+  [edit]="'Board'"
   (closePopUp)="toggleDeleteWindow()"
 ></app-delete-object>

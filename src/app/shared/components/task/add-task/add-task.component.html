@@ -25,7 +25,15 @@
         placeholder="e.g. Web Design"
         formControlName="title"
       />
-
+      <mat-error
+        minlength="1"
+        *ngIf="
+          checkValidator('title', 'minlength') ||
+          checkValidator('title', 'required')
+        "
+        style="font-size: 10px"
+        >Please enter a title</mat-error
+      >
       <!-- Description -->
       <label
         style="padding-top: 10px"
@@ -61,22 +69,30 @@
           *ngFor="let input of inputs.controls; let i = index"
           [formGroupName]="i"
         >
-          <input
-            [ngClass]="{
-              'dark-mode': isDarkMode,
-              white: isDarkMode,
-              'dark-mode-border': isDarkMode
-            }"
-            type="text"
-            formControlName="name"
-          />
-          <button
-            class="delete-column--btn btn-nobackground"
-            type="button"
-            (click)="deleteInput(i)"
+          <div class="input-container">
+            <input
+              [ngClass]="{
+                'dark-mode': isDarkMode,
+                white: isDarkMode,
+                'dark-mode-border': isDarkMode
+              }"
+              type="text"
+              formControlName="name"
+            />
+            <button
+              class="delete-column--btn btn-nobackground"
+              type="button"
+              (click)="deleteInput(i)"
+            >
+              <img src="assets/images/icon-cross.svg" />
+            </button>
+          </div>
+          <mat-error
+            minlength="1"
+            *ngIf="inputs.controls[i].invalid || inputs.controls[i].touched"
+            style="font-size: 10px; align-self: flex-start"
+            >Please enter a title</mat-error
           >
-            <img src="assets/images/icon-cross.svg" />
-          </button>
         </div>
       </div>
       <!-- add subtask button -->
@@ -106,12 +122,9 @@
           white: isDarkMode,
           'dark-mode-border': isDarkMode
         }"
-        formControlName="currentStatus"
+        (change)="onColumnSelect($event)"
       >
-        <option
-          *ngFor="let column of currentBoard.columns"
-          [value]="column.columnName"
-        >
+        <option *ngFor="let column of currentBoard.columns" [value]="column.id">
           {{ column.columnName }}
         </option>
       </select>

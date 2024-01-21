@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { CreateUserService } from 'src/app/shared/services/user/create-user/create-user.service';
-import { LoginUserService } from 'src/app/shared/services/user/login-user/login-user.service';
 import { User } from 'src/app/shared/models/user-interface';
-import { SidebarService } from 'src/app/shared/services/sidebar/sidebar.service';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
+import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
 
 @Component({
   selector: 'app-signup',
@@ -22,14 +20,14 @@ export class SignupComponent {
     private themeService: ThemeService,
     private fb: FormBuilder,
     private createUserService: CreateUserService,
-    private loginService: LoginUserService,
-    private sidebarService: SidebarService,
-    private router: Router
+    private router: Router,
+    private messageService: ReturnMessageService
   ) {}
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((theme) => {
       this.darkmode = theme;
     });
+
     this.initializeForm();
     // this.getData();
   }
@@ -39,10 +37,12 @@ export class SignupComponent {
       email: ['', [Validators.email, Validators.required]],
       username: ['', [Validators.minLength(3), Validators.required]],
       password: ['', [Validators.minLength(7), Validators.required]],
+      confirmedPassword: ['', [Validators.minLength(7), Validators.required]],
     });
   }
 
   createUser() {
+    this.checkSamePassword();
     if (this.userForm.invalid) {
       return;
     }
@@ -52,16 +52,22 @@ export class SignupComponent {
     const newUser = {
       username: user.username,
       password: user.password,
+      confirmedPassword: user.confirmedPassword,
       email: user.email,
     };
     this.createUserService.signUser(newUser).subscribe({
       next: (response) => {
+        this.messageService.setMessage({
+          message: response.message,
+          type: 'success',
+        });
         this.router.navigate(['/login']);
-        console.log(response);
       },
       error: (error) => {
-        console.log(error);
-        this.errorMessage = error.error;
+        this.messageService.setMessage({
+          message: error.error,
+          type: 'error',
+        });
       },
     });
   }
@@ -69,5 +75,20 @@ export class SignupComponent {
   checkValidator(formControlName: string, errorType: string) {
     const control = this.userForm.get(formControlName);
     return control?.hasError(errorType) && control.touched;
+  }
+
+  checkSamePassword() {
+    const password = this.userForm.get('password')?.value;
+    const confirmedPassword = this.userForm.get('confirmedPassword')?.value;
+    if (this.passwordNotMatch(password, confirmedPassword)) {
+      this.userForm.get('confirmedPassword')?.setErrors({
+        notSame: true,
+      });
+      console.log(this.userForm.get('confirmedPassword'));
+    }
+  }
+
+  passwordNotMatch(password: string, confirmedPassword: string) {
+    return password !== confirmedPassword;
   }
 }

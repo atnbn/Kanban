@@ -43,6 +43,16 @@
         "
         >Please enter a valid Password with atleast 7 characters</mat-error
       >
+      <label [ngClass]="{ white: darkmode }">confirm password</label>
+      <input formControlName="confirmedPassword" type="password" />
+      <mat-error
+        style="font-size: 10px"
+        *ngIf="
+          this.userForm.controls['password'].value !==
+          this.userForm.controls['confirmedPassword'].value
+        "
+        >Password does not match</mat-error
+      >
 
       <button
         type="submit"
