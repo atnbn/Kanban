@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { OpenPopUpService } from '../../shared/services/add-board/add-board-up.service';
 import { ThemeService } from '../../shared/services/theme/theme.service';
 import {
@@ -23,6 +23,8 @@ import { ReturnMessageService } from 'src/app/shared/services/return-message/ret
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
+  mobileQuery: MediaQueryList;
+
   isDarkMode: boolean = false;
   addBoardPopUp: boolean = false;
   sidebarState: boolean = true;
@@ -30,6 +32,7 @@ export class SidebarComponent implements OnInit {
   storage: Board[] = [];
   storedMode = localStorage.getItem('darkmode');
   boards: Board[] = [];
+  private _mobileQueryListener: () => void;
 
   constructor(
     private themeService: ThemeService,
@@ -39,8 +42,13 @@ export class SidebarComponent implements OnInit {
     private userService: UserService,
     private boardApiService: SaveBoardService,
     private router: Router,
-    private messageService: ReturnMessageService
-  ) {}
+    private messageService: ReturnMessageService,
+    changeDetectorRef: ChangeDetectorRef
+  ) {
+    this.mobileQuery = window.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+  }
 
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
