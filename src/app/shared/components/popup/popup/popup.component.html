@@ -1,0 +1,46 @@
+<app-add-board
+  (closePopUp)="closeObject()"
+  [type]="'create'"
+  *ngIf="type === 'create-board'"
+></app-add-board>
+
+<app-add-board
+  [type]="'edit'"
+  *ngIf="type === 'edit-board'"
+  (closePopUp)="closeObject()"
+></app-add-board>
+
+<app-add-task
+  (closePopUp)="closeObject()"
+  [type]="'create'"
+  *ngIf="type === 'create-task'"
+></app-add-task>
+
+<app-add-task
+  (closePopUp)="closeObject()"
+  [type]="'edit'"
+  *ngIf="type === 'edit-task'"
+></app-add-task>
+
+<app-detail-task
+  (closePopUp)="closeObject()"
+  *ngIf="type === 'detail-task'"
+></app-detail-task>
+
+<app-delete-object
+  (closePopUp)="closeObject()"
+  [type]="'board'"
+  *ngIf="type === 'delete-board'"
+></app-delete-object>
+
+<app-delete-object
+  (closePopUp)="closeObject()"
+  [type]="'task'"
+  *ngIf="type === 'delete-task'"
+></app-delete-object>
+
+<app-delete-object
+  (closePopUp)="closeObject()"
+  [type]="'user'"
+  *ngIf="type === 'delete-user'"
+></app-delete-object>

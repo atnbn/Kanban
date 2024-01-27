@@ -1,60 +1,46 @@
+<app-popup
+  *ngIf="openPopup"
+  [type]="type"
+  class="backdrop"
+  (closePopUps)="closeObjects()"
+></app-popup>
+
 <app-notification
   *ngIf="showMessage"
   [messageObject]="messageObject"
 ></app-notification>
 
-<section [ngClass]="{ 'dark-mode': isDarkMode }" class="grid-container">
-  <div class="logo-con">
-    <div
-      class="logo-header"
-      [ngClass]="{
-        'border-right': isDarkMode,
-        'd-none': sidebarState,
-        'border-bottom': isDarkMode
-      }"
-    >
-      <img
-        class="logo"
-        [src]="
-          isDarkMode
-            ? '/assets/images/logo-light.svg'
-            : '/assets/images/logo-dark.svg'
-        "
-        alt="logo-alt"
-      />
-    </div>
-  </div>
-  <!-- <app-sidebar></app-sidebar>
-  <div class="right-side">
-    <app-board *ngIf="!emptyBoard"></app-board>
-    <div class="add-board-con" *ngIf="emptyBoard">
-      <h2 [ngClass]="{ white: isDarkMode }">Please add a Board</h2>
-    </div>
-  </div> -->
-  <mat-sidenav-container
-    [ngClass]="{ border: isDarkMode }"
-    style="width: 100%"
-    autosize=""
-  >
-    <mat-sidenav
-      [ngClass]="{ border: isDarkMode }"
-      #sidenav
-      mode="side"
-      opened="true"
-    >
-      <app-sidebar></app-sidebar>
-    </mat-sidenav>
-    <mat-sidenav-content [ngClass]="{ border: isDarkMode }"
-      ><div class="right-side">
-        <app-board *ngIf="!emptyBoard"></app-board>
-        <div class="add-board-con" *ngIf="emptyBoard">
-          <h2 [ngClass]="{ white: isDarkMode }">Please add a Board</h2>
-        </div>
-      </div></mat-sidenav-content
-    >
-  </mat-sidenav-container>
+<div class="empty-content" *ngIf="emptyBoard && !sidebar">
+  <div class="fixed">
+    <span>Please add a board</span>
 
-  <div class="toggle-container" *ngIf="!sidebar" (click)="changeSidebar()">
-    <img src="assets/images/icon-show-sidebar.svg" />
+    <button class="add-column--btn" (click)="openBoard()">
+      + Add New Board
+    </button>
+  </div>
+</div>
+<section [ngClass]="{ 'dark-mode': isDarkMode }" class="grid-container">
+  <app-sidebar [class.active]="sidebar" class="sidebar"></app-sidebar>
+  <app-header
+    *ngIf="!emptyBoard"
+    class="header"
+    [class.active]="!sidebar"
+  ></app-header>
+  <app-board
+    [ngClass]="{ 'no-scroll': this.scrollDisabled }"
+    class="main-content"
+    *ngIf="!emptyBoard"
+  ></app-board>
+
+  <div class="main-content add-board-con" *ngIf="emptyBoard">
+    <h2 [ngClass]="{ white: isDarkMode }">Please add a Board</h2>
   </div>
 </section>
+
+<div
+  class="toggle-container"
+  *ngIf="!sidebar && !mobileQuery.matches"
+  (click)="changeSidebar()"
+>
+  <img src="assets/images/icon-show-sidebar.svg" />
+</div>

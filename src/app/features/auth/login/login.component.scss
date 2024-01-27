@@ -23,6 +23,11 @@ section {
     margin: auto;
 }
 
+.label-error-con {
+    display: flex;
+    justify-content: space-between;
+}
+
 h2 {
     align-self: flex-start;
 }
@@ -119,5 +124,13 @@ button:active {
     input,
     button {
         padding: 8px;
+    }
+}
+
+
+@media (max-height: 500px) {
+    section {
+        height: fit-content;
+        overflow: auto;
     }
 }

@@ -12,6 +12,8 @@ import { BoardObjectService } from '../../services/add-board/board-object.servic
 import { SaveBoardService } from '../../services/save-board/save-board.service';
 import { TaskApiService } from '../../services/add-task/add-task-api.service';
 import { ReturnMessageService } from '../../services/return-message/return-message.service';
+import { Router } from '@angular/router';
+import { UserService } from '../../services/user/user/user.service';
 
 @Component({
   selector: 'app-delete-object',
@@ -24,7 +26,7 @@ export class DeleteObjectComponent implements OnInit {
   allBoards: Board[] = [];
   currentObject?: Task | Board;
 
-  @Input() edit?: String;
+  @Input() type?: String;
   @Input() currentBoard?: Board;
   @Input() currentTask?: Task;
 
@@ -35,7 +37,9 @@ export class DeleteObjectComponent implements OnInit {
     private boardService: BoardObjectService,
     private boardApiService: SaveBoardService,
     private taskApiService: TaskApiService,
-    private messageService: ReturnMessageService
+    private messageService: ReturnMessageService,
+    private router: Router,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -47,16 +51,23 @@ export class DeleteObjectComponent implements OnInit {
       this.allBoards = storage;
     });
 
-    console.log(this.edit);
+    this.boardService.getBoard().subscribe((board) => {
+      console.log(board);
+      this.currentBoard = board;
+    });
+
+    this.boardService.getTask().subscribe((task) => {
+      this.currentTask = task;
+    });
   }
 
   deleteObject(id: any) {
-    if (this.edit === 'Task') {
+    if (this.type === 'task') {
       this.onDeleteTask();
-      console.log('delete');
-    } else if (this.edit === 'Board') {
-      console.log('delete-board');
+    } else if (this.type === 'board') {
       this.onDeleteBoard();
+    } else if (this.type === 'user') {
+      this.onDeleteUser();
     }
 
     this.closeDeleteWindow();
@@ -76,28 +87,31 @@ export class DeleteObjectComponent implements OnInit {
             type: 'success',
           });
           if (this.allBoards.length === 0) {
-            this.boardService.submitDataToBoard(this.allBoards);
+            console.log('empty ');
+            this.boardService.submitStorage(this.allBoards);
           } else {
-            this.boardService.submitDataToBoard(this.allBoards[0]);
+            this.boardService.submitBoard(this.allBoards[0]);
           }
+          this.router.navigate(['/home']);
+          this.boardService.submitStorage(this.allBoards);
+          this.closePopUp.emit(false);
         },
         error: (err) => {
           this.messageService.setMessage({
             message: err.message,
             type: 'error',
           });
+          this.closePopUp.emit(false);
         },
       });
     }
   }
 
   onDeleteTask() {
-    console.log(this.currentBoard);
     const taskId = this.currentTask?.id!;
     const currentColumn = this.currentBoard?.columns.find((column) =>
       column.tasks.some((task) => task.id === taskId)
     );
-    console.log(currentColumn);
 
     if (currentColumn) {
       currentColumn.tasks = currentColumn.tasks.filter(
@@ -119,7 +133,7 @@ export class DeleteObjectComponent implements OnInit {
               });
             },
             error: (error) => {
-              console.log(error.error);
+              error.error;
               this.messageService.setMessage({
                 message: error.error,
                 type: 'error',
@@ -128,6 +142,24 @@ export class DeleteObjectComponent implements OnInit {
           });
       }
     }
+  }
+
+  onDeleteUser() {
+    this.userService.deleteUser().subscribe({
+      next: (response) => {
+        this.messageService.setMessage({
+          message: response.message,
+          type: 'success',
+        });
+        this.router.navigate(['login']);
+      },
+      error: (error) => {
+        this.messageService.setMessage({
+          message: error.error,
+          type: 'error',
+        });
+      },
+    });
   }
   closeDeleteWindow() {
     this.closePopUp.emit(false);

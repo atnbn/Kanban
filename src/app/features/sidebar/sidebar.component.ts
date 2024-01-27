@@ -1,28 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { OpenPopUpService } from '../../shared/services/add-board/add-board-up.service';
 import { ThemeService } from '../../shared/services/theme/theme.service';
-import {
-  trigger,
-  transition,
-  style,
-  animate,
-  state,
-} from '@angular/animations';
 import { SidebarService } from '../../shared/services/sidebar/sidebar.service';
 import { BoardObjectService } from '../../shared/services/add-board/board-object.service';
 import { Board } from '../../shared/models/board-interface';
 import { UserService } from 'src/app/shared/services/user/user/user.service';
 import { SaveBoardService } from 'src/app/shared/services/save-board/save-board.service';
 
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
+  mobileQuery: MediaQueryList;
+  dropDown: boolean = false;
   isDarkMode: boolean = false;
   addBoardPopUp: boolean = false;
   sidebarState: boolean = true;
@@ -30,6 +32,10 @@ export class SidebarComponent implements OnInit {
   storage: Board[] = [];
   storedMode = localStorage.getItem('darkmode');
   boards: Board[] = [];
+  routeSub!: Subscription;
+  activeBoard: Board | null = {} as Board;
+  active: boolean = true;
+  private _mobileQueryListener: () => void;
 
   constructor(
     private themeService: ThemeService,
@@ -39,44 +45,56 @@ export class SidebarComponent implements OnInit {
     private userService: UserService,
     private boardApiService: SaveBoardService,
     private router: Router,
-    private messageService: ReturnMessageService
-  ) {}
+    private route: ActivatedRoute,
+    private messageService: ReturnMessageService,
+    changeDetectorRef: ChangeDetectorRef
+  ) {
+    this.mobileQuery = window.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+  }
 
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
       this.isDarkMode = darkmode;
     });
 
-    this.boardService.getBoardObjects().subscribe((objects) => {
-      if (Object.values(objects).length > 0) {
-        this.storage.push(objects);
+    this.boardService.getStorage().subscribe((objects) => {
+      if (objects.length > 0) {
+        this.storage = objects;
+        this.setActiveBoard(this.route.snapshot.queryParams['boardId']);
       }
     });
 
-    this.boardService.submitStorage(this.storage);
+    // this.boardService.getBoards);
     this.popupService.addBoard$.subscribe((value) => {
       this.addBoardPopUp = value;
     });
-
-    this.userService.getUser().subscribe({
-      next: (response: any) => {
-        this.currentUser = response.userData;
-      },
-      error: (error) => {
-        console.log(error);
-      },
+    this.routeSub = this.route.queryParams.subscribe((params) => {
+      const boardId = params['boardId'];
+      console.log(boardId);
+      this.setActiveBoard(boardId);
     });
 
-    this.boardApiService.getBoardObjects().subscribe({
-      next: (response) => {
-        this.storage = response;
-        this.boardService.submitStorage(this.storage);
-        this.boardService.submitDataToBoard(this.storage[0]);
-      },
-      error: (error) => {
-        this.addPopUp();
-      },
-    });
+    // Initial check in case the component is loaded with a boardId in the URL
+  }
+
+  ngOnDestroy() {
+    this.routeSub.unsubscribe();
+  }
+
+  setActiveBoard(boardId: string) {
+    if (boardId && this.storage.length > 0) {
+      const foundBoard = this.storage.find((board) => board.id === boardId);
+      console.log('succes', this.storage);
+      if (foundBoard) {
+        this.activeBoard = foundBoard;
+      } else {
+        this.activeBoard = null; // Or handle the error as you see fit
+      }
+    } else {
+      this.activeBoard = null;
+    }
   }
 
   addPopUp() {
@@ -88,21 +106,29 @@ export class SidebarComponent implements OnInit {
   changeMode() {
     this.themeService.toggleTheme();
   }
-
+  openSettings() {
+    this.dropDown = !this.dropDown;
+  }
   toggleSidebar() {
     this.sidebarService.toggleSidebar();
-    console.log('test');
   }
 
   openAddBoard() {
-    this.addBoardPopUp = true;
+    this.popupService.openAddBoard();
+    if (this.mobileQuery.matches) {
+      this.toggleSidebar();
+    } else {
+    }
   }
 
   openId(id: string) {
-    const foundObject = this.storage.find((obj) => obj.id === id);
-    if (foundObject) {
-      this.boardService.submitDataToBoard(foundObject);
-    }
+    this.router.navigate([], {
+      queryParams: { boardId: id },
+      queryParamsHandling: 'merge',
+    });
+  }
+  openDeletePopUp() {
+    this.popupService.openDeleteUser();
   }
 
   closeAddBoard() {
@@ -125,5 +151,14 @@ export class SidebarComponent implements OnInit {
         });
       },
     });
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleOutsideClick(event: MouseEvent) {
+    const clickedElement = event.target as HTMLElement;
+    const dropDown = clickedElement.tagName.toLowerCase();
+    if (dropDown === 'div' && this.dropDown === true) {
+      this.dropDown = false;
+    } else return;
   }
 }

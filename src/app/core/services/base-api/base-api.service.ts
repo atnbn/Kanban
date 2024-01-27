@@ -1,12 +1,13 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
+import { environment } from 'src/app/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BaseApiService {
-  protected apiUrl = 'http://localhost:3000/';
+  protected apiUrl = environment.apiBaseUrl;
   constructor(protected http: HttpClient) {}
 
   protected get(url: string, options = {}): Observable<any> {

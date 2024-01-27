@@ -117,7 +117,7 @@ button:active {
 }
 @media screen and (max-width: 600px) {
     section {
-        height: -webkit-fill-available;
+        height: 102vh;
     }
     .login-form {
         padding: 1rem;
@@ -134,5 +134,12 @@ button:active {
     input,
     button {
         padding: 8px;
+    }
+}
+
+@media (max-height: 500px) {
+    section {
+        height: fit-content;
+        overflow: auto;
     }
 }

@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -6,6 +7,8 @@ import {
   Input,
   OnInit,
   Output,
+  QueryList,
+  ViewChildren,
 } from '@angular/core';
 import { ThemeService } from '../../services/theme/theme.service';
 import {
@@ -20,26 +23,27 @@ import { Board, Columns, Task } from '../../models/board-interface';
 import { OpenPopUpService } from '../../services/add-board/add-board-up.service';
 import { SaveBoardService } from '../../services/save-board/save-board.service';
 import { ReturnMessageService } from '../../services/return-message/return-message.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-board',
   templateUrl: './add-board.component.html',
   styleUrls: ['./add-board.component.scss'],
 })
-export class AddBoardComponent implements OnInit {
+export class AddBoardComponent implements OnInit, AfterViewInit {
   boardObject: Board | undefined;
   fields: string[] = [];
   columnObject: any[] = [];
-  edit: boolean = false;
   formGroup!: FormGroup;
   modalOpen: boolean = true;
   message: any;
+  edit: boolean = false;
   allBoards!: Board[];
   isDarkMode: boolean = false;
   deleteForm: boolean = false;
   currentUser: any;
-  @Input() currentBoard: Board | null = null;
-
+  @ViewChildren('inputElement') inputElement!: QueryList<ElementRef>;
+  @Input() type: string = '';
   @Output() closePopUp = new EventEmitter<boolean>();
 
   constructor(
@@ -48,24 +52,36 @@ export class AddBoardComponent implements OnInit {
     private popupService: OpenPopUpService,
     private boardService: BoardObjectService,
     private saveBoardService: SaveBoardService,
-    private messageService: ReturnMessageService
+    private messageService: ReturnMessageService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((value) => {
       this.isDarkMode = value;
     });
-    if (this.currentBoard !== null) {
-      this.boardService.getStorage().subscribe((storage) => {
-        console.log(storage, 'storage');
-        this.allBoards = storage;
-      });
+    this.boardService.getStorage().subscribe((storage) => {
+      this.allBoards = storage;
+    });
+
+    if (this.type === 'edit') {
       this.edit = true;
-      this.boardObject = this.currentBoard;
+      this.boardService.getBoard().subscribe((board) => {
+        this.boardObject = board;
+      });
       this.initializeEditForm();
     } else {
       this.initializeForm();
     }
+  }
+
+  ngAfterViewInit(): void {
+    this.inputElement.changes.subscribe((inputs: QueryList<ElementRef>) => {
+      const lastInput: ElementRef = inputs.last;
+      if (lastInput) {
+        lastInput.nativeElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
   }
 
   initializeForm() {
@@ -77,6 +93,7 @@ export class AddBoardComponent implements OnInit {
   }
 
   initializeEditForm() {
+    console.log('test');
     this.formGroup = this.fb.group({
       title: [
         this.boardObject?.title,
@@ -85,6 +102,7 @@ export class AddBoardComponent implements OnInit {
       inputs: this.fb.array([]),
       columnName: [],
     });
+    console.log(this.formGroup.value);
 
     this.boardObject?.columns.forEach((column) => {
       this.inputs.push(
@@ -109,7 +127,6 @@ export class AddBoardComponent implements OnInit {
     });
 
     this.inputs.push(newInputForm);
-    console.log(this.inputs);
   }
 
   collectInputValues() {
@@ -124,7 +141,6 @@ export class AddBoardComponent implements OnInit {
   changeTaskStatus() {
     this.inputs.value.forEach((column: Columns) => {
       column.tasks.forEach((task: Task) => {
-        console.log('task', task);
         // task.status = column.columnName;
       });
     });
@@ -143,31 +159,39 @@ export class AddBoardComponent implements OnInit {
   }
 
   submitForm() {
-    if (this.edit) {
+    if (this.type === 'edit') {
       this.updateBoard();
-    } else {
+    } else if (this.type === 'create') {
       this.createBoard();
     }
     this.popupService.closeAddBoard();
   }
   createBoard() {
     this.createBoardObject();
-    this.boardService.addBoardObject(this.boardObject!);
-    this.boardService.submitDataToBoard(this.boardObject!);
-    this.saveBoardService.saveBoardObject(this.boardObject!).subscribe({
+    console.log(this.boardObject);
+    this.saveBoardService.saveBoardObject(this.boardObject).subscribe({
       next: (response: any) => {
         this.messageService.setMessage({
           message: response.message,
           type: 'success',
         });
+        this.allBoards.push(this.boardObject!);
+        this.boardService.submitBoard(this.boardObject!);
+        this.boardService.submitStorage(this.allBoards!);
+        this.router.navigate([], {
+          queryParams: { boardId: this.boardObject?.id },
+          queryParamsHandling: 'merge',
+        });
       },
       error: (error) => {
+        console.log(error);
         this.messageService.setMessage({
           message: error.error,
           type: 'error',
         });
       },
     });
+    this.closePopUp.emit(false);
   }
   deleteBoard(currBoard: any) {
     this.deleteForm = true;
@@ -198,10 +222,12 @@ export class AddBoardComponent implements OnInit {
       .editBoardObject(this.boardObject, this.boardObject?.id!)
       .subscribe({
         next: (response: any) => {
-          this.messageService.setMessage({
-            message: response.message,
-            type: 'success',
-          });
+          this.boardService.submitBoard(this.boardObject!);
+          if (response.message)
+            this.messageService.setMessage({
+              message: response.message,
+              type: 'success',
+            });
         },
         error: (error) => {
           this.messageService.setMessage({
@@ -210,8 +236,7 @@ export class AddBoardComponent implements OnInit {
           });
         },
       });
-    this.boardService.submitDataToBoard(this.boardObject);
-    console.log(this.boardObject);
+    this.boardService.submitBoard(this.boardObject!);
     this.updateExistingBoard(this.boardObject!);
     this.changeTaskStatus();
     this.closePopUp.emit(false);
@@ -219,14 +244,12 @@ export class AddBoardComponent implements OnInit {
 
   updateExistingBoard(currentBoard: Board) {
     // Find the index of the board in the storage array
-    console.log(currentBoard, this.allBoards);
     const boardIndex = this.allBoards.findIndex(
       (board) => board.id === currentBoard.id
     );
     if (boardIndex !== -1) {
       // Board found, update it
       this.allBoards[boardIndex] = currentBoard;
-      console.log(this.allBoards, 'update');
       this.boardService.submitStorage(this.allBoards);
       return true; // Return true to indicate that the board was successfully updated
     } else {
@@ -240,6 +263,7 @@ export class AddBoardComponent implements OnInit {
     const clickedElement = event.target as HTMLElement;
     if (clickedElement.tagName.toLowerCase() === 'section') {
       this.closePopUp.emit(false);
+      this.themeService.toggleScroll();
     } else return;
   }
 

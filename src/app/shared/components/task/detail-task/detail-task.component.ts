@@ -15,6 +15,8 @@ import {
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 import { TaskApiService } from 'src/app/shared/services/add-task/add-task-api.service';
 import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
+import { FormControl, FormGroup } from '@angular/forms';
+import { OpenPopUpService } from 'src/app/shared/services/add-board/add-board-up.service';
 @Component({
   selector: 'app-detail-task',
   templateUrl: './detail-task.component.html',
@@ -22,6 +24,7 @@ import { ReturnMessageService } from 'src/app/shared/services/return-message/ret
 })
 export class DetailTaskComponent implements OnInit {
   isDarkMode: boolean = false;
+  formGroup!: FormGroup;
   dropDown: boolean = false;
   currentBoard!: Board;
   edit: boolean = false;
@@ -34,7 +37,8 @@ export class DetailTaskComponent implements OnInit {
     private themeService: ThemeService,
     private boardService: BoardObjectService,
     private taskApiService: TaskApiService,
-    private messageService: ReturnMessageService
+    private messageService: ReturnMessageService,
+    private popupService: OpenPopUpService
   ) {}
 
   ngOnInit(): void {
@@ -44,10 +48,9 @@ export class DetailTaskComponent implements OnInit {
 
     this.boardService.getTask().subscribe((object: Task) => {
       this.currentTask = object;
-      console.log('currentTask', this.currentTask.status);
     });
 
-    this.boardService.sidebarData$.subscribe((board: Board) => {
+    this.boardService.getBoard().subscribe((board: Board) => {
       this.currentBoard = board;
     });
     this.calculateDoneSubtasks();
@@ -62,6 +65,7 @@ export class DetailTaskComponent implements OnInit {
   public changeValue(subtask: Subtask) {
     subtask.done = !subtask.done;
     this.calculateDoneSubtasks();
+    this.saveTask(this.currentTask);
   }
 
   onColumnSelect(event: Event) {
@@ -70,11 +74,9 @@ export class DetailTaskComponent implements OnInit {
 
     if (selectElement && selectElement.value) {
       const selectedColumnId = selectElement.value;
-      console.log('id', selectedColumnId);
       const column = this.currentBoard.columns.find(
         (c) => c.id === selectedColumnId
       );
-      console.log('column', column);
       if (column) {
         this.currentTask.status[0] = {
           id: column.id,
@@ -88,11 +90,12 @@ export class DetailTaskComponent implements OnInit {
 
   public toggelDeleteTaskWindow() {
     this.deleteForm = !this.deleteForm;
-    console.log('test');
   }
 
   editTask() {
-    this.edit = true;
+    this.popupService.openEditTask();
+    this.themeService.toggleScroll();
+    this.boardService.submitTask(this.currentTask);
   }
 
   closeWindow(boolean: boolean) {
@@ -119,8 +122,6 @@ export class DetailTaskComponent implements OnInit {
 
     if (currentColumn) {
       const existingTask = currentColumn.tasks.find((t) => t.id === task.id);
-      console.log('cuirrent ', currentColumn);
-      console.log(currentColumn.columnName);
 
       if (existingTask) {
         // Check if any property is different before updating
@@ -133,14 +134,21 @@ export class DetailTaskComponent implements OnInit {
           // Add the updated task
 
           currentColumn.tasks.push(task);
-
-          console.log('task is safed');
         }
         this.taskApiService
           .updateTask(this.currentBoard.id, currentColumn.id, task.id, task)
           .subscribe({
-            next: (result: any) => console.log(result),
-            error: (error) => console.error(error),
+            next: (result: any) => {
+              this.messageService.setMessage({
+                message: result.message,
+                type: 'success',
+              });
+            },
+            error: (error) =>
+              this.messageService.setMessage({
+                message: error.error,
+                type: 'success',
+              }),
           });
       }
     }
@@ -177,8 +185,6 @@ export class DetailTaskComponent implements OnInit {
     const clickedElement = event.target as HTMLElement;
     if (clickedElement.tagName.toLowerCase() === 'section') {
       this.closePopUp.emit(false);
-      console.log('save task');
-      // this.saveTask(this.currentTask);
       this.dropDown = false;
     }
     if (clickedElement.tagName.toLowerCase() === 'div') {
@@ -213,7 +219,6 @@ export class DetailTaskComponent implements OnInit {
 
           // Prepare the updated task data
           const updatedTaskData = { ...task };
-          console.log('updatedTaskData', updatedTaskData);
           // Call the API to update the task on the backend
           this.taskApiService
             .updateTask(

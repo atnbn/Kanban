@@ -22,6 +22,8 @@ import { HomeComponent } from './features/home/home.component';
 import { NotificationComponent } from './shared/components/notification/notification/notification.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { PopupComponent } from './shared/components/popup/popup/popup.component';
+import { HeaderComponent } from './shared/components/header/header/header.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     SignupComponent,
     HomeComponent,
     NotificationComponent,
+    PopupComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserAnimationsModule,

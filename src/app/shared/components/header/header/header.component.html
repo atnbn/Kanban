@@ -1,0 +1,42 @@
+<header [ngClass]="{ 'dark-mode': isDarkMode, 'border-bottom': isDarkMode }">
+  <div class="inner-header">
+    <div class="title-con">
+      <h1 [ngClass]="{ white: isDarkMode }">
+        {{ storage.length > 0 ? board?.title : "Add a new Board" }}
+      </h1>
+      <img
+        *ngIf="isMobile"
+        (click)="toggleSidebar()"
+        src="assets/images/icon-chevron-up.svg"
+      />
+    </div>
+    <div class="buttons">
+      <button
+        class="add-task--btn"
+        (click)="openAddTask()"
+        *ngIf="board?.columns?.length !== 0"
+        [ngClass]="{ 'sec-darkmode-btn': isDarkMode }"
+      >
+        + Add New Task
+      </button>
+      <button class="settings--btn btn-nobackground" (click)="toggleSettings()">
+        <img src="assets/images/icon-vertical-ellipsis.svg" />
+      </button>
+      <!-- Popup window -->
+      <div
+        [ngClass]="{ 'd-none': !dropDown, 'no-scroll': dropDown }"
+        class="edit-con"
+      >
+        <span
+          (click)="editBoard()"
+          [ngClass]="{ 'dark-mode-label': isDarkMode }"
+          >Edit Board</span
+        >
+        <span style="color: var(--red)" (click)="toggleDeleteWindow()"
+          >Delete Board</span
+        >
+      </div>
+    </div>
+  </div>
+</header>
+<!--  -->

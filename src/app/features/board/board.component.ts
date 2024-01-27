@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Renderer2 } from '@angular/core';
 import {
   Board,
   Columns,
@@ -13,6 +13,9 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { TaskApiService } from 'src/app/shared/services/add-task/add-task-api.service';
 import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
 import { Message } from 'src/app/shared/models/notification-interface';
+import { MediaQueryService } from 'src/app/shared/services/media-query/media-query.service';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-board',
@@ -22,6 +25,7 @@ import { Message } from 'src/app/shared/models/notification-interface';
 export class BoardComponent {
   message: string = '';
   isDarkMode: boolean = false;
+  storage: Board[] = [];
   addTaskPopUp: boolean = false;
   OpenTaskWindow: boolean = false;
   dropDown: boolean = false;
@@ -30,6 +34,9 @@ export class BoardComponent {
   createBoardMenu: boolean = false;
   deleteWindow: boolean = false;
   task!: Task;
+  routeSub!: Subscription;
+  private mediaQuerySubscription: Subscription | undefined;
+  isMobile: boolean = false;
 
   show: boolean = true;
   emptyBoard: boolean = false;
@@ -52,14 +59,18 @@ export class BoardComponent {
     private sidebarService: SidebarService,
     private popupService: OpenPopUpService,
     private taskService: TaskApiService,
-    private messageService: ReturnMessageService
+    private messageService: ReturnMessageService,
+    private mediaQueryService: MediaQueryService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
       this.isDarkMode = darkmode;
     });
-
+    this.boardService.getBoard().subscribe((data) => {
+      this.board = data;
+    });
     this.sidebarService.sidebar$.subscribe((status) => {
       this.sidebarStatus = status;
     });
@@ -68,29 +79,58 @@ export class BoardComponent {
       this.addTaskPopUp = value;
     });
 
-    this.boardService.sidebarData$.subscribe((data) => {
-      this.board = data;
+    this.boardService.storage$.subscribe((data) => {
+      this.storage = data;
+    });
+
+    this.mediaQuerySubscription = this.mediaQueryService.isMobile$.subscribe(
+      (isMobile) => {
+        this.isMobile = isMobile;
+        // Your logic for mobile screen size
+      }
+    );
+    this.routeSub = this.route.queryParams.subscribe((params) => {
+      const boardId = params['boardId'];
+      if (boardId) {
+        const foundObject = this.storage.find((obj) => obj.id === boardId);
+        if (foundObject) {
+          this.board = foundObject;
+        }
+      } else {
+        this.board = this.storage[0];
+      }
     });
   }
 
+  ngOnDestroy() {
+    if (this.mediaQuerySubscription) {
+      this.mediaQuerySubscription.unsubscribe();
+    }
+  }
+
   openAddTask(): void {
-    this.addTaskPopUp = true;
+    // this.addTaskPopUp = true;
+    this.popupService.openAddTask();
+    this.boardService.submitBoard(this.board);
+    this.themeService.toggleScroll();
   }
 
   openTask(task: Task) {
-    this.OpenTaskWindow = true;
+    this.popupService.openDetailTask();
     this.boardService.submitTask(task);
-    this.boardService.submitDataToBoard(this.board);
-    this.task = task;
+    this.themeService.toggleScroll();
+    this.boardService.submitBoard(this.board);
   }
   currentItem: any = {};
 
   closeTask() {
     this.OpenTaskWindow = false;
+    this.themeService.toggleScroll();
   }
 
   closeAddTask(): void {
     this.addTaskPopUp = false;
+    this.themeService.toggleScroll();
   }
   onDragStart(task: any) {
     this.currentItem = task;
@@ -117,13 +157,11 @@ export class BoardComponent {
             columnName: newColumn.columnName,
             id: newColumn.id,
           };
-          console.log(task.status);
           newColumn.tasks.push(task);
           // task.status = newStatus; // Update task status
 
           // Prepare the updated task data
           const updatedTaskData = { ...task, columnName: newStatus };
-          console.log('updatedTaskData', updatedTaskData);
           // Call the API to update the task on the backend
           this.taskService
             .updateTask(
@@ -185,9 +223,10 @@ export class BoardComponent {
   }
 
   editBoard(): void {
-    this.openBoardMenu = true;
+    console.log();
     this.boardService.submitBoard(this.board);
-    this.dropDown = false;
+    this.popupService.openEditBoard();
+    this.themeService.toggleScroll();
   }
 
   closeBoardMenu(): void {
@@ -200,18 +239,27 @@ export class BoardComponent {
     this.dropDown = false;
   }
 
-  openSettings(): void {
-    this.dropDown = true;
+  toggleSettings(): void {
+    this.dropDown = !this.dropDown;
   }
 
   closePopUp(): void {
     this.addTaskPopUp = false;
   }
 
+  toggleSidebar() {
+    this.sidebarService.toggleSidebar();
+  }
+
   @HostListener('document:click', ['$event'])
   handleOutsideClick(event: MouseEvent) {
     const clickedElement = event.target as HTMLElement;
-    if (clickedElement.tagName.toLowerCase() === 'div') {
+    const dropDown = clickedElement.tagName.toLowerCase();
+    const backdrop = clickedElement.className.toLowerCase().split(' ')[0];
+    if (backdrop === 'backdrop') {
+      this.sidebarService.toggleSidebar();
+      this.sidebarStatus = false;
+    } else if (dropDown === 'section') {
       this.dropDown = false;
     } else return;
   }

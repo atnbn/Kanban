@@ -87,13 +87,14 @@
         >Current Status</label
       >
       <select
+        *ngIf="currentTask.status"
         [ngClass]="{
           'dark-mode': isDarkMode,
           white: isDarkMode,
           'dark-mode-border': isDarkMode
         }"
-        (change)="onColumnSelect($event)"
         [(ngModel)]="currentTask.status[0].id"
+        (change)="onColumnSelect($event)"
       >
         <option *ngFor="let option of currentBoard.columns" [value]="option.id">
           {{ option.columnName }}
@@ -103,7 +104,7 @@
   </div>
 </section>
 
-<app-add-task
+<!-- <app-add-task
   *ngIf="edit"
   [type]="'edit'"
   [currentTask]="currentTask"
@@ -113,7 +114,7 @@
 <app-delete-object
   *ngIf="deleteForm"
   [currentTask]="currentTask"
-  [edit]="'Task'"
+  [type]="'Task'"
   [currentBoard]="currentBoard"
   (closePopUp)="closeDeleteWindow(false)"
-></app-delete-object>
+></app-delete-object> -->

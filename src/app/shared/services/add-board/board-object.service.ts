@@ -16,17 +16,17 @@ export class BoardObjectService {
   private storage = new BehaviorSubject<any>([]);
   storage$ = this.storage.asObservable();
 
-  addBoardObject(obj: Board) {
-    this.boardObjectsSubject.next(obj);
-  }
+  // addBoardObject(obj: Board) {
+  //   this.boardObjectsSubject.next(obj);
+  // }
 
-  getBoardObjects() {
-    return this.boardObjectsSubject.asObservable();
-  }
+  // getBoardObjects() {
+  //   return this.boardObjectsSubject.asObservable();
+  // }
 
-  submitDataToBoard(data: any) {
-    this.sidebarDataSubject.next(data);
-  }
+  // submitDataToBoard(data: any) {
+  //   this.sidebarDataSubject.next(data);
+  // }
   submitStorage(data: any) {
     this.storage.next(data);
   }

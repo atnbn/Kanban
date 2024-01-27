@@ -14,9 +14,8 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Board, Columns, Subtask, Task } from '../../../models/board-interface';
+import { Board, Columns, Status, Task } from '../../../models/board-interface';
 import { BoardObjectService } from '../../../services/add-board/board-object.service';
-import { OpenPopUpService } from '../../../services/add-board/add-board-up.service';
 import { TaskApiService } from 'src/app/shared/services/add-task/add-task-api.service';
 import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
 
@@ -31,9 +30,13 @@ export default class AddTaskComponent implements OnInit {
   modalOpen: boolean = true;
   formGroup!: FormGroup;
   isDarkMode: boolean = false;
+  currentTask!: Task;
   currentBoard!: Board;
+  newStatus: Status = {
+    id: '',
+    columnName: '',
+  };
   subTaskObject: any[] = [];
-  @Input() currentTask: Task | null = null;
   @Input() type: string = '';
   @Output() closePopUp = new EventEmitter<boolean>();
   constructor(
@@ -47,16 +50,24 @@ export default class AddTaskComponent implements OnInit {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
       this.isDarkMode = darkmode;
     });
+    if (this.type === 'edit') {
+      this.boardService.getTask().subscribe((data) => {
+        if (Object.keys(data).length > 0) {
+          this.currentTask = data;
+          console.log(this.currentTask);
+        }
+      });
+    }
 
-    this.boardService.sidebarData$.subscribe((data) => {
+    this.boardService.getBoard().subscribe((data) => {
       if (Object.keys(data).length > 0) {
         this.currentBoard = data;
       }
     });
+
     if (this.type === 'create') {
       this.initializeForm();
-    } else if (this.type === 'edit' && this.currentTask) {
-      this.taskObject = this.currentTask;
+    } else if (this.type === 'edit') {
       this.fillForm();
       this.edit = true;
     }
@@ -68,6 +79,7 @@ export default class AddTaskComponent implements OnInit {
       title: ['', [Validators.minLength(1), Validators.required]],
       description: ['', [Validators.minLength(1), Validators.required]],
       inputs: this.fb.array([]),
+      selectedColumnId: firstColumn.id,
       status: this.fb.group([
         {
           id: firstColumn.id,
@@ -75,25 +87,31 @@ export default class AddTaskComponent implements OnInit {
         },
       ]),
     });
-
-    console.log('taskgroup', this.formGroup.value);
   }
 
   fillForm() {
     this.formGroup = this.fb.group({
       title: [
-        this.taskObject?.title,
+        this.currentTask?.title,
         [Validators.minLength(1), Validators.required],
       ],
       description: [
-        this.taskObject?.description,
+        this.currentTask?.description,
         [Validators.minLength(1), Validators.required],
       ],
       inputs: this.fb.array([]),
-      status: [this.taskObject?.status],
-    });
+      selectedColumnId: this.currentTask.status[0].id,
 
-    this.taskObject.subtasks?.forEach((sub) => {
+      status: [
+        {
+          id: this.currentTask?.status[0].id,
+          columnName: this.currentTask?.status[0].columnName,
+        },
+      ],
+    });
+    console.log(this.formGroup.value);
+
+    this.currentTask.subtasks?.forEach((sub) => {
       this.inputs.push(
         this.fb.group({
           name: [sub.name, [Validators.minLength(1), Validators.required]],
@@ -120,6 +138,14 @@ export default class AddTaskComponent implements OnInit {
 
   get inputs() {
     return this.formGroup.controls['inputs'] as FormArray;
+  }
+
+  changeTask() {
+    this.currentBoard.columns.forEach((column) => {
+      if (column.id === this.newStatus.id) {
+        this.newStatus.columnName = column.columnName;
+      }
+    });
   }
 
   addInput() {
@@ -149,8 +175,10 @@ export default class AddTaskComponent implements OnInit {
       subtasks: this.inputs.value,
       status: [
         {
-          id: taskValues?.status?.[0]?.id,
-          columnName: taskValues?.status?.[0]?.columnName,
+          id: this.newStatus.id || this.currentBoard.columns[0].id,
+          columnName:
+            this.newStatus.columnName ||
+            this.currentBoard.columns[0].columnName,
         },
       ],
     };
@@ -158,6 +186,7 @@ export default class AddTaskComponent implements OnInit {
 
   createTask() {
     if (this.formGroup.invalid) {
+      console.log('invalid');
       this.formGroup.markAllAsTouched();
     } else {
       this.createTaskObject();
@@ -188,15 +217,12 @@ export default class AddTaskComponent implements OnInit {
 
   findBoard(currentColumn: Columns) {
     const boarId = this.currentBoard.id;
-
-    console.log(boarId, currentColumn.columnName);
   }
 
   updateTask() {
     if (this.edit && this.formGroup.valid) {
       this.createTaskObject();
-      this.moveTask(this.taskObject, this.taskObject.status[0].id);
-
+      console.log(this.taskObject.status[0].id);
       const currentColumn = this.findColumnContainingTask(this.taskObject);
 
       if (currentColumn) {
@@ -204,11 +230,12 @@ export default class AddTaskComponent implements OnInit {
           (task) => task.id === this.taskObject.id
         );
 
+        this.moveTask(this.taskObject, this.taskObject.status[0].id);
         if (taskToUpdate) {
           taskToUpdate.title = this.taskObject.title;
           taskToUpdate.description = this.taskObject.description;
-          taskToUpdate.status = this.taskObject.status;
-
+          taskToUpdate.status[0] = this.newStatus;
+          console.log(taskToUpdate.status[0].id);
           this.taskApiService
             .updateTask(
               this.currentBoard.id,
@@ -237,46 +264,42 @@ export default class AddTaskComponent implements OnInit {
     this.boardService.submitTask(this.taskObject);
   }
   onColumnSelect(event: Event) {
-    // Assert the event target as HTMLSelectElement
     const selectElement = event.target as HTMLSelectElement | null;
-
     if (selectElement && selectElement.value) {
       const selectedColumnId = selectElement.value;
-
       const column = this.currentBoard.columns.find(
         (c) => c.id === selectedColumnId
       );
       if (column) {
         this.formGroup.patchValue({
-          selectedColumn: {
+          status: {
             id: column.id,
             columnName: column.columnName,
           },
         });
+        this.newStatus = {
+          id: column.id,
+          columnName: column.columnName,
+        };
       }
     }
   }
 
-  // Move a task from one column to another
-
   private moveTask(task: Task, newStatus: string) {
     const currentColumn = this.findColumnContainingTask(task);
-
-    if (currentColumn && currentColumn.columnName !== newStatus) {
+    console.log('newStatus', newStatus);
+    if (currentColumn && currentColumn.id !== newStatus) {
       // Remove task from current column
       currentColumn.tasks = currentColumn.tasks.filter((t) => t.id !== task.id);
-
       // Find the new column
       const newColumn = this.currentBoard.columns.find(
-        (column) => column.columnName === newStatus
+        (column) => column.id === newStatus
       );
 
       if (newColumn) {
-        // Add task to the new column
-        newColumn.tasks.push(task);
+        newColumn.tasks.push(this.taskObject);
 
         // Update the task status
-        // task.status = newStatus;
       } else {
         console.error(`Column '${newStatus}' not found.`);
       }
@@ -297,7 +320,7 @@ export default class AddTaskComponent implements OnInit {
     if (!this.edit) {
       this.createTask();
     } else {
-      // this.updateTask();
+      this.updateTask();
     }
   }
 

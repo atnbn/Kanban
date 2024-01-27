@@ -1,25 +1,87 @@
 section {
     display: flex;
     position: relative;
+    overflow-y: hidden;
 }
-app-board {
-    width: 100%;
-    grid-area: main;
-}
-app-sidebar {
-    display: flex;
-    grid-area: sidebar;
+.empty-content {
+    position: absolute;
+    width: 100vw;
     height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: var(--darkgray);
 }
-app-header {
-    width: 100%;
+.add-column--btn {
+    width: 140px;
+    height: 40px;
+    border-radius: 30px;
+    background-color: var(--mainpurple);
+    color: #fff;
+    border: none;
+}
+// keine ahnung nachgehen was passiert wenn die sidebar verschwindet
+.header {
+    position: fixed;
+    left: 276px;
+    right: 0;
     height: 91px;
-    grid-area: header;
+    z-index: 10;
 }
 
-.right-side {
-    width: 100%;
+.header.active {
+    left: 0;
+}
+
+.fixed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+    align-items: center;
+    span {
+        letter-spacing: 1px;
+        color: var(--mediumgray);
+        font-family: "PlusMedium";
+        font-size: 14px;
+    }
+}
+.sidebar {
+    top: 0;
+    left: 0;
+    height: 100vh;
+    display: none;
+    animation: fadeInRightToLeft 1s ease forwards;
+}
+
+.sidebar.active ~ .main-content {
+    width: calc(100% - 300px);
+}
+
+.sidebar.active {
+    animation: fadeInLeftToRight 1s ease forwards;
+
+    display: flex;
+}
+
+.main-content {
     position: relative;
+    min-height: 100vh;
+    top: 91px;
+    flex-grow: 1;
+    animation: fadeInRightToLeft 0.5s ease forwards;
+}
+
+.main-content.active {
+    left: 0;
+    animation: fadeInLeftToRightMainContent 0.5s ease forwards;
+}
+.main-content.mobile {
+    left: 0;
+    animation: fadeRigh 0.5s ease forwards;
 }
 
 .logo-header {
@@ -51,10 +113,6 @@ app-header {
     }
 }
 
-.hide-sidebar {
-    transform: translateX(-100%);
-}
-
 .logo-con {
     display: flex;
     align-items: center;
@@ -72,6 +130,7 @@ app-header {
 
 .add-board-con {
     position: absolute;
+    z-index: 0;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -103,7 +162,141 @@ app-header {
         padding-right: 5px;
     }
 }
+.popup {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
-.mat-drawer {
-    background-color: var(--ultradark);
+@media (max-width: 700px) {
+    .header {
+        left: 217px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header {
+        left: 0;
+    }
+    section {
+        height: 100%;
+    }
+    .toggle-container {
+        width: 45px;
+        height: 40px;
+        bottom: 25px;
+    }
+    .side {
+        width: 150px;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 25px;
+        left: 22%;
+        width: 250px !important;
+        height: 300px;
+        // z-index: 100;
+        animation: fadeDown 0.5s ease forwards !important;
+    }
+    .mat-sidenav-content {
+        width: 100vw;
+        overflow-x: auto;
+    }
+
+    app-board {
+        transform: translateX(0px);
+    }
+    .sidebar.active {
+        z-index: 100;
+    }
+}
+
+@media (max-width: 400px) {
+    .sidebar {
+        left: 18%;
+    }
+    section {
+        height: 100%;
+    }
+}
+
+body::-webkit-scrollbar {
+    width: 10px; /* Adjust the width of the scrollbar */
+    background-color: var(--darkgray); /* Background color */
+}
+
+/* Style the scrollbar thumb (the part that's draggable) */
+body::-webkit-scrollbar-thumb {
+    background-color: var(--ultradark); /* Thumb color */
+    border-radius: 5px; /* Round corners of the thumb */
+}
+
+/* Style the scrollbar thumb when hovering over it */
+body::-webkit-scrollbar-thumb:hover {
+    background-color: var(--ultradark); /* Darker color on hover */
+}
+
+@keyframes fadeInLeftToRight {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+@keyframes fadeInRightToLeft {
+    from {
+        transform: translateX(325px);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInLeftToRightMainContent {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(300px);
+    }
+}
+@keyframes fadeInLeftToRightMainContentTablet {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(245px);
+    }
+}
+
+@keyframes fadeInRightToLeftTablet {
+    from {
+        transform: translateX(245px);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    font-family: PlusMedium;
+    background-color: rgba(0, 0, 0, 0.5);
 }

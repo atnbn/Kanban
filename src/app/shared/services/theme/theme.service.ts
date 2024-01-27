@@ -7,7 +7,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ThemeService {
   private isDarkModeSubject: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
+  private scrollSubject: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
   isDarkMode$: Observable<boolean> = this.isDarkModeSubject.asObservable();
+  scroll$: Observable<boolean> = this.scrollSubject.asObservable();
 
   constructor() {
     const storedMode = localStorage.getItem('darkmode');
@@ -24,6 +27,10 @@ export class ThemeService {
     this.isDarkModeSubject.next(!currentMode);
 
     this.setDarkMode(!currentMode);
+  }
+
+  toggleScroll() {
+    this.scrollSubject.next(!this.scrollSubject.value);
   }
 
   private setDarkMode(isDarkMode: boolean) {

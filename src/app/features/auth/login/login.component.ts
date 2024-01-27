@@ -15,6 +15,8 @@ import { Message } from 'src/app/shared/models/notification-interface';
 export class LoginComponent implements OnInit {
   darkmode: boolean = false;
   userForm!: FormGroup;
+
+  localStorageData: boolean = false;
   users: User[] = [];
   error: boolean = false;
   messageObject: Message = {} as Message;
@@ -32,9 +34,17 @@ export class LoginComponent implements OnInit {
       this.darkmode = theme;
     });
     this.initliazeForm();
+
+    if (localStorage.getItem('localstorage') === 'true') {
+      this.localStorageData = true;
+      this.userForm.patchValue({
+        email: localStorage.getItem('email'),
+        password: atob(localStorage.getItem('password') || ''),
+      });
+    }
     this.messageService.message$.subscribe((object: any) => {
-      console.log(object);
       if (object.message !== '') {
+        console.log(object);
         this.messageObject = object;
         this.showMessage = true;
         this.setTimer();
@@ -54,8 +64,8 @@ export class LoginComponent implements OnInit {
 
   initliazeForm() {
     this.userForm = this.fb.group({
-      email: ['guest@gmail.com', [Validators.email, Validators.required]],
-      password: ['vegeta54', [Validators.minLength(7), Validators.required]],
+      email: ['', [Validators.email, Validators.required]],
+      password: ['', [Validators.minLength(7), Validators.required]],
     });
   }
 
@@ -65,18 +75,21 @@ export class LoginComponent implements OnInit {
     if (this.userForm.invalid) {
       return;
     }
-    
+
     this.authUserService.login(value.email, value.password).subscribe({
       next: (response) => {
-        this.router.navigate(['/home']); // Navigate on successful login
+        this.localStorage();
         this.messageService.setMessage({
           message: response.message,
           type: 'success',
         });
+        this.router.navigate(['/home']); // Navigate on successful login
+        window.location.reload();
       },
       error: (error) => {
+        console.log(error);
         this.messageService.setMessage({
-          message: error.error,
+          message: error.error.message,
           type: 'success',
         });
       },
@@ -86,5 +99,18 @@ export class LoginComponent implements OnInit {
   checkValidator(formControlName: string, errorType: string) {
     const control = this.userForm.get(formControlName);
     return control?.hasError(errorType) && control.touched;
+  }
+
+  localStorage() {
+    const hashedPassword = btoa(this.userForm.value.password);
+    if (this.localStorageData) {
+      localStorage.setItem('localstorage', 'true');
+      localStorage.setItem('email', this.userForm.value.email);
+      localStorage.setItem('password', hashedPassword);
+    } else {
+      localStorage.removeItem('localstorage');
+      localStorage.removeItem('email');
+      localStorage.removeItem('password');
+    }
   }
 }

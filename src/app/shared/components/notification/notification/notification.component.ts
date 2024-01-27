@@ -53,7 +53,6 @@ export class NotificationComponent implements OnInit {
       this.messageObject.type === 'success'
     ) {
       this.messageType = 'success';
-      console.log('succes');
       this.setTimer();
     }
     if (
@@ -62,7 +61,6 @@ export class NotificationComponent implements OnInit {
     ) {
       this.messageType = 'error';
       this.setTimer();
-      console.log('error');
     }
   }
   setTimer() {
