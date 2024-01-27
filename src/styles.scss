@@ -6,6 +6,7 @@ body {
 }
 
 :root {
+    //colors
     --ultradark: #20212c;
     --darkgray: #2b2c37;
     --mediumgray: #828fa3;
@@ -19,6 +20,8 @@ body {
     --lineswhite: #828fa3;
     --secondarybtn: hsl(244, 45%, 94%);
     --red: #ea5555;
+
+    // sizes
 }
 
 @font-face {
@@ -121,4 +124,24 @@ body {
 
 .border {
     background-color: var(--light);
+}
+
+body::-webkit-scrollbar {
+    width: 10px; /* Adjust the width of the scrollbar */
+    background-color: var(--darkgray); /* Background color */
+}
+
+/* Style the scrollbar thumb (the part that's draggable) */
+body::-webkit-scrollbar-thumb {
+    background-color: var(--ultradark); /* Thumb color */
+    border-radius: 5px; /* Round corners of the thumb */
+}
+
+/* Style the scrollbar thumb when hovering over it */
+body::-webkit-scrollbar-thumb:hover {
+    background-color: var(--ultradark); /* Darker color on hover */
+}
+
+.no-scroll {
+    overflow: hidden;
 }

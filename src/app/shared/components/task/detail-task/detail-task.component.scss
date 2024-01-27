@@ -168,3 +168,9 @@ p {
     gap: 15px;
     justify-content: space-between;
 }
+
+@media (max-width: 600px) {
+    .form {
+        width: 250px;
+    }
+}

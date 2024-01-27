@@ -13,4 +13,8 @@ export class UserService extends BaseApiService {
   logout() {
     return this.post('api/logout', {});
   }
+
+  deleteUser() {
+    return this.delete('api/delete-user');
+  }
 }

@@ -117,6 +117,21 @@
         >Current Status</label
       >
       <select
+        *ngIf="this.type === 'edit'"
+        formControlName="selectedColumnId"
+        [ngClass]="{
+          'dark-mode': isDarkMode,
+          white: isDarkMode,
+          'dark-mode-border': isDarkMode
+        }"
+        (change)="onColumnSelect($event)"
+      >
+        <option *ngFor="let column of currentBoard.columns" [value]="column.id">
+          {{ column.columnName }}
+        </option>
+      </select>
+      <select
+        *ngIf="this.type === 'create'"
         [ngClass]="{
           'dark-mode': isDarkMode,
           white: isDarkMode,

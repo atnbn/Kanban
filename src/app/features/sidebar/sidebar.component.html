@@ -13,17 +13,34 @@
   />
 
   <div class="board-container">
-    <h2>ALL BOARDS ( {{ storage.length }} )</h2>
+    <div class="board-header">
+      <h2>ALL BOARDS ( {{ storage.length }} )</h2>
+      <img
+        class="setting-svg"
+        (click)="openSettings()"
+        *ngIf="mobileQuery.matches"
+        src="assets/images/icons8-settings (1).svg"
+      />
+    </div>
     <div
       class="all-boards"
       [ngClass]="{
         'all-boards-sidebar-dark': isDarkMode,
       }"
     >
-      <div class="board-collection" *ngFor="let board of storage">
-        <div class="board" (click)="openId(board.id)">
+      <div
+        class="board-collection"
+        *ngFor="let board of storage; let i = index"
+      >
+        <div
+          class="board"
+          (click)="openId(board.id)"
+          [ngClass]="{ active: board.id === activeBoard?.id && active }"
+        >
           <img src="/assets/images/icon-board.svg" />
-          <span>{{ board.title }}</span>
+          <span [ngClass]="{ white: board.id === activeBoard?.id && active }">{{
+            board.title
+          }}</span>
         </div>
       </div>
     </div>
@@ -49,15 +66,32 @@
       <img src="assets/images/icon-dark-theme.svg" />
     </div>
 
-    <div class="hide" (click)="toggleSidebar()">
-      <img src="assets/images/icon-hide-sidebar.svg" />
-      <span>Hide Sidebar</span>
-      <button (click)="logout()">logout</button>
+    <div class="hide">
+      <div (click)="toggleSidebar()" style="display: flex; gap: 5px">
+        <img src="assets/images/icon-hide-sidebar.svg" />
+
+        <span>Hide Sidebar</span>
+      </div>
+      <!-- <button (click)="logout()">logout</button> -->
+      <img
+        (click)="openSettings()"
+        style="align-self: flex-end"
+        src="assets/images/icons8-settings (1).svg"
+      />
+    </div>
+    <div
+      [ngClass]="{ 'd-none': !dropDown, 'no-scroll': dropDown }"
+      class="edit-con"
+    >
+      <span (click)="logout()" [ngClass]="{ 'dark-mode-label': isDarkMode }"
+        >Logout</span
+      >
+      <span
+        style="color: var(--red)"
+        (click)="openDeletePopUp()"
+        [ngClass]="{ 'dark-mode-label': isDarkMode }"
+        >Delete User</span
+      >
     </div>
   </div>
 </section>
-
-<app-add-board
-  *ngIf="addBoardPopUp"
-  (closePopUp)="closeAddBoard()"
-></app-add-board>

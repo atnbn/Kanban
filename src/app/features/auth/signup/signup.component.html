@@ -10,7 +10,8 @@
           minlength="4"
           *ngIf="
             checkValidator('username', 'minlength') ||
-            checkValidator('username', 'required')
+            checkValidator('username', 'required') ||
+            checkCustomValidator('username', 'invalidUsername')
           "
           class="error"
         >
@@ -22,9 +23,10 @@
         <label [ngClass]="{ white: darkmode }">Email</label>
         <mat-error
           *ngIf="
-            this.errorMessage ||
+            this.errorMessage !== '' ||
             checkValidator('email', 'email') ||
-            checkValidator('email', 'required')
+            checkValidator('email', 'required') ||
+            checkCustomValidator('email', 'invalidEmail')
           "
           class="error"
         >
@@ -39,7 +41,8 @@
           class="error"
           *ngIf="
             checkValidator('password', 'minlength') ||
-            checkValidator('password', 'required')
+            checkValidator('password', 'required') ||
+            checkCustomValidator('password', 'invalidPassword')
           "
           >Please enter a Password with atleast 7 characters</mat-error
         >

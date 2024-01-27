@@ -6,7 +6,6 @@ section {
     height: 100%;
     z-index: 1;
     font-family: PlusMedium;
-    background-color: rgba(0, 0, 0, 0.5);
 }
 
 h3 {
@@ -110,5 +109,10 @@ select {
 .input-container {
     display: flex;
     width: 100%;
-    flex-direction: column;
+}
+
+@media (max-width: 600px) {
+    .form {
+        width: 250px;
+    }
 }

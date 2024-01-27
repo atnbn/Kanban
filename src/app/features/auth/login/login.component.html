@@ -45,7 +45,13 @@
     </form>
 
     <div class="remember-con">
-      <input type="checkbox" class="remember-checkbox" />
+      <input
+        [(ngModel)]="localStorageData"
+        (change)="localStorage()"
+        type="checkbox"
+        class="remember-checkbox"
+        [checked]="localStorageData"
+      />
       <p [ngClass]="{ white: darkmode }">Remember me</p>
     </div>
     <span

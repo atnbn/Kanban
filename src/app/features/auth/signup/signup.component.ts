@@ -5,6 +5,7 @@ import { CreateUserService } from 'src/app/shared/services/user/create-user/crea
 import { User } from 'src/app/shared/models/user-interface';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
+import { ValidatorService } from 'src/app/shared/services/validator/validator.service';
 
 @Component({
   selector: 'app-signup',
@@ -16,12 +17,14 @@ export class SignupComponent {
   userForm!: FormGroup;
   errorMessage: string = '';
   allUserEmails: User[] = [];
+  show: boolean = false;
   constructor(
     private themeService: ThemeService,
     private fb: FormBuilder,
     private createUserService: CreateUserService,
     private router: Router,
-    private messageService: ReturnMessageService
+    private messageService: ReturnMessageService,
+    private validatorService: ValidatorService
   ) {}
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((theme) => {
@@ -29,14 +32,32 @@ export class SignupComponent {
     });
 
     this.initializeForm();
-    // this.getData();
   }
 
   initializeForm() {
     this.userForm = this.fb.group({
-      email: ['', [Validators.email, Validators.required]],
-      username: ['', [Validators.minLength(3), Validators.required]],
-      password: ['', [Validators.minLength(7), Validators.required]],
+      email: [
+        '',
+        [
+          Validators.email,
+          Validators.required,
+          this.validatorService.isValidEmail.bind(this.validatorService),
+        ],
+      ],
+      username: [
+        '',
+        [
+          Validators.required,
+          this.validatorService.isValidUsername.bind(this.validatorService),
+        ],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          this.validatorService.isValidPassword.bind(this.validatorService),
+        ],
+      ],
       confirmedPassword: ['', [Validators.minLength(7), Validators.required]],
     });
   }
@@ -58,14 +79,17 @@ export class SignupComponent {
     this.createUserService.signUser(newUser).subscribe({
       next: (response) => {
         this.messageService.setMessage({
-          message: response.message,
+          message: response,
           type: 'success',
         });
         this.router.navigate(['/login']);
       },
       error: (error) => {
+        console.log(error.error);
+        this.errorMessage = error.error;
+        this.show = true;
         this.messageService.setMessage({
-          message: error.error,
+          message: error,
           type: 'error',
         });
       },
@@ -77,6 +101,17 @@ export class SignupComponent {
     return control?.hasError(errorType) && control.touched;
   }
 
+  checkCustomValidator(formControlName: string, errorType: string): boolean {
+    const control = this.userForm.get(formControlName);
+    // Check if control exists and is touched
+    if (control && control.touched) {
+      // Check for the specific error
+      const errors = control.errors;
+      return errors?.[errorType] === true;
+    }
+    return false;
+  }
+
   checkSamePassword() {
     const password = this.userForm.get('password')?.value;
     const confirmedPassword = this.userForm.get('confirmedPassword')?.value;
@@ -84,7 +119,6 @@ export class SignupComponent {
       this.userForm.get('confirmedPassword')?.setErrors({
         notSame: true,
       });
-      console.log(this.userForm.get('confirmedPassword'));
     }
   }
 

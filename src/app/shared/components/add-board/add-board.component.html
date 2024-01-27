@@ -33,13 +33,14 @@
         for=""
         >Board Columns</label
       >
-      <div formArrayName="inputs">
+      <div formArrayName="inputs" class="all-inputs">
         <div
           class="columns"
           *ngFor="let input of inputs.controls; let i = index"
           [formGroupName]="i"
         >
           <input
+            #inputElement
             [ngClass]="{
               'dark-mode': isDarkMode,
               white: isDarkMode,

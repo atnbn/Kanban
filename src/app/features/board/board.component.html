@@ -1,35 +1,3 @@
-<header [ngClass]="{ 'dark-mode': isDarkMode, 'border-bottom': isDarkMode }">
-  <div class="inner-header">
-    <h1 [ngClass]="{ white: isDarkMode }">
-      {{ board.title ? board.title : "Add a new Board" }}
-    </h1>
-
-    <div class="buttons">
-      <button
-        class="add-task--btn"
-        (click)="openAddTask()"
-        [ngClass]="{ 'sec-darkmode-btn': isDarkMode }"
-      >
-        + Add New Task
-      </button>
-      <button class="settings--btn btn-nobackground" (click)="openSettings()">
-        <img src="assets/images/icon-vertical-ellipsis.svg" />
-      </button>
-      <!-- Popup window -->
-      <div [ngClass]="{ 'd-none': !dropDown }" class="edit-con">
-        <span
-          (click)="editBoard()"
-          [ngClass]="{ 'dark-mode-label': isDarkMode }"
-          >Edit Board</span
-        >
-        <span style="color: var(--red)" (click)="toggleDeleteWindow()"
-          >Delete Board</span
-        >
-      </div>
-    </div>
-  </div>
-</header>
-
 <section [ngClass]="{ 'dark-mode-body': isDarkMode }">
   <div *ngIf="board?.columns.length > 0" class="column-body">
     <!-- columns -->
@@ -76,27 +44,3 @@
     </button>
   </div>
 </section>
-
-<app-add-task
-  *ngIf="addTaskPopUp"
-  (closePopUp)="closeAddTask()"
-  [type]="'create'"
->
-</app-add-task>
-<app-detail-task
-  *ngIf="OpenTaskWindow"
-  (closePopUp)="closeTask()"
-></app-detail-task>
-
-<app-add-board
-  [currentBoard]="this.board"
-  *ngIf="openBoardMenu"
-  (closePopUp)="closeBoardMenu()"
-></app-add-board>
-
-<app-delete-object
-  [currentBoard]="this.board"
-  *ngIf="deleteWindow"
-  [edit]="'Board'"
-  (closePopUp)="toggleDeleteWindow()"
-></app-delete-object>
