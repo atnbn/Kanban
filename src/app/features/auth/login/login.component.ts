@@ -69,13 +69,13 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  login() {
+  login(event: Event) {
     const value = this.userForm.value;
 
     if (this.userForm.invalid) {
       return;
     }
-
+    event.preventDefault();
     this.authUserService.login(value.email, value.password).subscribe({
       next: (response) => {
         this.localStorage();
@@ -84,7 +84,6 @@ export class LoginComponent implements OnInit {
           type: 'success',
         });
         this.router.navigate(['/home']); // Navigate on successful login
-        window.location.reload();
       },
       error: (error) => {
         console.log(error);
