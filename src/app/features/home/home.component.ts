@@ -74,7 +74,6 @@ export class HomeComponent {
           this.boardService.submitBoard(response[0]);
         } else {
           this.emptyBoard = true;
-          console.log('empty board');
           this.popupService.openAddBoard();
         }
       },
@@ -87,7 +86,6 @@ export class HomeComponent {
       } else {
         this.emptyBoard = true;
       }
-      console.log('empty board', this.boards);
     });
 
     this.themeService.scroll$.subscribe((scroll) => {

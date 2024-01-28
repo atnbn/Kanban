@@ -15,7 +15,6 @@
         class="add-task--btn"
         (click)="openAddTask()"
         *ngIf="board?.columns?.length !== 0"
-        [ngClass]="{ 'sec-darkmode-btn': isDarkMode }"
       >
         + Add New Task
       </button>
@@ -24,7 +23,12 @@
       </button>
       <!-- Popup window -->
       <div
-        [ngClass]="{ 'd-none': !dropDown, 'no-scroll': dropDown }"
+        [ngClass]="{
+          'd-none': !dropDown,
+          'no-scroll': dropDown,
+          'dark-mode-gray': isDarkMode,
+          'light-mode-gray': !isDarkMode
+        }"
         class="edit-con"
       >
         <span

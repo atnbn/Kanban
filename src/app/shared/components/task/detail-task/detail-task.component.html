@@ -32,7 +32,14 @@
         <img src="assets/images/icon-vertical-ellipsis.svg" />
       </button>
 
-      <div [ngClass]="{ 'd-none': !dropDown }" class="edit-con">
+      <div
+        [ngClass]="{
+          'd-none': !dropDown,
+          'dark-mode-gray': isDarkMode,
+          'light-mode-gray': !isDarkMode
+        }"
+        class="edit-con"
+      >
         <span (click)="editTask()" [ngClass]="{ 'dark-mode-label': isDarkMode }"
           >Edit Task</span
         >
