@@ -15,7 +15,7 @@ import { SaveBoardService } from 'src/app/shared/services/save-board/save-board.
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -35,6 +35,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   routeSub!: Subscription;
   activeBoard: Board | null = {} as Board;
   active: boolean = true;
+  render: boolean = false;
   private _mobileQueryListener: () => void;
 
   constructor(
@@ -58,35 +59,63 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
       this.isDarkMode = darkmode;
     });
+    const storage$ = this.boardService.getStorage();
+    const queryParams$ = this.route.queryParams;
 
-    this.boardService.getStorage().subscribe((objects) => {
-      if (objects.length > 0) {
-        this.storage = objects;
-        this.setActiveBoard(this.route.snapshot.queryParams['boardId']);
+    const combined$ = combineLatest([storage$, queryParams$]).subscribe(
+      ([objects, params]) => {
+        if (objects.length > 0) {
+          this.storage = objects;
+          this.setActiveBoard(params['boardId']);
+          if (!params['boardId']) {
+            this.setBoardIfNoParam();
+          }
+        }
       }
-    });
+    );
 
-    // this.boardService.getBoards);
-    this.popupService.addBoard$.subscribe((value) => {
-      this.addBoardPopUp = value;
-    });
-    this.routeSub = this.route.queryParams.subscribe((params) => {
-      const boardId = params['boardId'];
-      console.log(boardId);
-      this.setActiveBoard(boardId);
-    });
+    this.routeSub = combined$;
+
+    // this.boardService.getStorage().subscribe((objects) => {
+    //   if (objects.length > 0) {
+    //     this.storage = objects;
+    //     this.render = true;
+    //     this.setActiveBoard(this.route.snapshot.queryParams['boardId']);
+    //   }
+    // });
+
+    // // this.boardService.getBoards);
+    // this.popupService.addBoard$.subscribe((value) => {
+    //   this.addBoardPopUp = value;
+    // });
+    // this.routeSub = this.route.queryParams.subscribe((params) => {
+    //   const boardId = params['boardId'];
+    //   if (!boardId && this.render) {
+    //     this.setBoardIfNoParam();
+    //   }
+    //   this.setActiveBoard(boardId);
+    // });
 
     // Initial check in case the component is loaded with a boardId in the URL
   }
 
   ngOnDestroy() {
-    this.routeSub.unsubscribe();
+    if (this.routeSub) {
+      this.routeSub.unsubscribe();
+    }
+  }
+
+  setBoardIfNoParam() {
+    this.activeBoard = this.storage[0];
+    this.router.navigate([], {
+      queryParams: { boardId: this.activeBoard.id },
+      queryParamsHandling: 'merge',
+    });
   }
 
   setActiveBoard(boardId: string) {
     if (boardId && this.storage.length > 0) {
       const foundBoard = this.storage.find((board) => board.id === boardId);
-      console.log('succes', this.storage);
       if (foundBoard) {
         this.activeBoard = foundBoard;
       } else {

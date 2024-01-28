@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Board } from 'src/app/shared/models/board-interface';
@@ -74,6 +74,7 @@ export class HeaderComponent {
 
   editBoard(): void {
     this.boardService.submitBoard(this.board!);
+    this.dropDown = false;
     this.popupService.openEditBoard();
     this.themeService.toggleScroll();
   }
@@ -82,5 +83,13 @@ export class HeaderComponent {
     this.popupService.openDeleteBoard();
     this.boardService.submitBoard(this.board!);
     this.dropDown = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleOutsideClick(event: MouseEvent) {
+    const clickedElement = event.target as HTMLElement;
+
+    const backdrop = clickedElement.tagName.toLowerCase();
+    if (this.dropDown && backdrop === 'div') this.dropDown = false;
   }
 }

@@ -9,7 +9,7 @@ import { AddBoardComponent } from './shared/components/add-board/add-board.compo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import AddTaskComponent from './shared/components/task/add-task/add-task.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { EditTaskComponent } from './shared/components/task/edit-task/edit-task.component';
+
 import { DetailTaskComponent } from './shared/components/task/detail-task/detail-task.component';
 import { FormsModule } from '@angular/forms';
 import { DeleteObjectComponent } from './shared/components/delete-object/delete-object.component';
@@ -32,7 +32,6 @@ import { HeaderComponent } from './shared/components/header/header/header.compon
     BoardComponent,
     AddBoardComponent,
     AddTaskComponent,
-    EditTaskComponent,
     DetailTaskComponent,
     DeleteObjectComponent,
     LoginComponent,
