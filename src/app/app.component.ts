@@ -6,7 +6,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { Board } from './shared/models/board-interface';
 import { BoardObjectService } from './shared/services/add-board/board-object.service';
 import { CreateUserService } from './shared/services/user/create-user/create-user.service';
-
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -39,7 +39,9 @@ export class AppComponent {
     private sidebarService: SidebarService,
     private boardService: BoardObjectService,
     private createUserService: CreateUserService
-  ) {}
+  ) {
+    console.log(environment);
+  }
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
       this.isDarkMode = darkmode;
