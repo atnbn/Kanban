@@ -184,7 +184,8 @@ export default class AddTaskComponent implements OnInit {
     };
   }
 
-  createTask() {
+  createTask(event: Event) {
+    event.preventDefault();
     if (this.formGroup.invalid) {
       console.log('invalid');
       this.formGroup.markAllAsTouched();
@@ -219,7 +220,8 @@ export default class AddTaskComponent implements OnInit {
     const boarId = this.currentBoard.id;
   }
 
-  updateTask() {
+  updateTask(event: Event) {
+    event.preventDefault();
     if (this.edit && this.formGroup.valid) {
       this.createTaskObject();
       console.log(this.taskObject.status[0].id);
@@ -316,11 +318,11 @@ export default class AddTaskComponent implements OnInit {
     return this.currentTask?.subtasks?.filter((subtask) => subtask.done).length;
   }
 
-  submitForm() {
+  submitForm(event: Event) {
     if (!this.edit) {
-      this.createTask();
+      this.createTask(event);
     } else {
-      this.updateTask();
+      this.updateTask(event);
     }
   }
 

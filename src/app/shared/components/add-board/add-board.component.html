@@ -1,5 +1,5 @@
 <section>
-  <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
+  <form [formGroup]="formGroup" (ngSubmit)="submitForm($event)">
     <div
       class="form"
       [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"

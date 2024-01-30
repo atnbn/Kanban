@@ -158,15 +158,16 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
     };
   }
 
-  submitForm() {
+  submitForm(event: Event) {
     if (this.type === 'edit') {
-      this.updateBoard();
+      this.updateBoard(event);
     } else if (this.type === 'create') {
-      this.createBoard();
+      this.createBoard(event);
     }
     this.popupService.closeAddBoard();
   }
-  createBoard() {
+  createBoard(event: Event) {
+    event.preventDefault();
     this.createBoardObject();
     console.log(this.boardObject);
     this.saveBoardService.saveBoardObject(this.boardObject).subscribe({
@@ -205,7 +206,8 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
   toggelDeleteWindow() {
     this.deleteForm = false;
   }
-  updateBoard() {
+  updateBoard(event: Event) {
+    event.preventDefault();
     this.createBoardObject();
     const indexToUpdate = this.allBoards.findIndex(
       (board: Board) => board.id === this.boardObject?.id
