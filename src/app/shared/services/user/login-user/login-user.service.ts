@@ -1,14 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
+import { BaseApiService } from 'src/app/core/services/base-api/base-api.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthUserService {
-  private apiUrl = 'http://localhost:3000/api';
-
-  constructor(private http: HttpClient) {}
+export class AuthUserService extends BaseApiService {
   login(email: string, password: string): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/login`,

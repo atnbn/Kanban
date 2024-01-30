@@ -1,14 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { BaseApiService } from 'src/app/core/services/base-api/base-api.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class HomeServiceService {
-  apiUrl = 'http://localhost:3000/api';
+export class HomeServiceService extends BaseApiService {
   userObject: string = '';
-  constructor(private http: HttpClient) {}
 
   setUserId(userId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/getUser/${userId}`);
