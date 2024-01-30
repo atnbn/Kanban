@@ -10,7 +10,7 @@ import { BaseApiService } from 'src/app/core/services/base-api/base-api.service'
 export class CreateUserService extends BaseApiService {
   signUser(user: User): Observable<any> {
     return this.http
-      .post(this.apiUrl, user, {
+      .post('api/sign-user', user, {
         headers: { 'Content-Type': 'application/json' },
       })
       .pipe(

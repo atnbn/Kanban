@@ -10,6 +10,6 @@ export class HomeServiceService extends BaseApiService {
   userObject: string = '';
 
   setUserId(userId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/getUser/${userId}`);
+    return this.http.get(`api/getUser/${userId}`);
   }
 }
