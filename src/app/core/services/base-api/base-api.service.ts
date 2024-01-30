@@ -9,8 +9,9 @@ import { environment } from 'src/environments/environment';
 export class BaseApiService {
   protected apiUrl = environment.apiBaseUrl;
   constructor(protected http: HttpClient) {}
-
   protected get(url: string, options = {}): Observable<any> {
+    console.log(environment);
+
     return this.http
       .get(`${this.apiUrl}${url}`, {
         ...options,
