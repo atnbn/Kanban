@@ -6,7 +6,6 @@ import { User } from 'src/app/shared/models/user-interface';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
 import { Message } from 'src/app/shared/models/notification-interface';
-import { SHA256 } from 'crypto-js';
 
 @Component({
   selector: 'app-login',
@@ -72,11 +71,10 @@ export class LoginComponent implements OnInit {
 
   login(event: Event) {
     const value = this.userForm.value;
+
     if (this.userForm.invalid) {
       return;
     }
-    const hashedPassword = SHA256(value.password).toString();
-    value.password = hashedPassword;
     event.preventDefault();
     this.authUserService.login(value.email, value.password).subscribe({
       next: (response) => {

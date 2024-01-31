@@ -69,7 +69,6 @@ export class SignupComponent {
     }
 
     const user = this.userForm.value;
-
     const newUser = {
       username: user.username,
       password: user.password,
