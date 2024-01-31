@@ -16,6 +16,7 @@ export class AuthUserService extends BaseApiService {
   }
 
   checkSession(): Observable<any> {
+    console.log(this.apiUrl + '/check-session');
     return this.http.get('/check-session', {
       withCredentials: true,
     });
