@@ -8,7 +8,7 @@ import { BaseApiService } from 'src/app/core/services/base-api/base-api.service'
 })
 export class AuthUserService extends BaseApiService {
   login(email: string, password: string): Observable<any> {
-    return this.http.post(
+    return this.post(
       `api/login`,
       { email, password },
       { withCredentials: true }
