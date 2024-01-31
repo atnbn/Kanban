@@ -16,16 +16,16 @@ export class AuthUserService extends BaseApiService {
   }
 
   checkSession(): Observable<any> {
-    return this.get('/api/check-session', {
+    return this.get('api/check-session', {
       withCredentials: true,
     });
   }
 
   addUser(userId: string): Observable<any> {
-    return this.http.get(`/getUser/${userId}`);
+    return this.get(`api/getUser/${userId}`);
   }
 
   logOutUser(): Observable<any> {
-    return this.http.post('/logout', {});
+    return this.post('api/logout', {});
   }
 }

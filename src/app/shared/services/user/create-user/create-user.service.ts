@@ -9,14 +9,12 @@ import { BaseApiService } from 'src/app/core/services/base-api/base-api.service'
 })
 export class CreateUserService extends BaseApiService {
   signUser(user: User): Observable<any> {
-    return this.http
-      .post('api/sign-user', user, {
-        headers: { 'Content-Type': 'application/json' },
+    return this.post('api/sign-user', user, {
+      headers: { 'Content-Type': 'application/json' },
+    }).pipe(
+      catchError((err) => {
+        return throwError(() => err.error);
       })
-      .pipe(
-        catchError((err) => {
-          return throwError(() => err.error);
-        })
-      );
+    );
   }
 }
