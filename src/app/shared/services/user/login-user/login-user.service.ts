@@ -9,23 +9,23 @@ import { BaseApiService } from 'src/app/core/services/base-api/base-api.service'
 export class AuthUserService extends BaseApiService {
   login(email: string, password: string): Observable<any> {
     return this.http.post(
-      `${this.apiUrl}api/login`,
+      `api/login`,
       { email, password },
       { withCredentials: true }
     );
   }
 
   checkSession(): Observable<any> {
-    return this.http.get('api/check-session', {
+    return this.http.get('/check-session', {
       withCredentials: true,
     });
   }
 
   addUser(userId: string): Observable<any> {
-    return this.http.get(`api/getUser/${userId}`);
+    return this.http.get(`/getUser/${userId}`);
   }
 
   logOutUser(): Observable<any> {
-    return this.http.post('api/logout', {});
+    return this.http.post('/logout', {});
   }
 }
