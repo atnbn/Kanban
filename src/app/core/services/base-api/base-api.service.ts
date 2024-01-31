@@ -10,6 +10,7 @@ export class BaseApiService {
   protected apiUrl = environment.apiBaseUrl;
   constructor(protected http: HttpClient) {}
   protected get(url: string, options = {}): Observable<any> {
+    console.log(this.apiUrl);
     return this.http
       .get(`${this.apiUrl}${url}`, {
         ...options,
