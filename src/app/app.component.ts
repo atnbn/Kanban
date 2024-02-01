@@ -7,51 +7,18 @@ import { Board } from './shared/models/board-interface';
 import { BoardObjectService } from './shared/services/add-board/board-object.service';
 import { CreateUserService } from './shared/services/user/create-user/create-user.service';
 import { environment } from 'src/environments/environment';
+import { ServerStatusService } from './shared/services/server-status/server-status.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  animations: [
-    trigger('fadeInOutHeader', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(-100%)' }),
-        animate(
-          '300ms ease-out',
-          style({ opacity: 1, transform: 'translateY(0%)' })
-        ),
-      ]),
-      transition(':leave', [
-        animate(
-          '300ms ease-in',
-          style({ opacity: 0, transform: 'translateY(-100%)' })
-        ),
-      ]),
-    ]),
-  ],
 })
 export class AppComponent {
+  isStarting: boolean = false;
   title = 'Project';
-  isDarkMode: boolean = false;
-  sidebarState: boolean = false;
-  boards: Board[] = [];
-  constructor(
-    private themeService: ThemeService,
-    private sidebarService: SidebarService,
-    private boardService: BoardObjectService,
-    private createUserService: CreateUserService
-  ) {
-    console.log(environment);
-  }
-  ngOnInit(): void {
-    this.themeService.isDarkMode$.subscribe((darkmode) => {
-      this.isDarkMode = darkmode;
+  constructor(private servverStatusService: ServerStatusService) {
+    this.servverStatusService.serverStarting$.subscribe((isStarting) => {
+      this.isStarting = isStarting;
     });
-
-    this.boardService.sidebarData$.subscribe((boards) => {
-      if (Object.keys(boards).length !== 0) {
-        this.boards.push(boards);
-      }
-    });
-    // this.addUser();
   }
 }

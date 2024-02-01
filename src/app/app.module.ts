@@ -24,6 +24,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PopupComponent } from './shared/components/popup/popup/popup.component';
 import { HeaderComponent } from './shared/components/header/header/header.component';
+import { ServerStartingComponent } from './features/server-starting/server-starting/server-starting.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { HeaderComponent } from './shared/components/header/header/header.compon
     NotificationComponent,
     PopupComponent,
     HeaderComponent,
+    ServerStartingComponent,
   ],
   imports: [
     BrowserAnimationsModule,
