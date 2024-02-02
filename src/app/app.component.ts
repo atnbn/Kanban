@@ -19,19 +19,5 @@ export class AppComponent {
   isStarting: boolean = false;
   title = 'Project';
 
-  constructor(
-    private loginService: AuthUserService,
-    private serverStatus: ServerStatusService,
-    private router: Router
-  ) {
-    this.loginService.checkSession().subscribe({
-      next: (data) => {
-        console.log('happens');
-      },
-      error: (err) => {
-        this.serverStatus.showServerStarting(),
-          this.router.navigate(['server']);
-      },
-    });
-  }
+  constructor() {}
 }
