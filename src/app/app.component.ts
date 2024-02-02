@@ -25,15 +25,13 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    setInterval(() => {
-      this.severStatus.checkServerStatus().subscribe({
-        next: (response) => {
-          this.router.navigate(['/login']);
-        },
-        error: (err) => {
-          this.router.navigate(['/server']);
-        },
-      });
-    }, 10000);
+    this.severStatus.checkServerStatus().subscribe({
+      next: (response) => {
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.router.navigate(['/server']);
+      },
+    });
   }
 }
