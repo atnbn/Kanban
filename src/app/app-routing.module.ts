@@ -4,6 +4,7 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { SignupComponent } from './features/auth/signup/signup.component';
 import { HomeComponent } from './features/home/home.component';
 import { AuthGuardService } from './shared/services/auth/auth.service';
+import { ServerStartingComponent } from './features/server-starting/server-starting/server-starting.component';
 const routes: Routes = [
   {
     path: 'login',
@@ -17,6 +18,7 @@ const routes: Routes = [
 
   { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'server', component: ServerStartingComponent, pathMatch: 'full' },
 ];
 
 @NgModule({
