@@ -16,10 +16,7 @@ import { environment } from 'src/environments/environment';
 })
 export class BaseApiService {
   protected apiUrl = environment.apiBaseUrl;
-  constructor(
-    protected http: HttpClient,
-    private serverStatusService: ServerStatusService
-  ) {}
+  constructor(protected http: HttpClient) {}
 
   protected get(url: string, options = {}): Observable<any> {
     return this.http
@@ -27,13 +24,7 @@ export class BaseApiService {
         ...options,
         withCredentials: true,
       })
-      .pipe(
-        timeout(5000),
-        switchMap(() => {
-          return of(this.serverStatusService.showServerStarting());
-        }),
-        catchError(this.handleError)
-      );
+      .pipe(catchError(this.handleError));
   }
 
   protected post(url: string, body: any, options = {}): Observable<any> {
