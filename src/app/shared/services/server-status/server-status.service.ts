@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +11,7 @@ export class ServerStatusService {
 
   showServerStarting() {
     this._serverStarting.next(true);
+    return of(true);
   }
 
   hideServerStarting() {

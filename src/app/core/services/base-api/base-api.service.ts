@@ -1,6 +1,14 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  of,
+  switchMap,
+  throwError,
+  timeout,
+} from 'rxjs';
+import { ServerStatusService } from 'src/app/shared/services/server-status/server-status.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -8,7 +16,10 @@ import { environment } from 'src/environments/environment';
 })
 export class BaseApiService {
   protected apiUrl = environment.apiBaseUrl;
-  constructor(protected http: HttpClient) {}
+  constructor(
+    protected http: HttpClient,
+    private serverStatusService: ServerStatusService
+  ) {}
 
   protected get(url: string, options = {}): Observable<any> {
     return this.http
@@ -16,7 +27,13 @@ export class BaseApiService {
         ...options,
         withCredentials: true,
       })
-      .pipe(catchError(this.handleError));
+      .pipe(
+        timeout(5000),
+        switchMap(() => {
+          return of(this.serverStatusService.showServerStarting());
+        }),
+        catchError(this.handleError)
+      );
   }
 
   protected post(url: string, body: any, options = {}): Observable<any> {
