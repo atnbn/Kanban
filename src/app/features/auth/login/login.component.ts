@@ -86,10 +86,9 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/home']); // Navigate on successful login
       },
       error: (error) => {
-        console.log(error);
         this.messageService.setMessage({
           message: error.error.message,
-          type: 'success',
+          type: 'error',
         });
       },
     });

@@ -2,7 +2,8 @@
     padding: 15px; /* Some padding */
     position: fixed; /* Fixed position */
     top: 0; /* At the top of the screen */
-    left: 40%; /* Move to the middle of the screen */
+    left: 50%; /* Move to the middle of the screen */
+    transform: translateX(-50%); /* Move to the middle of the screen */
     width: auto; /* Auto width for content-based sizing */
 
     text-align: center; /* Centered text */

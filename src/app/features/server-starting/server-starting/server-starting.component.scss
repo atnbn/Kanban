@@ -9,7 +9,7 @@ section {
 }
 
 img {
-    width: 70%;
+    width: 50%;
 }
 .img.active {
     animation: shake 1.5s ease-in-out;
@@ -58,5 +58,18 @@ button {
     }
     100% {
         transform: translateX(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .con {
+        gap: 15px;
+    }
+    span {
+        font-size: 15px;
+    }
+
+    button {
+        font-size: 15px;
     }
 }
