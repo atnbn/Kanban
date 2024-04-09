@@ -1,4 +1,3 @@
-import { isNgTemplate } from '@angular/compiler';
 import {
   Component,
   EventEmitter,

@@ -1,6 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Board, Task } from 'src/app/shared/models/board-interface';
-import { BoardObjectService } from 'src/app/shared/services/add-board/board-object.service';
 
 @Component({
   selector: 'app-popup',

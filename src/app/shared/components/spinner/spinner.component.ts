@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,21 +8,6 @@ import { Router } from '@angular/router';
 })
 export class SpinnerComponent {
   isSleeping: boolean = false;
-  constructor(private router: Router) {
-    this.redirect();
-  }
-
-  wakeUp() {
-    this.isSleeping = true;
-    this.redirect();
-    setTimeout(() => {
-      this.isSleeping = false;
-    }, 2000);
-  }
-
-  redirect() {
-    setTimeout(() => {
-      this.router.navigate(['/login']);
-    }, 8000);
-  }
+  @Input() loading: boolean = false;
+  constructor(private router: Router) {}
 }
