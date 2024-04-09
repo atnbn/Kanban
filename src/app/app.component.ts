@@ -15,7 +15,7 @@ import { Route, Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   isStarting: boolean = false;
   title = 'Project';
 
@@ -23,15 +23,4 @@ export class AppComponent implements OnInit {
     private severStatus: ServerStatusService,
     private router: Router
   ) {}
-
-  ngOnInit(): void {
-    this.severStatus.checkServerStatus().subscribe({
-      next: (response) => {
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        this.router.navigate(['/server']);
-      },
-    });
-  }
 }

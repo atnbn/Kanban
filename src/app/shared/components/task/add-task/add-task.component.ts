@@ -28,6 +28,7 @@ export default class AddTaskComponent implements OnInit {
   taskObject!: Task;
   edit: boolean = false;
   modalOpen: boolean = true;
+  isLoading: boolean = false;
   formGroup!: FormGroup;
   isDarkMode: boolean = false;
   currentTask!: Task;
@@ -187,9 +188,9 @@ export default class AddTaskComponent implements OnInit {
   createTask(event: Event) {
     event.preventDefault();
     if (this.formGroup.invalid) {
-      console.log('invalid');
       this.formGroup.markAllAsTouched();
     } else {
+      this.isLoading = true;
       this.createTaskObject();
       this.currentBoard?.columns.find((column) => {
         if (column.id === this.taskObject.status[0].id) {
@@ -198,6 +199,7 @@ export default class AddTaskComponent implements OnInit {
             .createTask(this.taskObject, this.currentBoard.id, column.id)
             .subscribe({
               next: (response: any) => {
+                this.isLoading = false;
                 this.messageService.setMessage({
                   message: response.message,
                   type: 'success',
@@ -205,6 +207,7 @@ export default class AddTaskComponent implements OnInit {
                 this.closePopUp.emit(false);
               },
               error: (error) => {
+                this.isLoading = false;
                 this.messageService.setMessage({
                   message: error.error,
                   type: 'error',

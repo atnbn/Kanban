@@ -83,6 +83,11 @@
       [ngClass]="{ 'd-none': !dropDown, 'no-scroll': dropDown }"
       class="edit-con"
     >
+      <span
+        (click)="openLanguagePopUp()"
+        [ngClass]="{ 'dark-mode-label': isDarkMode }"
+        >Language</span
+      >
       <span (click)="logout()" [ngClass]="{ 'dark-mode-label': isDarkMode }"
         >Logout</span
       >

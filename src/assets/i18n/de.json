@@ -1,0 +1,95 @@
+{
+  "login": {
+    "username": "username",
+    "email": "email",
+    "password": "password",
+    "rememberMe": "Login daten merken"
+  },
+  "signUp": {
+    "username": "Username",
+    "email": "Email",
+    "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "rememberMe": "Login daten merken",
+    "alreadyHaveAccount": "Schon registriert ? Anmelden"
+  },
+  "sidebar": {
+    "allboards": "ALLE BOARDS ",
+    "createboard": "+ Erstelle neues Board",
+    "hidesidebar": "Verstecke Sidebar",
+
+    "popup": {
+      "language": "Sprache",
+      "logout": "Logout",
+      "deleteuser": "Lösche User"
+    }
+  },
+
+  "board": {
+    "emptyboard": "Dieses board ist leer. Erstelle ein neue Reihe um zu starten"
+  },
+  "popup": {
+    "edit": "Bearbeite Board",
+    "delete": "Lösche Board"
+  },
+
+  "addBoard": {
+    "title": "Erstelle Neues Board",
+    "name": "Name",
+    "boardcolumns": "Board Reihen",
+    "addnewcolumn": "+ Erstelle neue Reihe",
+    "button": "Erstelle neues Board"
+  },
+  "editBoard": {
+    "title": "Board bearbeiten",
+    "name": "Name",
+    "boardcolumns": "Board Reihen",
+    "addnewcolumn": "+ Erstelle neue Reihe",
+    "button": "Speichern"
+  },
+
+  "addTask": {
+    "title": "Erstelle neuen Task",
+    "name": "Titel",
+    "description": "Beschreibung",
+    "addnewsubtask": "+ Erstelle eine Teilaufgabe ",
+    "currenstatus": "Momentaner Status",
+    "button": "Erstelle neuen Task"
+  },
+  "detailTask": {
+    "subtask": "Teilaufgabe",
+    "currenstatus": "Momentaner Status",
+
+    "popup": {
+      "edittask": "Bearbeite Task",
+      "deletetask": "Lösche Task"
+    }
+  },
+  "editTask": {
+    "title": "Bearbeite Task",
+    "name": "Titel",
+    "description": "Beschreibung",
+    "subtask": "Teilaufgabe",
+    "currenstatus": "Momentaner Status",
+    "button": "Speichern"
+  },
+  "deleteBoard": {
+    "title": "Board Löschen ?",
+    "description": "Sind sie sicher das sie das Board  löschen möchten. Diese Aktion kann nicht rückgängig gemacht werden",
+    "button": "Löschen",
+    "cancel": "Abbrechen"
+  },
+  "deleteTask": {
+    "title": "Diesen Task Löschen ?",
+    "description": "Sind sie sicher das sie den task  löschen möchten. Diese Aktion kann nicht rückgängig gemacht werden",
+    "button": "Delete",
+    "cancel": "Cancel"
+  },
+
+  "deleteUser": {
+    "title": "Delete this User ?",
+    "description": "Are you sure you want to delete the user? This action will remove all boards and cannot be reversed.",
+    "button": "Delete",
+    "cancel": "Cancel  "
+  }
+}

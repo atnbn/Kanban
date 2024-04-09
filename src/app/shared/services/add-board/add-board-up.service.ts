@@ -31,6 +31,9 @@ export class OpenPopUpService {
   private deleteUser = new BehaviorSubject<boolean>(false);
   deleteUser$ = this.deleteUser.asObservable();
 
+  private changeLanguage = new BehaviorSubject<boolean>(false);
+  changeLanguage$ = this.changeLanguage.asObservable();
+
   openAddBoard() {
     this.addBoard.next(true);
   }
@@ -59,6 +62,10 @@ export class OpenPopUpService {
   }
   openDeleteUser() {
     this.deleteUser.next(true);
+  }
+
+  openChangeLanguage() {
+    this.changeLanguage.next(true);
   }
 
   closeDetailTask() {
@@ -90,5 +97,9 @@ export class OpenPopUpService {
   }
   closeDeleteTask() {
     this.deleteTask.next(false);
+  }
+
+  closeChangeLanguage() {
+    this.changeLanguage.next(false);
   }
 }

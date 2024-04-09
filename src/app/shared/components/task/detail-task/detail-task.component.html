@@ -111,17 +111,4 @@
   </div>
 </section>
 
-<!-- <app-add-task
-  *ngIf="edit"
-  [type]="'edit'"
-  [currentTask]="currentTask"
-  (closePopUp)="closeWindow(false)"
-></app-add-task>
-
-<app-delete-object
-  *ngIf="deleteForm"
-  [currentTask]="currentTask"
-  [type]="'Task'"
-  [currentBoard]="currentBoard"
-  (closePopUp)="closeDeleteWindow(false)"
-></app-delete-object> -->
+<app-spinner *ngIf="isLoading"></app-spinner>

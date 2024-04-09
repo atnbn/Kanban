@@ -6,6 +6,7 @@ import { User } from 'src/app/shared/models/user-interface';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
 import { ValidatorService } from 'src/app/shared/services/validator/validator.service';
+import { LanguageService } from 'src/app/shared/services/language/language.service';
 
 @Component({
   selector: 'app-signup',
@@ -16,6 +17,7 @@ export class SignupComponent {
   darkmode: boolean = false;
   userForm!: FormGroup;
   errorMessage: string = '';
+  isLoading: boolean = false;
   allUserEmails: User[] = [];
   show: boolean = false;
   constructor(
@@ -24,7 +26,8 @@ export class SignupComponent {
     private createUserService: CreateUserService,
     private router: Router,
     private messageService: ReturnMessageService,
-    private validatorService: ValidatorService
+    private validatorService: ValidatorService,
+    private languageService: LanguageService
   ) {}
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((theme) => {
@@ -33,7 +36,9 @@ export class SignupComponent {
 
     this.initializeForm();
   }
-
+  changeLanguage(language: string) {
+    this.languageService.setLanguage(language);
+  }
   initializeForm() {
     this.userForm = this.fb.group({
       email: [
@@ -77,6 +82,7 @@ export class SignupComponent {
     };
     this.createUserService.signUser(newUser).subscribe({
       next: (response) => {
+        this.isLoading = true;
         this.messageService.setMessage({
           message: response,
           type: 'success',
@@ -84,7 +90,7 @@ export class SignupComponent {
         this.router.navigate(['/login']);
       },
       error: (error) => {
-        console.log(error.error);
+        this.isLoading = true;
         this.errorMessage = error.error;
         this.show = true;
         this.messageService.setMessage({

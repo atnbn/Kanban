@@ -23,6 +23,7 @@ import { UserService } from '../../services/user/user/user.service';
 export class DeleteObjectComponent implements OnInit {
   isTask: boolean = false;
   isDarkMode: boolean = false;
+  isLoading: boolean = false;
   allBoards: Board[] = [];
   currentObject?: Task | Board;
 
@@ -75,12 +76,14 @@ export class DeleteObjectComponent implements OnInit {
   }
 
   onDeleteBoard() {
+    this.isLoading = true;
     const index = this.allBoards.findIndex(
       (board) => board.id === this.currentBoard?.id
     );
     if (index !== -1) {
       this.boardApiService.deleteBoardObject(this.currentBoard!.id).subscribe({
         next: (response) => {
+          this.isLoading = false;
           this.allBoards.splice(index, 1);
           this.messageService.setMessage({
             message: response.message,
@@ -97,6 +100,7 @@ export class DeleteObjectComponent implements OnInit {
           this.closePopUp.emit(false);
         },
         error: (err) => {
+          this.isLoading = false;
           this.messageService.setMessage({
             message: err.message,
             type: 'error',
@@ -112,6 +116,7 @@ export class DeleteObjectComponent implements OnInit {
     const currentColumn = this.currentBoard?.columns.find((column) =>
       column.tasks.some((task) => task.id === taskId)
     );
+    this.isLoading = true;
 
     if (currentColumn) {
       currentColumn.tasks = currentColumn.tasks.filter(
@@ -127,6 +132,7 @@ export class DeleteObjectComponent implements OnInit {
           .deleteTask(this.currentBoard.id, currentColumn.id, taskId)
           .subscribe({
             next: (response) => {
+              this.isLoading = false;
               this.messageService.setMessage({
                 message: response.message,
                 type: 'success',
@@ -134,6 +140,7 @@ export class DeleteObjectComponent implements OnInit {
             },
             error: (error) => {
               error.error;
+              this.isLoading = false;
               this.messageService.setMessage({
                 message: error.error,
                 type: 'error',
@@ -145,8 +152,10 @@ export class DeleteObjectComponent implements OnInit {
   }
 
   onDeleteUser() {
+    this.isLoading = true;
     this.userService.deleteUser().subscribe({
       next: (response) => {
+        this.isLoading = false;
         this.messageService.setMessage({
           message: response.message,
           type: 'success',
@@ -154,6 +163,7 @@ export class DeleteObjectComponent implements OnInit {
         this.router.navigate(['login']);
       },
       error: (error) => {
+        this.isLoading = false;
         this.messageService.setMessage({
           message: error.error,
           type: 'error',

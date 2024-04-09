@@ -15,7 +15,7 @@ import { Message } from 'src/app/shared/models/notification-interface';
 export class LoginComponent implements OnInit {
   darkmode: boolean = false;
   userForm!: FormGroup;
-
+  isLoading: boolean = false;
   localStorageData: boolean = false;
   users: User[] = [];
   error: boolean = false;
@@ -44,7 +44,6 @@ export class LoginComponent implements OnInit {
     }
     this.messageService.message$.subscribe((object: any) => {
       if (object.message !== '') {
-        console.log(object);
         this.messageObject = object;
         this.showMessage = true;
         this.setTimer();
@@ -71,7 +70,7 @@ export class LoginComponent implements OnInit {
 
   login(event: Event) {
     const value = this.userForm.value;
-
+    this.isLoading = true;
     if (this.userForm.invalid) {
       return;
     }
@@ -79,6 +78,8 @@ export class LoginComponent implements OnInit {
     this.authUserService.login(value.email, value.password).subscribe({
       next: (response) => {
         this.localStorage();
+        this.isLoading = false;
+
         this.messageService.setMessage({
           message: response.message,
           type: 'success',
@@ -86,6 +87,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/home']); // Navigate on successful login
       },
       error: (error) => {
+        this.isLoading = false;
         this.messageService.setMessage({
           message: error.error.message,
           type: 'error',
