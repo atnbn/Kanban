@@ -3,6 +3,7 @@
   *ngIf="showMessage"
 ></app-notification>
 
+<app-spinner *ngIf="isLoading"></app-spinner>
 <section>
   <div class="login-form">
     <form [formGroup]="userForm" (ngSubmit)="login($event)">

@@ -152,6 +152,13 @@ export class HomeComponent {
         this.type = 'delete-user';
       }
     });
+
+    this.popupService.changeLanguage$.subscribe((data: boolean) => {
+      if (data) {
+        this.openPopup = data;
+        this.type = 'language';
+      }
+    });
   }
   closeObjects() {
     this.openPopup = false;

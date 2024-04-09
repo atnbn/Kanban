@@ -40,6 +40,7 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
   edit: boolean = false;
   allBoards!: Board[];
   isDarkMode: boolean = false;
+  isLoading: boolean = false;
   deleteForm: boolean = false;
   currentUser: any;
   @ViewChildren('inputElement') inputElement!: QueryList<ElementRef>;
@@ -167,6 +168,7 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
     this.popupService.closeAddBoard();
   }
   createBoard(event: Event) {
+    this.isLoading = true;
     event.preventDefault();
     this.createBoardObject();
     console.log(this.boardObject);
@@ -176,6 +178,7 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
           message: response.message,
           type: 'success',
         });
+        this.isLoading = false;
         this.allBoards.push(this.boardObject!);
         this.boardService.submitBoard(this.boardObject!);
         this.boardService.submitStorage(this.allBoards!);
@@ -185,7 +188,7 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
         });
       },
       error: (error) => {
-        console.log(error);
+        this.isLoading = false;
         this.messageService.setMessage({
           message: error.error,
           type: 'error',
@@ -208,6 +211,7 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
   }
   updateBoard(event: Event) {
     event.preventDefault();
+    this.isLoading = true;
     this.createBoardObject();
     const indexToUpdate = this.allBoards.findIndex(
       (board: Board) => board.id === this.boardObject?.id
@@ -224,6 +228,7 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
       .editBoardObject(this.boardObject, this.boardObject?.id!)
       .subscribe({
         next: (response: any) => {
+          this.isLoading = false;
           this.boardService.submitBoard(this.boardObject!);
           if (response.message)
             this.messageService.setMessage({
@@ -232,6 +237,7 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
             });
         },
         error: (error) => {
+          this.isLoading = false;
           this.messageService.setMessage({
             message: error.error,
             type: 'error',

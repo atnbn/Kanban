@@ -28,6 +28,7 @@ export class DetailTaskComponent implements OnInit {
   dropDown: boolean = false;
   currentBoard!: Board;
   edit: boolean = false;
+  isLoading: boolean = false;
   deleteForm: boolean = false;
   currentTask!: Task;
   checkedCount: number = 0;
@@ -119,7 +120,7 @@ export class DetailTaskComponent implements OnInit {
 
   saveTask(task: Task) {
     const currentColumn = this.findColumnContainingTask(task);
-
+    this.isLoading = true;
     if (currentColumn) {
       const existingTask = currentColumn.tasks.find((t) => t.id === task.id);
 
@@ -139,16 +140,19 @@ export class DetailTaskComponent implements OnInit {
           .updateTask(this.currentBoard.id, currentColumn.id, task.id, task)
           .subscribe({
             next: (result: any) => {
+              this.isLoading = true;
               this.messageService.setMessage({
                 message: result.message,
                 type: 'success',
               });
             },
-            error: (error) =>
+            error: (error) => {
               this.messageService.setMessage({
                 message: error.error,
                 type: 'success',
-              }),
+              });
+              this.isLoading = true;
+            },
           });
       }
     }

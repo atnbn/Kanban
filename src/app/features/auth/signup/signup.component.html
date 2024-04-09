@@ -1,8 +1,9 @@
 <section>
   <h1 [ngClass]="{ white: darkmode }">Kanban</h1>
+  <app-spinner *ngIf="isLoading"></app-spinner>
   <div class="login-form">
     <form [formGroup]="userForm" (ngSubmit)="createUser()">
-      <h2 [ngClass]="{ white: darkmode }">Signup</h2>
+      <h2 [ngClass]="{ white: darkmode }">{{ "signUp.title" | translate }}</h2>
 
       <div class="label-error-con">
         <label [ngClass]="{ white: darkmode }">Username</label>

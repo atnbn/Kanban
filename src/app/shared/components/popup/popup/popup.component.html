@@ -44,3 +44,8 @@
   [type]="'user'"
   *ngIf="type === 'delete-user'"
 ></app-delete-object>
+
+<app-language
+  (closePopUp)="closeObject()"
+  *ngIf="type === 'language'"
+></app-language>

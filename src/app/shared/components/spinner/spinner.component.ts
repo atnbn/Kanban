@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-server-starting',
-  templateUrl: './server-starting.component.html',
-  styleUrls: ['./server-starting.component.scss'],
+  selector: 'app-spinner',
+  templateUrl: './spinner.component.html',
+  styleUrls: ['./spinner.component.scss'],
 })
-export class ServerStartingComponent {
+export class SpinnerComponent {
   isSleeping: boolean = false;
   constructor(private router: Router) {
     this.redirect();

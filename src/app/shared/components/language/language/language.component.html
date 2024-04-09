@@ -1,0 +1,16 @@
+<section>
+  <div
+    class="con"
+    [ngClass]="{ 'dark-mode': isDarkMode, 'light-mode-gray': !isDarkMode }"
+  >
+    <div class="con-nation">
+      <img class="ger" src="assets/images/language/Germany Icon.png" />
+      <span [ngClass]="{ white: isDarkMode, black: !isDarkMode }">German</span>
+    </div>
+
+    <div class="con-nation">
+      <img style="padding-top: 2px" src="assets/images/language/Uk.png" />
+      <span [ngClass]="{ white: isDarkMode, black: !isDarkMode }">English</span>
+    </div>
+  </div>
+</section>

@@ -150,6 +150,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
 
+  openLanguagePopUp() {
+    this.popupService.openChangeLanguage();
+    this.dropDown = false;
+  }
+
   openId(id: string) {
     this.router.navigate([], {
       queryParams: { boardId: id },
