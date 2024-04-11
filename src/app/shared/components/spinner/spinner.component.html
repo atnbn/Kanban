@@ -1,13 +1,3 @@
 <section>
-  <!-- <img
-    [class.active]="isSleeping"
-    class="img"
-    src="/assets/images/Snorlax.png"
-  />
-  <div class="con">
-    <span>Hmmm Seems like the server is Sleeping 💤💤💤💤</span>
-
-    <button (click)="wakeUp()">Wake it up!</button>
-  </div> -->
-  <span class="loader"></span>
+  <span *ngIf="loading" class="loader"></span>
 </section>

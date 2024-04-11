@@ -1,12 +1,23 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  map,
+  of,
+  tap,
+  throwError,
+} from 'rxjs';
 import { BaseApiService } from 'src/app/core/services/base-api/base-api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthUserService extends BaseApiService {
+  private _loading = new BehaviorSubject<boolean>(false);
+  loading$ = this._loading.asObservable();
+
   login(email: string, password: string): Observable<any> {
     return this.post(
       `api/login`,
@@ -27,5 +38,9 @@ export class AuthUserService extends BaseApiService {
 
   logOutUser(): Observable<any> {
     return this.post('api/logout', {});
+  }
+
+  triggerLoading(state: boolean) {
+    this._loading.next(state);
   }
 }

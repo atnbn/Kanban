@@ -5,22 +5,25 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, finalize, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuardService {
+  loading: boolean = false;
   constructor(private authService: AuthUserService, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
+    this.authService.triggerLoading(true); // Show loading spinner before sending the request
     return this.authService.checkSession().pipe(
       map((authStatus) => {
+        this.authService.triggerLoading(false); // Hide loading spinner after receiving the response
         const currentUrl = state.url;
-
+        console.log('Session searching');
         if (authStatus.isLoggedIn) {
           if (currentUrl === '/login' || currentUrl === '/sign-up') {
             this.router.navigate(['/home']);
@@ -34,6 +37,10 @@ export class AuthGuardService {
           }
           return true;
         }
+      }),
+      catchError(() => {
+        this.authService.triggerLoading(false); // Hide loading spinner in case of error
+        return of(false);
       })
     );
   }

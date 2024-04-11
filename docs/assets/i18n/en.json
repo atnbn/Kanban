@@ -5,7 +5,12 @@
     "email": "email",
     "password": "password",
     "rememberMe": "rememberMe",
-    "createAccount": "create an account "
+    "createAccount": "create an account ",
+
+    "validator": {
+      "name": "Invalid Name",
+      "password": ""
+    }
   },
   "signup": {
     "title": "Sign Up",

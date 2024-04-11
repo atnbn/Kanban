@@ -15,12 +15,17 @@ import { Route, Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   isStarting: boolean = false;
   title = 'Project';
-
+  loading: boolean = false;
   constructor(
     private severStatus: ServerStatusService,
-    private router: Router
+    private router: Router,
+    private authService: AuthUserService
   ) {}
+
+  ngOnInit(): void {
+    this.authService.loading$.subscribe((bool) => (this.loading = bool));
+  }
 }
