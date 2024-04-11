@@ -18,29 +18,28 @@ export class AuthGuardService {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    this.authService.triggerLoading(true);
+    this.authService.triggerLoading(true); // Show loading spinner before sending the request
     return this.authService.checkSession().pipe(
       map((authStatus) => {
-        this.authService.triggerLoading(false);
+        this.authService.triggerLoading(false); // Hide loading spinner after receiving the response
         const currentUrl = state.url;
         console.log('Session searching');
         if (authStatus.isLoggedIn) {
           if (currentUrl === '/login' || currentUrl === '/sign-up') {
             this.router.navigate(['/home']);
-            this.authService.triggerLoading(false);
             return false;
           }
           return true;
         } else {
           if (currentUrl !== '/login' && currentUrl !== '/sign-up') {
             this.router.navigate(['/login']);
-            this.authService.triggerLoading(false);
             return false;
           }
           return true;
         }
       }),
       catchError(() => {
+        this.authService.triggerLoading(false); // Hide loading spinner in case of error
         return of(false);
       })
     );

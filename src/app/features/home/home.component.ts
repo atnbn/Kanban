@@ -20,7 +20,6 @@ import { SaveBoardService } from 'src/app/shared/services/save-board/save-board.
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  // hier bist du stehen geblieben :D
   mobileQuery: MediaQueryList;
   type: string = '';
   messageObject: Message = {} as Message;
