@@ -41,8 +41,6 @@ export class AuthGuardService {
         }
       }),
       catchError(() => {
-        this.loading = false; // Set loading flag to false in case of error
-        this.authService.triggerLoading(false);
         return of(false);
       })
     );
