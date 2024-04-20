@@ -6,7 +6,10 @@
 <app-spinner *ngIf="isLoading"></app-spinner>
 <section>
   <div class="over-con">
+    <img class="logo" src="assets/images/logo-light.svg" />
     <div class="login-form">
+      <img class="setting-img" src="assets/images/icons8-settings (1).svg" />
+
       <form [formGroup]="userForm" (ngSubmit)="login($event)">
         <h2 [ngClass]="{ white: darkmode }">Login</h2>
 
@@ -64,8 +67,6 @@
         Create an account
       </span>
     </div>
-    <div class="img-con-right">
-      <img class="img-right" src="assets/images/login/kanbanimg.png" alt="" />
-    </div>
+    <img class="img-right" src="assets/images/login/kanbanimg.png" alt="" />
   </div>
 </section>
