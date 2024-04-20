@@ -1,9 +1,13 @@
+<app-spinner *ngIf="isLoading"></app-spinner>
 <section>
-  <h1 [ngClass]="{ white: darkmode }">Kanban</h1>
-  <app-spinner *ngIf="isLoading"></app-spinner>
-  <div class="login-form">
+  <div class="over-con">
     <form [formGroup]="userForm" (ngSubmit)="createUser()">
-      <h2 [ngClass]="{ white: darkmode }">{{ "signUp.title" | translate }}</h2>
+      <img class="logo" src="assets/images/logo-light.svg" />
+      <img class="setting-img" src="assets/images/icons8-settings (1).svg" />
+
+      <h2 [ngClass]="{ white: darkmode }">
+        {{ "signUp.title" | translate }}
+      </h2>
 
       <div class="label-error-con">
         <label [ngClass]="{ white: darkmode }">Username</label>
@@ -70,19 +74,23 @@
       >
         Register
       </button>
+      <div>
+        <div class="remember-con">
+          <input type="checkbox" class="remember-checkbox" />
+          <p [ngClass]="{ white: darkmode }">Remember me</p>
+        </div>
+        <p
+          style="cursor: pointer"
+          routerLink="/"
+          [ngClass]="{ whit: darkmode }"
+          class="create-acc"
+        >
+          Already have an account ? Login
+        </p>
+      </div>
     </form>
-
-    <div class="remember-con">
-      <input type="checkbox" class="remember-checkbox" />
-      <p [ngClass]="{ white: darkmode }">Remember me</p>
+    <div class="img-con-right">
+      <img class="img-right" src="assets/images/login/kanbanimg.png" alt="" />
     </div>
-    <p
-      style="cursor: pointer"
-      routerLink="/"
-      [ngClass]="{ whit: darkmode }"
-      class="create-acc"
-    >
-      Already have an account ? Login
-    </p>
   </div>
 </section>
