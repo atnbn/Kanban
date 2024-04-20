@@ -5,62 +5,67 @@
 
 <app-spinner *ngIf="isLoading"></app-spinner>
 <section>
-  <div class="login-form">
-    <form [formGroup]="userForm" (ngSubmit)="login($event)">
-      <h2 [ngClass]="{ white: darkmode }">Login</h2>
+  <div class="over-con">
+    <div class="login-form">
+      <form [formGroup]="userForm" (ngSubmit)="login($event)">
+        <h2 [ngClass]="{ white: darkmode }">Login</h2>
 
-      <div class="label-error-con">
-        <label [ngClass]="{ white: darkmode }">Email</label>
-        <mat-error
-          class="error"
-          *ngIf="
-            userForm.get('email')?.hasError('required') &&
-            userForm.get('email')?.touched
-          "
-          >Please enter a correct Email</mat-error
+        <div class="label-error-con">
+          <label [ngClass]="{ white: darkmode }">Email</label>
+          <mat-error
+            class="error"
+            *ngIf="
+              userForm.get('email')?.hasError('required') &&
+              userForm.get('email')?.touched
+            "
+            >Please enter a correct Email</mat-error
+          >
+          <mat-error class="error" style="font-size: 10px" *ngIf="error"
+            >Email or Password is wrong !</mat-error
+          >
+        </div>
+        <input matInput formControlName="email" type="email" />
+        <div class="label-error-con">
+          <label [ngClass]="{ white: darkmode }">Password</label>
+          <mat-error
+            class="error"
+            *ngIf="
+              userForm.get('password')?.hasError('required') &&
+              userForm.get('password')?.touched
+            "
+            >Please enter a Password</mat-error
+          >
+        </div>
+        <input formControlName="password" type="password" />
+        <button
+          [disabled]="userForm.invalid"
+          type="submit"
+          [ngClass]="{ white: darkmode, 'invalid-button': userForm.invalid }"
         >
-        <mat-error class="error" style="font-size: 10px" *ngIf="error"
-          >Email or Password is wrong !</mat-error
-        >
+          Login
+        </button>
+      </form>
+
+      <div class="remember-con">
+        <input
+          [(ngModel)]="localStorageData"
+          (change)="localStorage()"
+          type="checkbox"
+          class="remember-checkbox"
+          [checked]="localStorageData"
+        />
+        <p [ngClass]="{ white: darkmode }">Remember me</p>
       </div>
-      <input matInput formControlName="email" type="email" />
-      <div class="label-error-con">
-        <label [ngClass]="{ white: darkmode }">Password</label>
-        <mat-error
-          class="error"
-          *ngIf="
-            userForm.get('password')?.hasError('required') &&
-            userForm.get('password')?.touched
-          "
-          >Please enter a Password</mat-error
-        >
-      </div>
-      <input formControlName="password" type="password" />
-      <button
-        [disabled]="userForm.invalid"
-        type="submit"
-        [ngClass]="{ white: darkmode, 'invalid-button': userForm.invalid }"
+      <span
+        routerLink="/sign-up"
+        [ngClass]="{ white: darkmode }"
+        class="create-acc"
       >
-        Login
-      </button>
-    </form>
-
-    <div class="remember-con">
-      <input
-        [(ngModel)]="localStorageData"
-        (change)="localStorage()"
-        type="checkbox"
-        class="remember-checkbox"
-        [checked]="localStorageData"
-      />
-      <p [ngClass]="{ white: darkmode }">Remember me</p>
+        Create an account
+      </span>
     </div>
-    <span
-      routerLink="/sign-up"
-      [ngClass]="{ white: darkmode }"
-      class="create-acc"
-    >
-      Create an account
-    </span>
+    <div class="img-con-right">
+      <img class="img-right" src="assets/images/login/kanbanimg.png" alt="" />
+    </div>
   </div>
 </section>
