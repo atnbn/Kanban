@@ -2,11 +2,11 @@ section {
     height: 100vh;
     width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: var(--ultradark);
     flex-direction: column;
     font-family: plusmedium;
+    justify-content: center;
+    align-items: center;
 }
 
 // h1 {
@@ -15,11 +15,27 @@ section {
 //     font-family: plusbold;
 // }
 
+.over-con {
+    display: flex;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    height: 60%;
+    border-radius: 10px;
+    position: relative;
+}
+
+.img-right {
+    border-radius: 15px;
+    width: 400px;
+    height: 100%;
+    object-fit: cover;
+}
+
 .login-form {
     padding: 2rem;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
     width: 400px;
+    position: relative;
     margin: auto;
 }
 
@@ -104,7 +120,24 @@ button:active {
 .create-acc {
     cursor: pointer;
 }
-
+.setting-img {
+    position: absolute;
+    width: 30px;
+    top: -50px;
+    right: 15px;
+    cursor: pointer;
+}
+.logo {
+    width: 200px;
+    left: 40px;
+    position: absolute;
+    top: 25px;
+}
+@media (max-width: 888px) {
+    .img-right {
+        display: none;
+    }
+}
 @media screen and (max-width: 600px) {
     section {
         height: -webkit-fill-available;
@@ -113,11 +146,18 @@ button:active {
         padding: 1rem;
         width: 300px;
     }
+    .logo {
+        width: 165px;
+        left: 25px;
+        top: 30px;
+    }
     .error {
         font-size: 10px;
         text-align: end;
     }
-
+    .setting-img {
+        top: -77px;
+    }
     input {
         width: 94%;
     }
@@ -126,7 +166,6 @@ button:active {
         padding: 8px;
     }
 }
-
 
 @media (max-height: 500px) {
     section {
