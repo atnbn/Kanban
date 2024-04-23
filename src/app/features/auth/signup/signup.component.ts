@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { CreateUserService } from 'src/app/shared/services/user/create-user/create-user.service';
@@ -7,6 +7,9 @@ import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
 import { ValidatorService } from 'src/app/shared/services/validator/validator.service';
 import { LanguageService } from 'src/app/shared/services/language/language.service';
+import { LanguageComponent } from 'src/app/shared/components/language/language/language.component';
+import { OpenPopUpService } from 'src/app/shared/services/add-board/add-board-up.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-signup',
@@ -14,12 +17,15 @@ import { LanguageService } from 'src/app/shared/services/language/language.servi
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent {
+  currentLanguage: string = 'en';
   darkmode: boolean = false;
   userForm!: FormGroup;
+  language: boolean = false;
   errorMessage: string = '';
   isLoading: boolean = false;
   allUserEmails: User[] = [];
   show: boolean = false;
+  lang: string = '';
   constructor(
     private themeService: ThemeService,
     private fb: FormBuilder,
@@ -27,7 +33,7 @@ export class SignupComponent {
     private router: Router,
     private messageService: ReturnMessageService,
     private validatorService: ValidatorService,
-    private languageService: LanguageService
+    private popUpService: OpenPopUpService
   ) {}
   ngOnInit(): void {
     this.themeService.isDarkMode$.subscribe((theme) => {
@@ -36,9 +42,7 @@ export class SignupComponent {
 
     this.initializeForm();
   }
-  changeLanguage(language: string) {
-    this.languageService.setLanguage(language);
-  }
+
   initializeForm() {
     this.userForm = this.fb.group({
       email: [
@@ -126,8 +130,22 @@ export class SignupComponent {
       });
     }
   }
-
+  triggerLanguage() {
+    this.popUpService.openChangeLanguage();
+    this.language = !this.language;
+  }
   passwordNotMatch(password: string, confirmedPassword: string) {
     return password !== confirmedPassword;
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleOutsideClick(event: MouseEvent) {
+    const clickedElement = event.target as HTMLElement;
+    const element = clickedElement.className;
+    if (element === 'setting-img' || element === 'con dark-mode') {
+      this.language = true;
+    } else {
+      this.language = false;
+    }
   }
 }

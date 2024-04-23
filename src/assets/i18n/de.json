@@ -5,13 +5,21 @@
     "password": "password",
     "rememberMe": "Login daten merken"
   },
-  "signUp": {
-    "username": "Username",
+  "signup": {
+    "title": "Registrieren",
+    "username": "Benutzer Name",
     "email": "Email",
     "password": "Passwort",
     "confirmPassword": "Passwort bestätigen",
     "rememberMe": "Login daten merken",
-    "alreadyHaveAccount": "Schon registriert ? Anmelden"
+    "alreadyHaveAccount": "Schon registriert ? Anmelden",
+    "button": "REGESTRIEREN",
+    "errors": {
+      "usernameError": "Bitte fügen sie einen Namen mit mindestens 3 buchstaben ein",
+      "emailError": "Bitte fügen sie eine gültige Email ein  ",
+      "passwordError": "Bite fügen sie ein Password mit mindestens 7 buchstaben ein",
+      "confirmPasswordError": "Passwort stimmt nicht überein"
+    }
   },
   "sidebar": {
     "allboards": "ALLE BOARDS ",
