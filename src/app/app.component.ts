@@ -28,7 +28,8 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('lang')?.length === 0) {
+    if (!localStorage.getItem('lang')) {
+      console.log('add default lang');
       this.translate.setDefaultLang('en');
     } else {
       const currLang = localStorage.getItem('lang');
