@@ -28,6 +28,9 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.authService.loading$.subscribe(
+      (bool: boolean) => (this.loading = bool)
+    );
     if (!localStorage.getItem('lang')) {
       console.log('add default lang');
       this.translate.setDefaultLang('en');
