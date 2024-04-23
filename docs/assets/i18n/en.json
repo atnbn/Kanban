@@ -17,9 +17,16 @@
     "username": "Username",
     "email": "Email",
     "password": "Password",
-    "confirmPassword": "Confirm Password",
+    "confirmPassword": "Confirm password",
     "alreadyHaveAccount": "Already have an account? Login",
-    "register": "REGISTER"
+    "button": "REGISTER",
+    "rememberMe": "Remember me",
+    "errors": {
+      "usernameError": "Please add a Username with atleast 3 characters",
+      "emailError": "Please enter a valid email",
+      "passwordError": "Please enter a Password with atleast 7 characters!",
+      "confirmPasswordError": "Password does not match"
+    }
   },
 
   "sidebar": {
