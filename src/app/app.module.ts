@@ -14,7 +14,7 @@ import { DetailTaskComponent } from './shared/components/task/detail-task/detail
 import { FormsModule } from '@angular/forms';
 import { DeleteObjectComponent } from './shared/components/delete-object/delete-object.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './features/auth/login/login.component';
 import { SignupComponent } from './features/auth/signup/signup.component';
 import { MatInputModule } from '@angular/material/input';
@@ -26,13 +26,17 @@ import { PopupComponent } from './shared/components/popup/popup/popup.component'
 import { HeaderComponent } from './shared/components/header/header/header.component';
 
 import { LanguageComponent } from './shared/components/language/language/language.component';
-import { TranslationPipe } from './shared/pipes/translation/translation.pipe';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
     AppComponent,
-    TranslationPipe,
     SidebarComponent,
     BoardComponent,
     AddBoardComponent,
@@ -46,7 +50,6 @@ import { SpinnerComponent } from './shared/components/spinner/spinner.component'
     PopupComponent,
     LanguageComponent,
     HeaderComponent,
-    TranslationPipe,
     SpinnerComponent,
   ],
   imports: [
@@ -60,6 +63,13 @@ import { SpinnerComponent } from './shared/components/spinner/spinner.component'
     MatInputModule,
     MatSidenavModule,
     MatCheckboxModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],

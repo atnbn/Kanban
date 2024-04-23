@@ -5,27 +5,23 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class LanguageService {
-  private currentLanguageSubject = new BehaviorSubject<string>('en');
+  private currentLanguageSubject = new BehaviorSubject<string>('');
   currentLanguage$ = this.currentLanguageSubject.asObservable();
 
   private translations: { [key: string]: any } = {};
   constructor() {
-    this.loadTranslations('en');
-    this.loadTranslations('de');
+    // this.loadTranslations('en');
+    // this.loadTranslations('de');
+    // this.setDefaultLanguage();
   }
 
-  setLanguage(language: string) {
-    this.currentLanguageSubject.next(language);
-  }
+  // setDefaultLanguage() {
+  //   if (!localStorage.getItem('lang')) this.currentLanguageSubject.next('en');
+  //   else return;
+  // }
 
-  getTranslation(key: string): string {
-    return this.translations[this.currentLanguageSubject.value][key] || key;
-  }
-
-  private loadTranslations(language: string) {
-    console.log(language);
-    import(`../../../../assets/i18n/${language}.json`).then((translations) => {
-      this.translations[language] = translations.default;
-    });
+  setLang(lang: string) {
+    this.currentLanguageSubject.next(lang);
+    localStorage.setItem('lang', lang);
   }
 }

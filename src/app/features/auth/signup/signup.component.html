@@ -3,14 +3,20 @@
   <div class="over-con">
     <form [formGroup]="userForm" (ngSubmit)="createUser()">
       <img class="logo" src="assets/images/logo-light.svg" />
-      <img class="setting-img" src="assets/images/icons8-settings (1).svg" />
+      <img
+        class="setting-img"
+        (click)="triggerLanguage()"
+        src="assets/images/icons8-settings (1).svg"
+      />
 
       <h2 [ngClass]="{ white: darkmode }">
-        {{ "signUp.title" | translate }}
+        {{ "signup.title" | translate }}
       </h2>
 
       <div class="label-error-con">
-        <label [ngClass]="{ white: darkmode }">Username</label>
+        <label [ngClass]="{ white: darkmode }">{{
+          "signup.username" | translate
+        }}</label>
         <mat-error
           minlength="4"
           *ngIf="
@@ -20,12 +26,14 @@
           "
           class="error"
         >
-          Please add a Username with atleast 3 characters
+          {{ "signup.errors.usernameError" | translate }}
         </mat-error>
       </div>
       <input formControlName="username" type="text" />
       <div class="label-error-con">
-        <label [ngClass]="{ white: darkmode }">Email</label>
+        <label [ngClass]="{ white: darkmode }">{{
+          "signup.email" | translate
+        }}</label>
         <mat-error
           *ngIf="
             this.errorMessage !== '' ||
@@ -35,13 +43,15 @@
           "
           class="error"
         >
-          {{ this.errorMessage || "Please enter a valid email" }}
+          {{ this.errorMessage || "signup.errors.emailError" | translate }}
           <img class="alert-svg" src="/assets/images/alert-svgrepo-com.svg" />
         </mat-error>
       </div>
       <input formControlName="email" type="email" />
       <div class="label-error-con">
-        <label [ngClass]="{ white: darkmode }">Password</label>
+        <label [ngClass]="{ white: darkmode }">{{
+          "signup.password" | translate
+        }}</label>
         <mat-error
           class="error"
           *ngIf="
@@ -49,19 +59,21 @@
             checkValidator('password', 'required') ||
             checkCustomValidator('password', 'invalidPassword')
           "
-          >Please enter a Password with atleast 7 characters</mat-error
+          >{{ "signup.errors.passwordError" | translate }}</mat-error
         >
       </div>
       <input formControlName="password" type="password" />
       <div class="label-error-con">
-        <label [ngClass]="{ white: darkmode }">confirm password</label>
+        <label [ngClass]="{ white: darkmode }">{{
+          "signup.confirmPassword" | translate
+        }}</label>
         <mat-error
           class="error"
           *ngIf="
             this.userForm.controls['password'].value !==
             this.userForm.controls['confirmedPassword'].value
           "
-          >Password does not match
+          >{{ "signup.errors.confirmPasswordError" | translate }}
         </mat-error>
       </div>
 
@@ -72,12 +84,14 @@
         [disabled]="userForm.invalid"
         [ngClass]="{ white: darkmode, 'invalid-button': userForm.invalid }"
       >
-        Register
+        {{ "signup.button" | translate }}
       </button>
       <div>
         <div class="remember-con">
           <input type="checkbox" class="remember-checkbox" />
-          <p [ngClass]="{ white: darkmode }">Remember me</p>
+          <p [ngClass]="{ white: darkmode }">
+            {{ "signup.rememberMe" | translate }}
+          </p>
         </div>
         <p
           style="cursor: pointer"
@@ -85,7 +99,7 @@
           [ngClass]="{ whit: darkmode }"
           class="create-acc"
         >
-          Already have an account ? Login
+          {{ "signup.alreadyHaveAccount" | translate }}
         </p>
       </div>
     </form>
@@ -94,3 +108,6 @@
     </div>
   </div>
 </section>
+
+<!-- <app-popup [type]="'language'" (closePopUps)="triggerLanguage()"></app-popup> -->
+<app-language *ngIf="language"></app-language>
