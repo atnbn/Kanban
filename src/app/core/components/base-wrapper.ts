@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { HostListener, Injectable, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';

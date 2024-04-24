@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthUserService } from 'src/app/shared/services/user/login-user/login-user.service';
@@ -41,7 +41,10 @@ export class LoginComponent extends BaseWrapper {
       });
     }
   }
-
+  triggerLanguage() {
+    this.popUpService.openChangeLanguage();
+    this.language = !this.language;
+  }
   login(event: Event) {
     const value = this.formGroup.value;
     this.isLoading = true;
@@ -85,6 +88,17 @@ export class LoginComponent extends BaseWrapper {
       localStorage.removeItem('localstorage');
       localStorage.removeItem('email');
       localStorage.removeItem('password');
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleOutsideClick(event: MouseEvent) {
+    const clickedElement = event.target as HTMLElement;
+    const element = clickedElement.className;
+    if (element === 'setting-img' || element === 'con dark-mode') {
+      this.language = true;
+    } else {
+      this.language = false;
     }
   }
 }
