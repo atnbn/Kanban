@@ -4,14 +4,20 @@
       class="form"
       [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"
     >
-      <h3 *ngIf="!edit" [ngClass]="{ white: isDarkMode }">Add New Board</h3>
-      <h3 *ngIf="edit" [ngClass]="{ white: isDarkMode }">Edit Board</h3>
+      <h3 [ngClass]="{ white: isDarkMode }">
+        {{
+          this.edit
+            ? ("editboard.title" | translate)
+            : ("addboard.title" | translate)
+        }}
+      </h3>
+
       <label
         [ngClass]="{
           white: isDarkMode,
           'dark-mode-label': !isDarkMode
         }"
-        >Name</label
+        >{{ "addboard.name" | translate }}</label
       >
       <input
         formControlName="title"
@@ -31,7 +37,7 @@
           'dark-mode-label': !isDarkMode
         }"
         for=""
-        >Board Columns</label
+        >{{ "addboard.boardcolumns" | translate }}</label
       >
       <div formArrayName="inputs" class="all-inputs">
         <div
@@ -68,7 +74,7 @@
         type="button"
         (click)="addInput()"
       >
-        + Add New Column
+        {{ "addboard.addnewcolumn" | translate }}
       </button>
       <button
         type="submit"
@@ -76,7 +82,11 @@
         [disabled]="!formGroup.valid"
         [ngClass]="{ invalid: !formGroup.valid }"
       >
-        {{ this.edit ? "Save Changes" : "Create New Board" }}
+        {{
+          this.edit
+            ? ("editboard.button" | translate)
+            : ("addboard.button" | translate)
+        }}
       </button>
     </div>
   </form>

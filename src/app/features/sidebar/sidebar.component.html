@@ -14,7 +14,10 @@
 
   <div class="board-container">
     <div class="board-header">
-      <h2>ALL BOARDS ( {{ storage.length }} )</h2>
+      <div class="allboards-con">
+        <span>{{ "sidebar.allboards" | translate }}</span>
+        <h2>({{ storage.length }})</h2>
+      </div>
       <img
         class="setting-svg"
         (click)="openSettings()"
@@ -46,7 +49,9 @@
     </div>
     <div class="board" (click)="openAddBoard()">
       <img src="assets/images/icon-board-new.svg" />
-      <span style="color: #635fc7"> + Create New Board</span>
+      <span style="color: #635fc7">{{
+        "sidebar.createboard" | translate
+      }}</span>
     </div>
   </div>
 
@@ -70,7 +75,7 @@
       <div (click)="toggleSidebar()" style="display: flex; gap: 5px">
         <img src="assets/images/icon-hide-sidebar.svg" />
 
-        <span>Hide Sidebar</span>
+        <span>{{ "sidebar.hidesidebar" | translate }}</span>
       </div>
       <!-- <button (click)="logout()">logout</button> -->
       <img
@@ -86,16 +91,16 @@
       <span
         (click)="openLanguagePopUp()"
         [ngClass]="{ 'dark-mode-label': isDarkMode }"
-        >Language</span
+        >{{ "sidebar.popup.language" | translate }}</span
       >
-      <span (click)="logout()" [ngClass]="{ 'dark-mode-label': isDarkMode }"
-        >Logout</span
-      >
+      <span (click)="logout()" [ngClass]="{ 'dark-mode-label': isDarkMode }">{{
+        "sidebar.popup.logout" | translate
+      }}</span>
       <span
         style="color: var(--red)"
         (click)="openDeletePopUp()"
         [ngClass]="{ 'dark-mode-label': isDarkMode }"
-        >Delete User</span
+        >{{ "sidebar.popup.deleteuser" | translate }}</span
       >
     </div>
   </div>

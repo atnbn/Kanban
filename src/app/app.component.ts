@@ -28,20 +28,17 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.loading$.subscribe(
-      (bool: boolean) => (this.loading = bool)
-    );
+    this.authService.loading$.subscribe((bool: boolean) => {
+      this.loading = bool;
+    });
     if (!localStorage.getItem('lang')) {
-      console.log('add default lang');
       this.translate.setDefaultLang('en');
     } else {
       const currLang = localStorage.getItem('lang');
-      console.log('curr lang', currLang);
       this.translate.use(currLang!);
     }
 
     this.tr.currentLanguage$.subscribe((lang: string) => {
-      console.log(lang);
       if (lang !== '') this.translate.use(lang);
     });
   }

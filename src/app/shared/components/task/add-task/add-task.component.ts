@@ -55,7 +55,6 @@ export default class AddTaskComponent implements OnInit {
       this.boardService.getTask().subscribe((data) => {
         if (Object.keys(data).length > 0) {
           this.currentTask = data;
-          console.log(this.currentTask);
         }
       });
     }
@@ -81,12 +80,10 @@ export default class AddTaskComponent implements OnInit {
       description: ['', [Validators.minLength(1), Validators.required]],
       inputs: this.fb.array([]),
       selectedColumnId: firstColumn.id,
-      status: this.fb.group([
-        {
-          id: firstColumn.id,
-          columnName: firstColumn.columnName,
-        },
-      ]),
+      status: this.fb.group({
+        id: firstColumn.id,
+        columnName: firstColumn.columnName,
+      }),
     });
   }
 
@@ -110,7 +107,6 @@ export default class AddTaskComponent implements OnInit {
         },
       ],
     });
-    console.log(this.formGroup.value);
 
     this.currentTask.subtasks?.forEach((sub) => {
       this.inputs.push(
@@ -176,7 +172,7 @@ export default class AddTaskComponent implements OnInit {
       subtasks: this.inputs.value,
       status: [
         {
-          id: this.newStatus.id || this.currentBoard.columns[0].id,
+          id: this.currentBoard.columns[0].id,
           columnName:
             this.newStatus.columnName ||
             this.currentBoard.columns[0].columnName,
@@ -227,7 +223,6 @@ export default class AddTaskComponent implements OnInit {
     event.preventDefault();
     if (this.edit && this.formGroup.valid) {
       this.createTaskObject();
-      console.log(this.taskObject.status[0].id);
       const currentColumn = this.findColumnContainingTask(this.taskObject);
 
       if (currentColumn) {
@@ -239,8 +234,12 @@ export default class AddTaskComponent implements OnInit {
         if (taskToUpdate) {
           taskToUpdate.title = this.taskObject.title;
           taskToUpdate.description = this.taskObject.description;
-          taskToUpdate.status[0] = this.newStatus;
-          console.log(taskToUpdate.status[0].id);
+          taskToUpdate.subtasks = this.inputs.value;
+          taskToUpdate.status[0] =
+            this.newStatus.columnName === ''
+              ? taskToUpdate.status[0]
+              : taskToUpdate.status[0];
+
           this.taskApiService
             .updateTask(
               this.currentBoard.id,
@@ -292,7 +291,6 @@ export default class AddTaskComponent implements OnInit {
 
   private moveTask(task: Task, newStatus: string) {
     const currentColumn = this.findColumnContainingTask(task);
-    console.log('newStatus', newStatus);
     if (currentColumn && currentColumn.id !== newStatus) {
       // Remove task from current column
       currentColumn.tasks = currentColumn.tasks.filter((t) => t.id !== task.id);

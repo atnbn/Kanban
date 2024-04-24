@@ -10,6 +10,7 @@ import {
   TranslateService,
   TranslationChangeEvent,
 } from '@ngx-translate/core';
+import { OpenPopUpService } from 'src/app/shared/services/add-board/add-board-up.service';
 import { LanguageService } from 'src/app/shared/services/language/language.service';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 
@@ -27,6 +28,8 @@ export class LanguageComponent implements OnInit {
   constructor(
     private themeService: ThemeService,
     public translate: TranslateService,
+    private popupService: OpenPopUpService,
+
     public ts: LanguageService
   ) {}
 
@@ -38,6 +41,7 @@ export class LanguageComponent implements OnInit {
 
   setLanguage(lang: string) {
     this.ts.setLang(lang);
+    this.closePopUp.emit(false);
   }
 
   @HostListener('document:click', ['$event'])
@@ -45,7 +49,7 @@ export class LanguageComponent implements OnInit {
     const clickedElement = event.target as HTMLElement;
     if (clickedElement.className.toLowerCase() === 'backdrop') {
       this.closePopUp.emit(false);
-    } else return;
+    }
   }
 
   @HostListener('document:keydown.escape', ['$event'])

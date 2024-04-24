@@ -4,8 +4,13 @@
       class="form"
       [ngClass]="{ 'light-mode': !isDarkMode, 'dark-mode': isDarkMode }"
     >
-      <h3 *ngIf="!edit" [ngClass]="{ white: isDarkMode }">Add New Task</h3>
-      <h3 *ngIf="edit" [ngClass]="{ white: isDarkMode }">Edit Task</h3>
+      <h3 [ngClass]="{ white: isDarkMode }">
+        {{
+          this.edit
+            ? ("addtask.title" | translate)
+            : ("edittask.title" | translate)
+        }}
+      </h3>
 
       <!-- Title -->
       <label
@@ -13,7 +18,7 @@
           white: isDarkMode,
           'dark-mode-label': !isDarkMode
         }"
-        >Title</label
+        >{{ "addtask.name" | translate }}</label
       >
       <input
         [ngClass]="{
@@ -32,7 +37,7 @@
           checkValidator('title', 'required')
         "
         style="font-size: 10px"
-        >Please enter a title</mat-error
+        >{{ "addtask.validator.titleerror" | translate }}</mat-error
       >
       <!-- Description -->
       <label
@@ -41,7 +46,7 @@
           white: isDarkMode,
           'dark-mode-label': !isDarkMode
         }"
-        >Description</label
+        >{{ "addtask.description" | translate }}</label
       >
       <textarea
         [ngClass]="{
@@ -61,7 +66,7 @@
           'dark-mode-label': !isDarkMode
         }"
       >
-        Subtasks</label
+        {{ "addtask.subtask" | translate }}</label
       >
       <div formArrayName="inputs">
         <div
@@ -91,7 +96,7 @@
             minlength="1"
             *ngIf="inputs.controls[i].invalid || inputs.controls[i].touched"
             style="font-size: 10px; align-self: flex-start"
-            >Please enter a title</mat-error
+            >{{ "addtask.validator.titleerror" | translate }}</mat-error
           >
         </div>
       </div>
@@ -105,7 +110,7 @@
         type="button"
         class="add-column--btn"
       >
-        + Add New Subtask
+        {{ "addtask.addnewsubtask" | translate }}
       </button>
 
       <!-- Select Status -->
@@ -114,7 +119,7 @@
           white: isDarkMode,
           'dark-mode-label': !isDarkMode
         }"
-        >Current Status</label
+        >{{ "addtask.currentstatus" | translate }}</label
       >
       <select
         *ngIf="this.type === 'edit'"
@@ -144,8 +149,14 @@
         </option>
       </select>
       <!-- Submit button -->
-      <button class="add-board--btn" *ngIf="!edit">Create Task</button>
-      <button class="add-board--btn" *ngIf="edit">Save Changes</button>
+      <button class="add-board--btn">
+        {{
+          this.edit
+            ? ("edittask.button" | translate)
+            : ("addtask.button" | translate)
+        }}
+      </button>
+      <!-- <button class="add-board--btn" *ngIf="edit">Save Changes</button> -->
     </div>
   </form>
 </section>

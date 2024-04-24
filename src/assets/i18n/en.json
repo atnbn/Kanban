@@ -31,7 +31,7 @@
 
   "sidebar": {
     "allboards": "ALL BOARDS ",
-    "createboard": "+ CREATE New BOARD",
+    "createboard": "+ Create New BOARD",
     "hidesidebar": "Hide Sidebar",
 
     "popup": {
@@ -43,7 +43,8 @@
 
   "board": {
     "emptyboard": "This board is empty. Create a new column to get started",
-    "emptybutton": "+ Add New Column"
+    "emptybutton": "+ Add New Column",
+    "addcolumn": "+ New Column"
   },
   "popup": {
     "edit": "Edit Board",
@@ -58,9 +59,6 @@
   },
   "editboard": {
     "title": "Edit Board",
-    "name": "Name",
-    "boardcolumns": "Board Columns",
-    "addnewcolumn": "+ Add New Column",
     "button": "Save Changes"
   },
 
@@ -68,14 +66,22 @@
     "title": "Add New Task",
     "name": "Title",
     "description": "Description",
+    "subtask": "Subtasks",
     "addnewsubtask": "+ Add New Subtask",
-    "currenstatus": "Current Status",
-    "button": "Create Task"
+    "currentstatus": "Current Status",
+    "button": "Create Task",
+    "placeholder": {
+      "title": "z.B Web Design",
+      "description": "z.B Es ist immer gut, eine Pause einzulegen. Eine 15-minütige Pause lädt die Batterien wieder auf"
+    },
+    "validator": {
+      "titleerror": "Please enter a title"
+    }
   },
 
   "detailtask": {
     "subtask": "Subtasks",
-    "currenstatus": "Current Status",
+    "currentstatus": "Current Status",
 
     "popup": {
       "edittask": "Edit Task",
@@ -88,27 +94,34 @@
     "name": "Title",
     "description": "Description",
     "subtask": "Subtasks",
-    "currenstatus": "Current Status",
+    "currentstatus": "Current Status",
     "button": "Save Changes"
   },
 
   "deleteboard": {
     "title": "Delete this Board ?",
-    "description": "Are you sure you want to delete the board? This action will remove all columns and tasks and cannot be reversed.",
+    "description": "Are you sure you want to delete the Board: {{value}}? This action will remove all columns and tasks and cannot be reversed.",
     "button": "Delete",
-    "cancel": "Cancel"
+    "cancle": "Cancle"
   },
   "deletetask": {
     "title": "Delete this Task ?",
-    "description": "Are you sure you want to delete the TASK? This action will remove all columns and tasks and cannot be reversed.",
+    "description": "Are you sure you want to delete the task: {{value}}? This action cannot be reversed.",
     "button": "Delete",
-    "cancel": "Cancel"
+    "cancle": "Cancle"
   },
 
   "deleteuser": {
     "title": "Delete this User ?",
     "description": "Are you sure you want to delete the user? This action will remove all boards and cannot be reversed.",
     "button": "Delete",
-    "cancel": "Cancel  "
+    "cancle": "Cancle  "
+  },
+
+  "header": {
+    "button": "+ Create new task"
+  },
+  "loading": {
+    "text": "The Server is starting..."
   }
 }

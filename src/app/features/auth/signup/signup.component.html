@@ -1,7 +1,7 @@
 <app-spinner *ngIf="isLoading"></app-spinner>
 <section>
   <div class="over-con">
-    <form [formGroup]="userForm" (ngSubmit)="createUser()">
+    <form [formGroup]="formGroup" (ngSubmit)="createUser()">
       <img class="logo" src="assets/images/logo-light.svg" />
       <img
         class="setting-img"
@@ -70,8 +70,8 @@
         <mat-error
           class="error"
           *ngIf="
-            this.userForm.controls['password'].value !==
-            this.userForm.controls['confirmedPassword'].value
+            this.formGroup.controls['password'].value !==
+            this.formGroup.controls['confirmedPassword'].value
           "
           >{{ "signup.errors.confirmPasswordError" | translate }}
         </mat-error>
@@ -81,8 +81,8 @@
 
       <button
         type="submit"
-        [disabled]="userForm.invalid"
-        [ngClass]="{ white: darkmode, 'invalid-button': userForm.invalid }"
+        [disabled]="formGroup.invalid"
+        [ngClass]="{ white: darkmode, 'invalid-button': formGroup.invalid }"
       >
         {{ "signup.button" | translate }}
       </button>

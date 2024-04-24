@@ -12,10 +12,10 @@ import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { TaskApiService } from 'src/app/shared/services/add-task/add-task-api.service';
 import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
-import { Message } from 'src/app/shared/models/notification-interface';
 import { MediaQueryService } from 'src/app/shared/services/media-query/media-query.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-board',
@@ -55,13 +55,14 @@ export class BoardComponent {
   };
   constructor(
     private themeService: ThemeService,
+    private messageService: ReturnMessageService,
+    private route: ActivatedRoute,
     private boardService: BoardObjectService,
     private sidebarService: SidebarService,
     private popupService: OpenPopUpService,
     private taskService: TaskApiService,
-    private messageService: ReturnMessageService,
     private mediaQueryService: MediaQueryService,
-    private route: ActivatedRoute
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -109,7 +110,6 @@ export class BoardComponent {
   }
 
   openAddTask(): void {
-    // this.addTaskPopUp = true;
     this.popupService.openAddTask();
     this.boardService.submitBoard(this.board);
     this.themeService.toggleScroll();
@@ -153,10 +153,12 @@ export class BoardComponent {
           (col: Columns) => col.id === newStatus
         );
         if (newColumn) {
-          task.status[0] = {
-            columnName: newColumn.columnName,
-            id: newColumn.id,
-          };
+          task.status = [
+            {
+              columnName: newColumn.columnName,
+              id: newColumn.id,
+            },
+          ];
           newColumn.tasks.push(task);
           // task.status = newStatus; // Update task status
 
@@ -223,7 +225,6 @@ export class BoardComponent {
   }
 
   editBoard(): void {
-    console.log();
     this.boardService.submitBoard(this.board);
     this.popupService.openEditBoard();
     this.themeService.toggleScroll();

@@ -23,7 +23,7 @@ export class AuthGuardService {
       map((authStatus) => {
         this.authService.triggerLoading(false); // Hide loading spinner after receiving the response
         const currentUrl = state.url;
-        console.log('Session searching');
+        ('Session searching');
         if (authStatus.isLoggedIn) {
           if (currentUrl === '/login' || currentUrl === '/sign-up') {
             this.router.navigate(['/home']);
