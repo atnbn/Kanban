@@ -33,14 +33,14 @@
       </div>
     </div>
     <div class="columns add-column" (click)="editBoard()">
-      <p>+ New Column</p>
+      <p>{{ "board.addcolumn" | translate }}</p>
     </div>
   </div>
   <div *ngIf="board.columns.length === 0" class="fixed">
-    <span>This board is empty. Create a new column to get started</span>
+    <span style="text-align: center">{{ "board.emptyboard" | translate }}</span>
 
     <button class="add-column--btn" (click)="editBoard()">
-      + Add New Column
+      {{ "board.emptybutton" | translate }}
     </button>
   </div>
 </section>

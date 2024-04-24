@@ -36,6 +36,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   activeBoard: Board | null = {} as Board;
   active: boolean = true;
   render: boolean = false;
+  language: boolean = false;
   private _mobileQueryListener: () => void;
 
   constructor(
@@ -75,28 +76,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     );
 
     this.routeSub = combined$;
-
-    // this.boardService.getStorage().subscribe((objects) => {
-    //   if (objects.length > 0) {
-    //     this.storage = objects;
-    //     this.render = true;
-    //     this.setActiveBoard(this.route.snapshot.queryParams['boardId']);
-    //   }
-    // });
-
-    // // this.boardService.getBoards);
-    // this.popupService.addBoard$.subscribe((value) => {
-    //   this.addBoardPopUp = value;
-    // });
-    // this.routeSub = this.route.queryParams.subscribe((params) => {
-    //   const boardId = params['boardId'];
-    //   if (!boardId && this.render) {
-    //     this.setBoardIfNoParam();
-    //   }
-    //   this.setActiveBoard(boardId);
-    // });
-
-    // Initial check in case the component is loaded with a boardId in the URL
   }
 
   ngOnDestroy() {
@@ -154,7 +133,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.popupService.openChangeLanguage();
     this.dropDown = false;
   }
-
+  // triggerLanguage() {
+  //   this.popupService.openChangeLanguage();
+  //   // this.language = !this.language;
+  // }
   openId(id: string) {
     this.router.navigate([], {
       queryParams: { boardId: id },

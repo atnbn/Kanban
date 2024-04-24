@@ -6,72 +6,46 @@ import { User } from 'src/app/shared/models/user-interface';
 import { ThemeService } from 'src/app/shared/services/theme/theme.service';
 import { ReturnMessageService } from 'src/app/shared/services/return-message/return-message.service';
 import { Message } from 'src/app/shared/models/notification-interface';
+import { BaseWrapper } from 'src/app/core/components/base-wrapper';
+import { OpenPopUpService } from 'src/app/shared/services/add-board/add-board-up.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
-  darkmode: boolean = false;
-  userForm!: FormGroup;
-  isLoading: boolean = false;
+export class LoginComponent extends BaseWrapper {
   localStorageData: boolean = false;
-  users: User[] = [];
   error: boolean = false;
-  messageObject: Message = {} as Message;
-  message: string = '';
-  showMessage: boolean = false;
-  constructor(
-    private themeService: ThemeService,
-    private fb: FormBuilder,
-    private authUserService: AuthUserService,
-    private router: Router,
-    private messageService: ReturnMessageService
-  ) {}
-  ngOnInit(): void {
-    this.themeService.isDarkMode$.subscribe((theme) => {
-      this.darkmode = theme;
-    });
-    this.initliazeForm();
 
+  constructor(
+    themeService: ThemeService,
+    fb: FormBuilder,
+    router: Router,
+    translate: TranslateService,
+    popUpService: OpenPopUpService,
+    messageService: ReturnMessageService,
+    private authUserService: AuthUserService
+  ) {
+    super(themeService, fb, router, translate, popUpService, messageService);
+    this.initializeForm({
+      email: ['', [Validators.email, Validators.required]],
+      password: ['', [Validators.minLength(7), Validators.required]],
+    });
     if (localStorage.getItem('localstorage') === 'true') {
       this.localStorageData = true;
-      this.userForm.patchValue({
+      this.formGroup.patchValue({
         email: localStorage.getItem('email'),
         password: atob(localStorage.getItem('password') || ''),
       });
     }
-    this.messageService.message$.subscribe((object: any) => {
-      if (object.message !== '') {
-        this.messageObject = object;
-        this.showMessage = true;
-        this.setTimer();
-      }
-    });
-  }
-
-  setTimer() {
-    setTimeout(() => {
-      this.showMessage = false;
-      this.messageObject = {
-        message: '',
-        type: '',
-      };
-    }, 3500);
-  }
-
-  initliazeForm() {
-    this.userForm = this.fb.group({
-      email: ['', [Validators.email, Validators.required]],
-      password: ['', [Validators.minLength(7), Validators.required]],
-    });
   }
 
   login(event: Event) {
-    const value = this.userForm.value;
+    const value = this.formGroup.value;
     this.isLoading = true;
-    if (this.userForm.invalid) {
+    if (this.formGroup.invalid) {
       return;
     }
     event.preventDefault();
@@ -97,15 +71,15 @@ export class LoginComponent implements OnInit {
   }
 
   checkValidator(formControlName: string, errorType: string) {
-    const control = this.userForm.get(formControlName);
+    const control = this.formGroup.get(formControlName);
     return control?.hasError(errorType) && control.touched;
   }
 
   localStorage() {
-    const hashedPassword = btoa(this.userForm.value.password);
+    const hashedPassword = btoa(this.formGroup.value.password);
     if (this.localStorageData) {
       localStorage.setItem('localstorage', 'true');
-      localStorage.setItem('email', this.userForm.value.email);
+      localStorage.setItem('email', this.formGroup.value.email);
       localStorage.setItem('password', hashedPassword);
     } else {
       localStorage.removeItem('localstorage');

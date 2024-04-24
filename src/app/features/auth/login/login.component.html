@@ -10,7 +10,7 @@
     <div class="login-form">
       <img class="setting-img" src="assets/images/icons8-settings (1).svg" />
 
-      <form [formGroup]="userForm" (ngSubmit)="login($event)">
+      <form [formGroup]="formGroup" (ngSubmit)="login($event)">
         <h2 [ngClass]="{ white: darkmode }">Login</h2>
 
         <div class="label-error-con">
@@ -18,8 +18,8 @@
           <mat-error
             class="error"
             *ngIf="
-              userForm.get('email')?.hasError('required') &&
-              userForm.get('email')?.touched
+              formGroup.get('email')?.hasError('required') &&
+              formGroup.get('email')?.touched
             "
             >Please enter a correct Email</mat-error
           >
@@ -33,17 +33,17 @@
           <mat-error
             class="error"
             *ngIf="
-              userForm.get('password')?.hasError('required') &&
-              userForm.get('password')?.touched
+              formGroup.get('password')?.hasError('required') &&
+              formGroup.get('password')?.touched
             "
             >Please enter a Password</mat-error
           >
         </div>
         <input formControlName="password" type="password" />
         <button
-          [disabled]="userForm.invalid"
+          [disabled]="formGroup.invalid"
           type="submit"
-          [ngClass]="{ white: darkmode, 'invalid-button': userForm.invalid }"
+          [ngClass]="{ white: darkmode, 'invalid-button': formGroup.invalid }"
         >
           Login
         </button>

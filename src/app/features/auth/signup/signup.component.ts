@@ -10,41 +10,29 @@ import { LanguageService } from 'src/app/shared/services/language/language.servi
 import { LanguageComponent } from 'src/app/shared/components/language/language/language.component';
 import { OpenPopUpService } from 'src/app/shared/services/add-board/add-board-up.service';
 import { TranslateService } from '@ngx-translate/core';
+import { BaseWrapper } from 'src/app/core/components/base-wrapper';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent {
-  currentLanguage: string = 'en';
-  darkmode: boolean = false;
-  userForm!: FormGroup;
-  language: boolean = false;
+export class SignupComponent extends BaseWrapper {
   errorMessage: string = '';
-  isLoading: boolean = false;
-  allUserEmails: User[] = [];
   show: boolean = false;
   lang: string = '';
   constructor(
-    private themeService: ThemeService,
-    private fb: FormBuilder,
-    private createUserService: CreateUserService,
-    private router: Router,
-    private messageService: ReturnMessageService,
     private validatorService: ValidatorService,
-    private popUpService: OpenPopUpService
-  ) {}
-  ngOnInit(): void {
-    this.themeService.isDarkMode$.subscribe((theme) => {
-      this.darkmode = theme;
-    });
-
-    this.initializeForm();
-  }
-
-  initializeForm() {
-    this.userForm = this.fb.group({
+    private createUserService: CreateUserService,
+    themeService: ThemeService,
+    fb: FormBuilder,
+    router: Router,
+    translate: TranslateService,
+    messageService: ReturnMessageService,
+    popUpService: OpenPopUpService
+  ) {
+    super(themeService, fb, router, translate, popUpService, messageService);
+    this.initializeForm({
       email: [
         '',
         [
@@ -70,14 +58,13 @@ export class SignupComponent {
       confirmedPassword: ['', [Validators.minLength(7), Validators.required]],
     });
   }
-
   createUser() {
     this.checkSamePassword();
-    if (this.userForm.invalid) {
+    if (this.formGroup.invalid) {
       return;
     }
 
-    const user = this.userForm.value;
+    const user = this.formGroup.value;
     const newUser = {
       username: user.username,
       password: user.password,
@@ -106,12 +93,12 @@ export class SignupComponent {
   }
 
   checkValidator(formControlName: string, errorType: string) {
-    const control = this.userForm.get(formControlName);
+    const control = this.formGroup.get(formControlName);
     return control?.hasError(errorType) && control.touched;
   }
 
   checkCustomValidator(formControlName: string, errorType: string): boolean {
-    const control = this.userForm.get(formControlName);
+    const control = this.formGroup.get(formControlName);
     // Check if control exists and is touched
     if (control && control.touched) {
       // Check for the specific error
@@ -122,10 +109,10 @@ export class SignupComponent {
   }
 
   checkSamePassword() {
-    const password = this.userForm.get('password')?.value;
-    const confirmedPassword = this.userForm.get('confirmedPassword')?.value;
+    const password = this.formGroup.get('password')?.value;
+    const confirmedPassword = this.formGroup.get('confirmedPassword')?.value;
     if (this.passwordNotMatch(password, confirmedPassword)) {
-      this.userForm.get('confirmedPassword')?.setErrors({
+      this.formGroup.get('confirmedPassword')?.setErrors({
         notSame: true,
       });
     }

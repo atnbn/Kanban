@@ -3,6 +3,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -20,7 +21,7 @@ import { UserService } from '../../services/user/user/user.service';
   templateUrl: './delete-object.component.html',
   styleUrls: ['./delete-object.component.scss'],
 })
-export class DeleteObjectComponent implements OnInit {
+export class DeleteObjectComponent implements OnInit, OnDestroy {
   isTask: boolean = false;
   isDarkMode: boolean = false;
   isLoading: boolean = false;
@@ -53,13 +54,16 @@ export class DeleteObjectComponent implements OnInit {
     });
 
     this.boardService.getBoard().subscribe((board) => {
-      console.log(board);
       this.currentBoard = board;
     });
 
     this.boardService.getTask().subscribe((task) => {
       this.currentTask = task;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.currentTask = {} as Task;
   }
 
   deleteObject(id: any) {
@@ -90,7 +94,6 @@ export class DeleteObjectComponent implements OnInit {
             type: 'success',
           });
           if (this.allBoards.length === 0) {
-            console.log('empty ');
             this.boardService.submitStorage(this.allBoards);
           } else {
             this.boardService.submitBoard(this.allBoards[0]);

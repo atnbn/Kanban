@@ -59,7 +59,6 @@ export class HeaderComponent {
 
   toggleSidebar() {
     this.sidebarService.toggleSidebar();
-    console.log('test');
   }
 
   openAddTask(): void {

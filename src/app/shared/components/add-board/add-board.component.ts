@@ -94,7 +94,6 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
   }
 
   initializeEditForm() {
-    console.log('test');
     this.formGroup = this.fb.group({
       title: [
         this.boardObject?.title,
@@ -103,7 +102,6 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
       inputs: this.fb.array([]),
       columnName: [],
     });
-    console.log(this.formGroup.value);
 
     this.boardObject?.columns.forEach((column) => {
       this.inputs.push(
@@ -171,7 +169,6 @@ export class AddBoardComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     event.preventDefault();
     this.createBoardObject();
-    console.log(this.boardObject);
     this.saveBoardService.saveBoardObject(this.boardObject).subscribe({
       next: (response: any) => {
         this.messageService.setMessage({

@@ -34,21 +34,23 @@
   },
 
   "board": {
-    "emptyboard": "Dieses board ist leer. Erstelle ein neue Reihe um zu starten"
+    "emptyboard": "Dieses board ist leer. Erstelle ein neue Reihe um zu starten",
+    "addcolumn": "+ Neue Reihe",
+    "emptybutton": "+ Neue Reihe"
   },
   "popup": {
     "edit": "Bearbeite Board",
     "delete": "Lösche Board"
   },
 
-  "addBoard": {
+  "addboard": {
     "title": "Erstelle Neues Board",
     "name": "Name",
     "boardcolumns": "Board Reihen",
     "addnewcolumn": "+ Erstelle neue Reihe",
     "button": "Erstelle neues Board"
   },
-  "editBoard": {
+  "editboard": {
     "title": "Board bearbeiten",
     "name": "Name",
     "boardcolumns": "Board Reihen",
@@ -56,48 +58,59 @@
     "button": "Speichern"
   },
 
-  "addTask": {
+  "addtask": {
     "title": "Erstelle neuen Task",
     "name": "Titel",
+    "subtask": "Teilaufgaben",
     "description": "Beschreibung",
     "addnewsubtask": "+ Erstelle eine Teilaufgabe ",
-    "currenstatus": "Momentaner Status",
-    "button": "Erstelle neuen Task"
+    "currentstatus": "Momentaner Status",
+    "button": "Erstelle neuen Task",
+    "placeholder": {
+      "title": "z.B Web Design",
+      "description": "z.B Es ist immer gut, eine Pause einzulegen. Eine 15-minütige Pause lädt die Batterien wieder auf"
+    }
   },
-  "detailTask": {
+  "detailtask": {
     "subtask": "Teilaufgabe",
-    "currenstatus": "Momentaner Status",
+    "currentstatus": "Aktueller Status",
 
     "popup": {
-      "edittask": "Bearbeite Task",
+      "edittask": "Bearbeitete Task",
       "deletetask": "Lösche Task"
     }
   },
-  "editTask": {
-    "title": "Bearbeite Task",
+  "edittask": {
+    "title": "Bearbeitete Task",
     "name": "Titel",
     "description": "Beschreibung",
     "subtask": "Teilaufgabe",
-    "currenstatus": "Momentaner Status",
+    "currentstatus": "Aktueller Status",
     "button": "Speichern"
   },
-  "deleteBoard": {
+  "deleteboard": {
     "title": "Board Löschen ?",
-    "description": "Sind sie sicher das sie das Board  löschen möchten. Diese Aktion kann nicht rückgängig gemacht werden",
+    "description": "Sind sie sicher das sie das Board: {{value}} löschen möchten. Diese Aktion kann nicht rückgängig gemacht werden!",
     "button": "Löschen",
     "cancel": "Abbrechen"
   },
-  "deleteTask": {
+  "deletetask": {
     "title": "Diesen Task Löschen ?",
-    "description": "Sind sie sicher das sie den task  löschen möchten. Diese Aktion kann nicht rückgängig gemacht werden",
+    "description": "Sind sie sicher das sie den Task: {{value}}  löschen möchten. Diese Aktion kann nicht rückgängig gemacht werden!",
     "button": "Delete",
     "cancel": "Cancel"
   },
 
-  "deleteUser": {
+  "deleteuser": {
     "title": "Delete this User ?",
-    "description": "Are you sure you want to delete the user? This action will remove all boards and cannot be reversed.",
-    "button": "Delete",
-    "cancel": "Cancel  "
+    "description": "Sind sie sicher das sie ihren Account löschen möchten? Diese Aktion kann nicht mehr rückgängig gemacht werden!",
+    "button": "Löschen",
+    "cancle": "Abbrechen  "
+  },
+  "header": {
+    "button": "+ Erstelle neuen Task"
+  },
+  "loading": {
+    "text": "Der Server wird gestartet..."
   }
 }

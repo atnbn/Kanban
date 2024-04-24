@@ -13,7 +13,7 @@
     </p>
 
     <div class="delete-btn-con">
-      <button (click)="deleteTask(currentTask.id)" class="delete-btn btn">
+      <button (click)="toggelDeleteTaskWindow()" class="delete-btn btn">
         Delete
       </button>
       <button (click)="toggelDeleteTaskWindow()" class="cancel-btn btn">
@@ -40,12 +40,14 @@
         }"
         class="edit-con"
       >
-        <span (click)="editTask()" [ngClass]="{ 'dark-mode-label': isDarkMode }"
-          >Edit Task</span
+        <span
+          (click)="editTask()"
+          [ngClass]="{ 'dark-mode-label': isDarkMode }"
+          >{{ "detailtask.popup.edittask" | translate }}</span
         >
-        <span (click)="toggelDeleteTaskWindow()" style="color: var(--red)"
-          >Delete Task</span
-        >
+        <span (click)="toggelDeleteTaskWindow()" style="color: var(--red)">{{
+          "detailtask.popup.deletetask" | translate
+        }}</span>
       </div>
     </div>
 
@@ -64,7 +66,7 @@
           white: isDarkMode,
           'dark-mode-label': !isDarkMode
         }"
-        >Subtasks ({{ checkedCount }} of
+        >{{ "detailtask.popup.edittask" | translate }} ({{ checkedCount }} of
         {{ currentTask.subtasks?.length }})</label
       >
       <!-- Subtask-->
@@ -91,7 +93,7 @@
           white: isDarkMode,
           'dark-mode-label': !isDarkMode
         }"
-        >Current Status</label
+        >{{ "detailtask.currentstatus" | translate }}</label
       >
       <select
         *ngIf="currentTask.status"
@@ -112,3 +114,4 @@
 </section>
 
 <app-spinner *ngIf="isLoading"></app-spinner>
+<app-delete-object [type]="'edit'" *ngIf="delete"></app-delete-object>

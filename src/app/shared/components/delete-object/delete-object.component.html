@@ -8,14 +8,14 @@
       class="title-delete"
       [ngClass]="{ white: isDarkMode }"
     >
-      Delete this Board ?
+      {{ "deletetask.title" | translate }}
     </h2>
     <h2
       *ngIf="type === 'board'"
       class="title-delete"
       [ngClass]="{ white: isDarkMode }"
     >
-      Delete this Board ?
+      {{ "deleteboard.title" | translate }}
     </h2>
 
     <h2
@@ -23,29 +23,31 @@
       class="title-delete"
       [ngClass]="{ white: isDarkMode }"
     >
-      Delete User ?
+      {{ "deleteuser.title" | translate }}
     </h2>
 
-    <p *ngIf="type === 'task'" [ngClass]="{ 'dark-mode-label': isDarkMode }">
-      Are you sure you want to delete the ‘{{ currentTask?.title }}’ task and
-      its subtasks? This action cannot be reversed.
+    <p
+      *ngIf="type === 'task' && currentTask?.title"
+      [ngClass]="{ 'dark-mode-label': isDarkMode }"
+    >
+      {{ "deletetask.description" | translate : { value: currentTask!.title } }}
     </p>
 
     <p *ngIf="type === 'board'" [ngClass]="{ 'dark-mode-label': isDarkMode }">
-      Are you sure you want to delete the {{ this.currentBoard?.title }} board?
-      This action will remove all columns and tasks and cannot be reversed.
+      {{
+        "deleteboard.description" | translate : { value: currentBoard!.title }
+      }}
     </p>
     <p *ngIf="type === 'user'" [ngClass]="{ 'dark-mode-label': isDarkMode }">
-      Are you sure you want to delete your account? This action cannot be
-      reversed.
+      {{ "deleteuser.description" | translate }}
     </p>
 
     <div class="delete-btn-con">
       <button (click)="deleteObject(currentObject?.id)" class="delete-btn btn">
-        Delete
+        {{ "deleteuser.button" | translate }}
       </button>
       <button (click)="closeDeleteWindow()" class="cancel-btn btn">
-        Cancel
+        {{ "deleteuser.cancle" | translate }}
       </button>
     </div>
   </div>

@@ -16,7 +16,7 @@
         (click)="openAddTask()"
         *ngIf="board?.columns?.length !== 0"
       >
-        + Add New Task
+        {{ "header.button" | translate }}
       </button>
       <button class="settings--btn btn-nobackground" (click)="toggleSettings()">
         <img src="assets/images/icon-vertical-ellipsis.svg" />
@@ -34,13 +34,12 @@
         <span
           (click)="editBoard()"
           [ngClass]="{ 'dark-mode-label': isDarkMode }"
-          >Edit Board</span
+          >{{ "popup.edit" | translate }}</span
         >
-        <span style="color: var(--red)" (click)="toggleDeleteWindow()"
-          >Delete Board</span
-        >
+        <span style="color: var(--red)" (click)="toggleDeleteWindow()">{{
+          "popup.delete" | translate
+        }}</span>
       </div>
     </div>
   </div>
 </header>
-<!--  -->
