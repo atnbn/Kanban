@@ -1,20 +1,28 @@
 .success-message {
-    padding: 15px; /* Some padding */
+    padding: 15px; /* Some padding s*/
     position: fixed; /* Fixed position */
     top: 0; /* At the top of the screen */
-    left: 50%; /* Move to the middle of the screen */
-    transform: translateX(-50%); /* Move to the middle of the screen */
-    width: auto; /* Auto width for content-based sizing */
-
-    text-align: center; /* Centered text */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow */
+    // width: auto; /* Auto width for content-based sizing */
+    background-color: transparent;
     z-index: 1000; /* Sit on top */
     transition: all 0.5s ease; /* Transition for smooth effect */
-    border-radius: 5px; /* Optional: rounded corners */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
+.inner-con {
+    text-align: center; /* Centered text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow */
+    border-radius: 5px; /* Optional: rounded corners */
+    width: fit-content;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
 .success-message.show {
-    top: 0; /* Slide down to show */
+    top: 0;
 }
 
 .error {

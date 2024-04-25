@@ -29,7 +29,10 @@ h3 {
 label {
     font-size: 14px;
 }
-
+.main-col {
+    max-height: 400px;
+    overflow-y: auto;
+}
 textarea {
     height: 100px;
     resize: none;
@@ -114,5 +117,11 @@ select {
 @media (max-width: 600px) {
     .form {
         width: 250px;
+    }
+}
+
+@media (max-height: 900px) {
+    .main-col {
+        max-height: 300px;
     }
 }

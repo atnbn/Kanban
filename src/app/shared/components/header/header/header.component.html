@@ -1,5 +1,7 @@
-<header [ngClass]="{ 'dark-mode': isDarkMode, 'border-bottom': isDarkMode }">
-  <div class="inner-header">
+<header
+  [ngClass]="{ 'light-mode-gray': !isDarkMode, 'border-bottom': isDarkMode }"
+>
+  <div class="inner-header" [ngClass]="{ 'light-mode-gray': !isDarkMode }">
     <div class="title-con">
       <h1 [ngClass]="{ white: isDarkMode }">
         {{ storage.length > 0 ? board?.title : "Add a new Board" }}
@@ -27,7 +29,8 @@
           'd-none': !dropDown,
           'no-scroll': dropDown,
           'dark-mode-gray': isDarkMode,
-          'light-mode-gray': !isDarkMode
+          'light-mode-gray': !isDarkMode,
+          'dark-shadow': isDarkMode
         }"
         class="edit-con"
       >

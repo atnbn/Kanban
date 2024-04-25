@@ -39,6 +39,9 @@ body {
 .light-mode {
     background-color: var(--white);
 }
+.light-mode-border {
+    border: 1px solid var(--lineswhite);
+}
 .white {
     color: var(--white);
 }
@@ -86,6 +89,9 @@ body {
 
 .border-right {
     border-right: 2px solid var(--linesdark) !important;
+}
+.dark-shadow {
+    box-shadow: 0px 6px 1px var(--lt-color-gray-800);
 }
 .black {
     color: black;

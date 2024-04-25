@@ -75,6 +75,9 @@
           [checked]="subtask.done"
           (click)="changeValue(subtask)"
           type="checkbox"
+          [ngClass]="{
+            'light-mode-border': !isDarkMode,
+          }"
         />
 
         <span
