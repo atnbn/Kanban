@@ -1,3 +1,4 @@
++
 <section>
   <form [formGroup]="formGroup" (ngSubmit)="submitForm($event)">
     <div
@@ -6,7 +7,7 @@
     >
       <h3 [ngClass]="{ white: isDarkMode }">
         {{
-          this.edit
+          !this.edit
             ? ("addtask.title" | translate)
             : ("edittask.title" | translate)
         }}
@@ -68,7 +69,7 @@
       >
         {{ "addtask.subtask" | translate }}</label
       >
-      <div formArrayName="inputs">
+      <div class="main-col columns" formArrayName="inputs">
         <div
           class="columns"
           *ngFor="let input of inputs.controls; let i = index"
