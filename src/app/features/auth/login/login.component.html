@@ -7,25 +7,28 @@
 <section>
   <div class="over-con">
     <img class="logo" src="assets/images/logo-light.svg" />
-    <div class="login-form">
+    <div class="abs-con">
       <img
         class="setting-img"
         (click)="triggerLanguage()"
         src="assets/images/icons8-settings (1).svg"
       />
-
+    </div>
+    <div class="login-form">
       <form [formGroup]="formGroup" (ngSubmit)="login($event)">
-        <h2 [ngClass]="{ white: darkmode }">Login</h2>
+        <h2 [ngClass]="{ white: darkmode }">{{ "login.title" | translate }}</h2>
 
         <div class="label-error-con">
-          <label [ngClass]="{ white: darkmode }">Email</label>
+          <label [ngClass]="{ white: darkmode }">{{
+            "login.email" | translate
+          }}</label>
           <mat-error
             class="error"
             *ngIf="
               formGroup.get('email')?.hasError('required') &&
               formGroup.get('email')?.touched
             "
-            >Please enter a correct Email</mat-error
+            >{{ "login.validator.name" | translate }}</mat-error
           >
           <mat-error class="error" style="font-size: 10px" *ngIf="error"
             >Email or Password is wrong !</mat-error
@@ -33,14 +36,16 @@
         </div>
         <input matInput formControlName="email" type="email" />
         <div class="label-error-con">
-          <label [ngClass]="{ white: darkmode }">Password</label>
+          <label [ngClass]="{ white: darkmode }">{{
+            "login.password" | translate
+          }}</label>
           <mat-error
             class="error"
             *ngIf="
               formGroup.get('password')?.hasError('required') &&
               formGroup.get('password')?.touched
             "
-            >Please enter a Password</mat-error
+            >{{ "login.validator.password" | translate }}</mat-error
           >
         </div>
         <input formControlName="password" type="password" />
@@ -49,7 +54,7 @@
           type="submit"
           [ngClass]="{ white: darkmode, 'invalid-button': formGroup.invalid }"
         >
-          Login
+          {{ "login.button" | translate }}
         </button>
       </form>
 
@@ -61,14 +66,16 @@
           class="remember-checkbox"
           [checked]="localStorageData"
         />
-        <p [ngClass]="{ white: darkmode }">Remember me</p>
+        <p [ngClass]="{ white: darkmode }">
+          {{ "login.rememberme" | translate }}
+        </p>
       </div>
       <span
         routerLink="/sign-up"
         [ngClass]="{ white: darkmode }"
         class="create-acc"
       >
-        Create an account
+        {{ "login.createaccount" | translate }}
       </span>
     </div>
     <img class="img-right" src="assets/images/login/kanbanimg.png" alt="" />

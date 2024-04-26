@@ -1,15 +1,16 @@
 {
   "login": {
-    "title": "login",
-    "username": "username",
-    "email": "email",
-    "password": "password",
-    "rememberMe": "rememberMe",
-    "createAccount": "create an account ",
-
+    "title": "Login",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "rememberme": "Remember Me",
+    "createaccount": "Create an account ",
+    "button": "Login",
     "validator": {
-      "name": "Invalid Name",
-      "password": ""
+      "name": "Please enter a correct email",
+      "password": "Please enter a valid password",
+      "wrong": "Email or password are wrong"
     }
   },
   "signup": {
