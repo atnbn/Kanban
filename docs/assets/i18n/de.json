@@ -1,9 +1,18 @@
 {
   "login": {
-    "username": "username",
-    "email": "email",
-    "password": "password",
-    "rememberMe": "Login daten merken"
+    "title": "Anmelden",
+    "username": "Username",
+    "email": "Email",
+    "password": "Passwort",
+    "button": "Anmelden",
+    "rememberme": "Login daten merken",
+    "createaccount": "Erstelle ein Konto ",
+
+    "validator": {
+      "name": "Bitte fügen sie eine gültige Email ein",
+      "password": "Bitte fügen sie ein gültiges Password ein",
+      "wrong": "Email oder Password sind falsch"
+    }
   },
   "signup": {
     "title": "Registrieren",

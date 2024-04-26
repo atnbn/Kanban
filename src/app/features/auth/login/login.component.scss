@@ -14,6 +14,10 @@ section {
 //     font-size: 60px;
 //     font-family: plusbold;
 // }
+.abs-con {
+    position: absolute;
+    width: 50%;
+}
 
 .over-con {
     display: flex;
@@ -123,8 +127,8 @@ button:active {
 .setting-img {
     position: absolute;
     width: 30px;
-    top: -50px;
-    right: 15px;
+    top: 10px;
+    right: 0;
     cursor: pointer;
 }
 .logo {
@@ -133,9 +137,18 @@ button:active {
     position: absolute;
     top: 25px;
 }
+.responsiv {
+    display: none;
+}
 @media (max-width: 888px) {
     .img-right {
         display: none;
+    }
+    .abs-con {
+        width: 100%;
+    }
+    .setting-img {
+        right: 25px;
     }
 }
 @media screen and (max-width: 600px) {
@@ -155,9 +168,7 @@ button:active {
         font-size: 10px;
         text-align: end;
     }
-    .setting-img {
-        top: -77px;
-    }
+
     input {
         width: 94%;
     }
@@ -167,9 +178,11 @@ button:active {
     }
 }
 
-@media (max-height: 500px) {
+@media (max-height: 700px) {
     section {
-        height: fit-content;
         overflow: auto;
+    }
+    .over-con {
+        height: 80%;
     }
 }

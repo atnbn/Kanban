@@ -188,9 +188,17 @@ button:active {
         width: 100%;
     }
 }
-@media (max-height: 500px) {
+@media (max-height: 700px) {
     section {
-        height: fit-content;
         overflow: auto;
+    }
+    .over-con {
+        height: 92%;
+    }
+    .setting-img {
+        top: 10px;
+    }
+    .logo {
+        top: 5px;
     }
 }
