@@ -39,7 +39,11 @@
         for=""
         >{{ "addboard.boardcolumns" | translate }}</label
       >
-      <div formArrayName="inputs" class="all-inputs">
+      <div
+        formArrayName="inputs"
+        class="all-inputs"
+        [ngClass]="{ 'dark-scroll': isDarkMode, 'light-scroll': !isDarkMode }"
+      >
         <div
           class="columns"
           *ngFor="let input of inputs.controls; let i = index"

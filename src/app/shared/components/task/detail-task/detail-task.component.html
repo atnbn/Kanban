@@ -60,7 +60,7 @@
       {{ currentTask.description }}
     </span>
     <!-- Subtask--container -->
-    <div class="subtask-con">
+    <div class="subtask-con" [ngClass]="{ 'dark-scroll': isDarkMode }">
       <label
         [ngClass]="{
           white: isDarkMode,

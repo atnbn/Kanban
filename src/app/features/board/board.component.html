@@ -1,5 +1,9 @@
 <section [ngClass]="{ 'dark-mode-body': isDarkMode }">
-  <div *ngIf="board?.columns.length > 0" class="column-body">
+  <div
+    *ngIf="board?.columns.length > 0"
+    class="column-body"
+    [ngClass]="{ 'light-mode': !isDarkMode, 'dark-scroll': isDarkMode }"
+  >
     <!-- columns -->
     <div
       class="columns"

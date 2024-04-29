@@ -2,9 +2,9 @@ section {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding-left: 25px;
     transition: transform 0.7s ease-out;
     border-right: 2px solid var(--light);
+    width: 275px;
 }
 
 .logo-header {
@@ -52,11 +52,14 @@ h2 {
 .logo {
     margin-top: 25px;
     width: 150px;
+    padding-left: 15px;
 }
 
 .board-container {
     flex-grow: 1;
     margin-top: 30px;
+
+    padding-left: 15px;
     display: flex;
     flex-direction: column;
 }
@@ -99,13 +102,14 @@ h2 {
 
 .switch-container {
     display: flex;
+    margin-left: 15px;
+
     gap: 10px;
     justify-content: center;
     align-items: center;
     border-radius: 5px;
     height: 48px;
-    width: 250px;
-
+    width: 230px;
     img {
         width: 15px;
         height: 15px;
@@ -147,10 +151,10 @@ h2 {
     position: absolute;
     bottom: 50px;
     right: 4px;
-    background-color: var(--ultradark);
     padding: 10px;
     height: fit-content;
     width: 150px;
+    z-index: 100;
     box-shadow: 0px 6px 1px var(--lt-color-gray-800);
     gap: 10px;
     justify-content: center;
@@ -234,18 +238,28 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+.hide-inner {
+    display: flex;
+    gap: 5px;
+    margin-left: 15px;
+    cursor: pointer;
+}
 
 @media (max-width: 700px) {
     section {
         // Adjust the sidebar width or any other properties for tablet view
-        padding-left: 15px;
+        width: 217px;
+    }
+
+    span {
+        font-size: 14px;
     }
     .board-container {
         margin-top: 10px;
     }
 
     .switch-container {
-        width: 200px;
+        width: 180px;
         height: 40px;
     }
     .switch {
@@ -259,6 +273,11 @@ input:checked + .slider:before {
 
     .active {
         width: 180px;
+    }
+    .hide-inner {
+        img {
+            width: 15px;
+        }
     }
 }
 

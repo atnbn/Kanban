@@ -40,6 +40,15 @@ input {
     }
 }
 
+.all-inputs {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+    max-height: 300px;
+    overflow: auto;
+}
+
 .columns {
     width: 100%;
     display: flex;
