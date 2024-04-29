@@ -1,6 +1,6 @@
 <section
-  *ngIf="sidebarState"
-  [ngClass]="{ 'dark-mode': isDarkMode, 'border-right': isDarkMode ,'light-mode': !isDarkMode, 'hide-sidebar' : !sidebarState, }"
+  *ngIf="sidebar"
+  [ngClass]="{ 'dark-mode': isDarkMode, 'border-right': isDarkMode ,'light-mode': !isDarkMode, 'hide-sidebar' : !sidebar, }"
 >
   <img
     class="logo"
@@ -72,7 +72,7 @@
     </div>
 
     <div class="hide">
-      <div (click)="toggleSidebar()" style="display: flex; gap: 5px">
+      <div (click)="toggleSidebar()" class="hide-inner">
         <img src="assets/images/icon-hide-sidebar.svg" />
 
         <span>{{ "sidebar.hidesidebar" | translate }}</span>
@@ -80,12 +80,17 @@
       <!-- <button (click)="logout()">logout</button> -->
       <img
         (click)="openSettings()"
-        style="align-self: flex-end"
+        style="align-self: flex-end; cursor: pointer"
         src="assets/images/icons8-settings (1).svg"
       />
     </div>
     <div
-      [ngClass]="{ 'd-none': !dropDown, 'no-scroll': dropDown }"
+      [ngClass]="{
+        'd-none': !dropDown,
+        'no-scroll': dropDown,
+        'light-mode-gray': !isDarkMode,
+        'dark-mode': isDarkMode
+      }"
       class="edit-con"
     >
       <span
@@ -97,7 +102,7 @@
         "sidebar.popup.logout" | translate
       }}</span>
       <span
-        style="color: var(--red)"
+        style="color: var(--red); cursor: pointer"
         (click)="openDeletePopUp()"
         [ngClass]="{ 'dark-mode-label': isDarkMode }"
         >{{ "sidebar.popup.deleteuser" | translate }}</span

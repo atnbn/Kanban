@@ -19,7 +19,10 @@
     </button>
   </div>
 </div>
-<section [ngClass]="{ 'dark-mode': isDarkMode }" class="grid-container">
+<section
+  [ngClass]="{ 'dark-mode': isDarkMode, 'light-mode': !isDarkMode }"
+  class="grid-container"
+>
   <app-sidebar [class.active]="sidebar" class="sidebar"></app-sidebar>
   <app-header
     *ngIf="!emptyBoard"

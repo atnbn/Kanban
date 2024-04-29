@@ -71,6 +71,8 @@ p {
 
 .subtask-con {
     display: flex;
+    max-height: 400px;
+    overflow: auto;
 }
 
 .subtask {

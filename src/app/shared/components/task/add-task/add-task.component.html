@@ -69,7 +69,11 @@
       >
         {{ "addtask.subtask" | translate }}</label
       >
-      <div class="main-col columns" formArrayName="inputs">
+      <div
+        class="main-col columns"
+        [ngClass]="{ 'dark-scroll': isDarkMode }"
+        formArrayName="inputs"
+      >
         <div
           class="columns"
           *ngFor="let input of inputs.controls; let i = index"

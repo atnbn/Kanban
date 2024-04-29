@@ -28,15 +28,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isDarkMode: boolean = false;
   addBoardPopUp: boolean = false;
   sidebarState: boolean = true;
-  currentUser: any = {};
+  sidebar: boolean = true;
   storage: Board[] = [];
-  storedMode = localStorage.getItem('darkmode');
   boards: Board[] = [];
   routeSub!: Subscription;
   activeBoard: Board | null = {} as Board;
   active: boolean = true;
-  render: boolean = false;
-  language: boolean = false;
   private _mobileQueryListener: () => void;
 
   constructor(
@@ -45,7 +42,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private boardService: BoardObjectService,
     private popupService: OpenPopUpService,
     private userService: UserService,
-    private boardApiService: SaveBoardService,
     private router: Router,
     private route: ActivatedRoute,
     private messageService: ReturnMessageService,
@@ -60,6 +56,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.themeService.isDarkMode$.subscribe((darkmode) => {
       this.isDarkMode = darkmode;
     });
+    this.sidebarService.sidebar$.subscribe(
+      (bool: boolean) => (this.sidebarState = bool)
+    );
     const storage$ = this.boardService.getStorage();
     const queryParams$ = this.route.queryParams;
 
@@ -119,6 +118,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
   toggleSidebar() {
     this.sidebarService.toggleSidebar();
+    this.sidebarState = !this.sidebarState;
   }
 
   openAddBoard() {
@@ -172,9 +172,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   handleOutsideClick(event: MouseEvent) {
     const clickedElement = event.target as HTMLElement;
-    const dropDown = clickedElement.tagName.toLowerCase();
-    if (dropDown === 'div' && this.dropDown === true) {
+    const lower = clickedElement.tagName.toLowerCase();
+    if (lower === 'div' && this.dropDown) {
       this.dropDown = false;
     } else return;
+    if (lower === 'div' && this.sidebarState) {
+      console.log('triggewr');
+      this.sidebarService.toggleSidebar();
+    }
   }
 }
